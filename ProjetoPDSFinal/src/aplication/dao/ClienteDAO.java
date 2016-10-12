@@ -1,4 +1,4 @@
-package dao;
+package aplication.dao;
 
 import aplication.Exceptions.BDException;
 import aplication.Exceptions.BDMensagensPadrao;
