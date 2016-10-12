@@ -5,7 +5,7 @@
  */
 package aplication.view.cliente;
 
-import dao.ClienteDAO;
+import aplication.dao.ClienteDAO;
 import java.awt.HeadlessException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
