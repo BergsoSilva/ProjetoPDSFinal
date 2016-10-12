@@ -1,7 +1,7 @@
 
 package aplication.view.cliente;
 
-import dao.ClienteDAO;
+import aplication.dao.ClienteDAO;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
