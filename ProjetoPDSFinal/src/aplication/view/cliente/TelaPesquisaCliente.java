@@ -3,7 +3,7 @@ package aplication.view.cliente;
 
 
 import aplication.modelo.Cliente;
-import dao.ClienteDAO;
+import aplication.dao.ClienteDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
