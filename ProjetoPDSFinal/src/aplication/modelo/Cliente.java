@@ -83,4 +83,12 @@ public class Cliente implements Serializable{
     public void setClifone(String clifone) {
         this.clifone = clifone;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
+    
+    
+    
 }

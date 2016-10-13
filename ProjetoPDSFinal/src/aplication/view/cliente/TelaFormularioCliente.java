@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import aplication.modelo.Cliente;
+import aplication.modelo.Funcionario;
 
 
 public class TelaFormularioCliente extends javax.swing.JFrame {

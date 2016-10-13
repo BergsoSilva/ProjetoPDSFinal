@@ -43,6 +43,11 @@ public class EstadoCivil implements Serializable {
         this.descricao = descricao;
     }
 
+    @Override
+    public String toString() {
+        return descricao;
+    }
+
     
     
 }

@@ -2,11 +2,15 @@ package aplication.dao;
 
 import aplication.Exceptions.BDException;
 import aplication.Exceptions.BDMensagensPadrao;
+import aplication.modelo.Cidade;
+import aplication.modelo.EstadoCivil;
+import aplication.modelo.Funcao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import aplication.modelo.Funcionario;
 import aplication.util.ConnectioinFactory;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 
@@ -21,37 +25,31 @@ public class FuncionarioDAO {
       
            EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
            try {
-               manager.getTransaction().begin();;
+               manager.getTransaction().begin();
                 if(funcionario.getId() == null) {
-                    // caso id for igual a nulo persistir
+                    // caso id for igual a nulo inserir no banco
                      manager.persist(funcionario);
                 } else {
-                    /* Caso a instrução for edita verificar se o funcionario exit */
-                    if (!manager.contains(funcionario)){
-                         // funcionario ser alterado nao existe no banco
-                        if (consultarPorId(funcionario.getId()) == null) {
-                                throw new BDException(BDMensagensPadrao.FUNCIONARIO_NAO_EXIST);
-                        }
-                    }
+                   
                     
-                    // caso o funcionario existe no banco executa a alteração
-                     JOptionPane.showMessageDialog(null,funcionario.getNome()+BDMensagensPadrao.INSTRUCAO_ERRO);
-                    return manager.merge(funcionario);
+                    /* caso o funcionario existe no banco executa a alteração */
+                     return manager.merge(funcionario);
+                  
                 }
                 
                 manager.flush();
                 manager.getTransaction().commit();
                JOptionPane.showMessageDialog(null,BDMensagensPadrao.CADASTRADO_COM_SUCESSO);
-                
-           }catch(BDException ex ){
-                manager.getTransaction().rollback();
+                 return funcionario;
+           }catch(Exception ex ){
+               manager.getTransaction().rollback();
                throw  new BDException(BDMensagensPadrao.INSTRUCAO_ERRO, ex);
            }finally{
                manager.close();
            }
            
            // retorna o  funcionario persitido
-           return funcionario;
+          
      }
     
    /* public void alterar(Funcionario funcionarios){        
@@ -99,7 +97,8 @@ public class FuncionarioDAO {
             }
   }
     
-  public void excluir (Long id) throws BDException{
+    
+    public void excluir (Long id) throws BDException{
       EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
       try {
             manager.getTransaction().begin();
@@ -115,4 +114,40 @@ public class FuncionarioDAO {
       manager.close();
     }
   }
+    
+    public List<Funcao> listarFuncao(){
+        List<Funcao> fcs = new ArrayList<>();
+         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+            manager.getTransaction().begin();
+            Query query = manager.createQuery("select fc from Funcao fc ");
+            fcs = query.getResultList();
+            manager.getTransaction();
+            manager.close();
+        return fcs;
+    }
+   
+    public List<Cidade> listarCidades(){
+            List<Cidade> cidades = new ArrayList<>();
+            EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+            manager.getTransaction().begin();
+            Query query = manager.createQuery("select c from Cidade c ");
+            cidades = query.getResultList();
+            manager.getTransaction();
+            manager.close();
+        return cidades;
+        
+    }
+    
+    public List<EstadoCivil> listarEstadoCivil(){
+            List<EstadoCivil> estadocivis = new ArrayList<>();
+            EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+            manager.getTransaction().begin();
+            Query query = manager.createQuery("select e from EstadoCivil e ");
+            estadocivis = query.getResultList();
+            manager.getTransaction();
+            manager.close();
+        return estadocivis;
+        
+        
+    }
 }

@@ -41,5 +41,10 @@ public class Cidade implements Serializable {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return nome;
+    }
+
       
 }
