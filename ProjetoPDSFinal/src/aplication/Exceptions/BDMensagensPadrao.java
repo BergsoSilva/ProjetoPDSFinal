@@ -21,5 +21,6 @@ public class BDMensagensPadrao {
     public static final String FECHAR_RESULTSET_ERRO = "Ocorreu um erro ao fechar os resultados do banco de dados.";
     public static final String CADASTRADO_COM_SUCESSO ="Cadastrado com sucesso.";
     public static final String ALTERADO_COM_SUCESSO="Alterado com sucesso.";
+    public static final String FUNCIONARIO_NAO_EXIST="Funcionario not found.";
     
 }
