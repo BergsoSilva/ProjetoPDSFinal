@@ -5,6 +5,7 @@
  */
 package aplication.modelo;
 
+import aplication.view.funcionario.Telefone;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,11 +49,9 @@ public class Funcionario implements Serializable {
     @Column(name="funlogin")
     private String login;
     @Column(name = "funsenha")
-    private String senha;
-    @ElementCollection
-    @CollectionTable(name = "telefone_funcionarios", joinColumns = @JoinColumn(name = "funid"))
-    @Column(name = "telefone")
-    private Collection<String> telefones;
+    private String senha; 
+    @OneToMany
+    private Collection<Telefone> telefones;
     @ManyToOne
     @JoinColumn(name = "funfunid" , nullable = false)
     private Funcao funcao;
@@ -118,14 +118,13 @@ public class Funcionario implements Serializable {
         this.senha = senha;
     }
 
-    public Collection<String> getTelefones() {
+    public Collection<Telefone> getTelefones() {
         return telefones;
     }
 
-    public void setTelefones(Collection<String> telefones) {
+    public void setTelefones(Collection<Telefone> telefones) {
         this.telefones = telefones;
     }
-
     public Funcao getFuncao() {
         return funcao;
     }

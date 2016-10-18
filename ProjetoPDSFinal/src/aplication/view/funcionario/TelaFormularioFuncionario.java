@@ -243,6 +243,11 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
         });
         jPanel1.add(campoSalario1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 110, 30));
 
+        try {
+            campoTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)#####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         campoTelefone.setText("(  )     -    ");
         jPanel1.add(campoTelefone, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 230, 30));
 
@@ -268,7 +273,20 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
     private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_botaoCancelarActionPerformed
-
+    private Calendar formatarData(String data ){
+        SimpleDateFormat stringData = new SimpleDateFormat("dd/MM/yyyy");
+        
+        Calendar calendar = Calendar.getInstance();
+        
+        try {
+            calendar.setTime(stringData.parse(data));
+            
+            return  calendar;
+        } catch (ParseException ex) {
+            Logger.getLogger(TelaFormularioFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     return  null;
+    }
     private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
        
         Funcionario funcioario = new Funcionario();        
@@ -276,19 +294,10 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
         
         funcioario.setNome(campoNome.getText());
         
-        SimpleDateFormat admissao = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar adminssaoConvertida = Calendar.getInstance(); 
-        Calendar demissaoConvertida = Calendar.getInstance();
+      
         
-        try {
-            adminssaoConvertida.setTime(admissao.parse(campoDtAdminissao.getText()));
-            demissaoConvertida.setTime(admissao.parse(campoDtDemissao.getText()));
-        } catch (ParseException ex) {
-            Logger.getLogger(TelaFormularioFuncionario.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        funcioario.setDataadimissao(adminssaoConvertida);
-        funcioario.setDatademissao(demissaoConvertida);
+        funcioario.setDataadimissao(formatarData(campoDtAdminissao.getText() ));
+        funcioario.setDatademissao(formatarData(campoDtDemissao.getText() ));
         funcioario.setSalario(Double.parseDouble(campoSalario1.getText()));
         funcioario.setCidade((Cidade) comboCidade.getSelectedItem());
         funcioario.setFuncao((Funcao) comboFuncao.getSelectedItem());
