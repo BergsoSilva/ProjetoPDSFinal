@@ -11,6 +11,7 @@ import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -28,8 +29,7 @@ public class Cliente implements Serializable{
     private char sexo;
     private Calendar dataDasc;
     private String cpf;
-    private String clifone;
-
+    
     public Long getId() {
         return id;
     }
@@ -76,14 +76,6 @@ public class Cliente implements Serializable{
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
-    }
-
-    public String getClifone() {
-        return clifone;
-    }
-
-    public void setClifone(String clifone) {
-        this.clifone = clifone;
     }
 
     @Override
