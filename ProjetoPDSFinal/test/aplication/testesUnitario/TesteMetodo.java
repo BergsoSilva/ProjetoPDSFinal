@@ -23,9 +23,9 @@ public class TesteMetodo {
         Funcionario f = new Funcionario();
         f.setId(Long.parseLong("1"));
   
-        for (Telefone tel : dao.pesquisar(f)) {
+        /*for (Telefone tel : dao.pesquisar(f)) {
             System.out.println(""+ tel.getTipo() +"\n" + tel.getNumero());
-        }
+        }*/
 
     }
     
