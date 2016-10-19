@@ -8,7 +8,7 @@ import javax.persistence.Query;
 import aplication.modelo.Cliente;
 import aplication.modelo.Funcionario;
 import aplication.util.ConnectioinFactory;
-import aplication.view.funcionario.Telefone;
+import aplication.modelo.Telefone;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.persistence.TypedQuery;
