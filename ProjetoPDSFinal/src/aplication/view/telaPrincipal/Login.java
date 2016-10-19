@@ -5,6 +5,9 @@
  */
 package aplication.view.telaPrincipal;
 
+import aplication.dao.FuncionarioDAO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author pc
@@ -20,9 +23,17 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(this);
     }
     
-    private void estrarTelaPricipal (){
-        TelaPrincipal telaPrincipal = new TelaPrincipal();
-        telaPrincipal.setVisible(true);
+    private void estrarTelaPricipal (String login , String senha){
+        FuncionarioDAO dao = new FuncionarioDAO();
+        
+        if (dao.validarUsuario(login, senha)!= null) {
+            TelaPrincipal telaPrincipal = new TelaPrincipal();
+            telaPrincipal.setVisible(true);
+            
+           this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null,"Usuario invalido.");
+        }
         
     }
 
@@ -47,8 +58,18 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setText("Senha:");
 
         botaoEntrar.setText("Entrar");
+        botaoEntrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoEntrarActionPerformed(evt);
+            }
+        });
 
         botaoCancelar.setText("Cancelar");
+        botaoCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCancelarActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("Entre com seu Login e Senha de Usuário");
@@ -97,6 +118,14 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void botaoEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEntrarActionPerformed
+          estrarTelaPricipal (campoLogin.getText() , campoSenha.getText());
+    }//GEN-LAST:event_botaoEntrarActionPerformed
+
+    private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_botaoCancelarActionPerformed
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

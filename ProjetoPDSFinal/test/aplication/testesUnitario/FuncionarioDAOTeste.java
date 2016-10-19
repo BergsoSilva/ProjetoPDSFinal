@@ -34,5 +34,10 @@ public class FuncionarioDAOTeste {
          
          System.out.println("teste realizado com suceso");
      }
+
+     @Test
+     public void loginESenha(){
+         assertEquals(dao.validarUsuario("teste","123").getLogin(), "teste");
+     }
      
 }

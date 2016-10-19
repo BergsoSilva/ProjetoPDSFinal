@@ -69,7 +69,7 @@ public class FuncionarioDAO {
                 fun.setEstadocivil(funcinario.getEstadocivil());
                 fun.setLogin(funcinario.getLogin());
                 fun.setSenha(funcinario.getSenha());
-                fun.setTelefones(funcinario.getTelefones());
+                fun.setTelefone(funcinario.getTelefone());
             manager.getTransaction().commit();
            JOptionPane.showMessageDialog(null, BDMensagensPadrao.INSTRUCAO_SUCESSO);
             manager.close();
@@ -164,13 +164,17 @@ public class FuncionarioDAO {
     
     public Usuario  validarUsuario( String login , String senha){
         
-        Usuario usuario =new Usuario();
+        Usuario usuario ;
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         manager.getTransaction().begin();
-        Query query = manager.createQuery("select f.login, f. from Funcionario f  WHERE f.login=:plogin and f.senha=:psenha");
-        query.setParameter("plogin","berg");
-        query.setParameter("psenha","123");
-        //usuario = query
+               
+        String qry = "SELECT NEW aplication.modelo.Usuario(u.login , u.senha )FROM Funcionario u "
+                    + " where u.login=:plogin and u.senha=:psenha";
+            
+        Query query = manager.createQuery(qry);
+        query.setParameter("plogin",login);
+        query.setParameter("psenha",senha);
+        usuario=(Usuario) query.getSingleResult();
         manager.getTransaction();
         manager.close();
         

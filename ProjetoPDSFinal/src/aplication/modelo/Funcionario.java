@@ -54,6 +54,8 @@ public class Funcionario implements Serializable {
     @ManyToOne
     @JoinColumn(name = "funcidid" , nullable = false)
     private Cidade  cidade;
+    @Column(name = "telefone")
+    private String telefone;
 
     public Long getId() {
         return id;
@@ -133,4 +135,14 @@ public class Funcionario implements Serializable {
     public void setCidade(Cidade cidade) {
         this.cidade = cidade;
     }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+    
+    
 }
