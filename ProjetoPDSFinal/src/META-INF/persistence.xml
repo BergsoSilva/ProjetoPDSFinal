@@ -7,7 +7,7 @@
     <class>aplication.modelo.Funcao</class>
     <class>aplication.modelo.EstadoCivil</class>
     <class>aplication.modelo.Funcionario</class>
-    <class>aplication.view.funcionario.Telefone</class>
+    <class>aplication.modelo.Telefone</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/projetopds?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.password" value="123"/>
