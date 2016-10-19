@@ -1,38 +1,53 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aplication.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
 
 /**
  *
- * @author pc
+ * @author Erick
  */
 @Entity
-@Table(name = "telefone")
-public class Telefone implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Telefone implements Serializable{
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
-    private String tipo;
+    
     private String numero;
     
-    @ManyToOne
-    @JoinColumn(name = "telfunid" , nullable = false)
-    private Funcionario funcionario;
+    @ManyToOne    
+    @JoinColumn(name = "telcliid" , nullable = true)
+    private Cliente cliente;
     
+    @ManyToOne    
+    @JoinColumn(name = "telfunid" , nullable = true)
+    private Funcionario funcionario;
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+   
     public Long getId() {
         return id;
     }
@@ -41,25 +56,11 @@ public class Telefone implements Serializable {
         this.id = id;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public String getNumero() {
         return numero;
     }
 
     public void setNumero(String numero) {
         this.numero = numero;
-    }    
-    
-    @Override
-    public String toString() {
-        return numero;
     }
-    
 }
