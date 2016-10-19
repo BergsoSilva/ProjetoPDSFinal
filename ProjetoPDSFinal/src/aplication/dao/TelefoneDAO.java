@@ -2,16 +2,12 @@ package aplication.dao;
 
 import aplication.Exceptions.BDException;
 import aplication.Exceptions.BDMensagensPadrao;
-import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import aplication.modelo.Cliente;
-import aplication.modelo.Funcionario;
-import aplication.util.ConnectioinFactory;
 import aplication.modelo.Telefone;
-import java.sql.SQLException;
+import aplication.util.ConnectioinFactory;
 import java.util.ArrayList;
-import javax.persistence.TypedQuery;
+import java.util.List;
+import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
 
@@ -24,7 +20,7 @@ public class TelefoneDAO {
     public void inserir(Telefone telefone){
       // Inserido a classe de util
       
-           EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         try{
         
             manager.getTransaction().begin();
@@ -34,14 +30,12 @@ public class TelefoneDAO {
             
         }catch(Exception ex ){
                JOptionPane.showMessageDialog(null,BDMensagensPadrao.INSTRUCAO_ERRO);
-               manager.getTransaction().rollback();
-        }finally{
-               manager.close();
+               //manager.getTransaction().rollback();
         }
         
     }
     
-    public void alterar(Telefone fone){        
+    /*public void alterar(Telefone fone){        
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         
         Telefone telefone;
@@ -62,20 +56,19 @@ public class TelefoneDAO {
         }finally{
                manager.close();
         }
-    }
+    }*/
     
-    public List<Telefone> pesquisar(Funcionario funcionario){
+    public List<Telefone> pesquisarTelefoneCliente(){
         List<Telefone> telefones = new ArrayList<>();
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         
        
         manager.getTransaction().begin();
         
-        String qry = "SELECT  t  FROM Telefone t "
-                    + " where t.funcionario.id = :pid";
-        Query query = manager.createQuery(qry);
-        query.setParameter("pid",funcionario.getId());
+        Query query = manager.createQuery("SELECT t FROM Telefone t where t.cliente is not null");
+                
         telefones = query.getResultList();
+        System.out.println(telefones);
         
         manager.getTransaction();
         
