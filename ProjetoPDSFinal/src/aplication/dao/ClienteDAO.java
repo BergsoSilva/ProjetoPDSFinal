@@ -38,7 +38,7 @@ public class ClienteDAO {
         manager.getTransaction().begin();
             cliente = manager.find(Cliente.class, clienteNovo.getId());
             cliente.setNome(clienteNovo.getNome());
-            cliente.setClifone(clienteNovo.getClifone());
+            //cliente.setClifone(clienteNovo.getClifone());
             cliente.setNumHabilitacao(clienteNovo.getNumHabilitacao());
             cliente.setSexo(clienteNovo.getSexo());
             cliente.setDataDasc(clienteNovo.getDataDasc());
