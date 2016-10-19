@@ -95,31 +95,35 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
     }
     
     private String salvarImagem() throws IOException{
-        arquivo = jFileChooser.getSelectedFile();
-        String nomeImagem = arquivo.getName();
-        File caminhoPasta = new File("");
-            
-        FileInputStream fisDe;
-        
-        String caminhoImagem = caminhoPasta.getAbsoluteFile() + "/" + "src/img/" + nomeImagem;
-        
-        try {
-            fisDe = new FileInputStream(arquivo.getAbsolutePath());
-            FileOutputStream fisPara = new FileOutputStream(caminhoImagem);
-            
-            FileChannel fcPara = fisDe.getChannel();
-            FileChannel fcDe = fisPara.getChannel();
-                        
-            if( fcPara.transferTo(0, fcPara.size(), fcDe ) == 0L ) {
-                fcPara.close();
-                fcDe.close();
+        if (arquivo != null){
+            arquivo = jFileChooser.getSelectedFile();
+            String nomeImagem = arquivo.getName();
+            File caminhoPasta = new File("");
+
+            FileInputStream fisDe;
+
+            String caminhoImagem = caminhoPasta.getAbsoluteFile() + "/" + "src/img/" + nomeImagem;
+
+            try {
+                fisDe = new FileInputStream(arquivo.getAbsolutePath());
+                FileOutputStream fisPara = new FileOutputStream(caminhoImagem);
+
+                FileChannel fcPara = fisDe.getChannel();
+                FileChannel fcDe = fisPara.getChannel();
+
+                if( fcPara.transferTo(0, fcPara.size(), fcDe ) == 0L ) {
+                    fcPara.close();
+                    fcDe.close();
+                }
+            } catch (FileNotFoundException ex) {
+               Logger.getLogger(TelaFormularioProduto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(TelaFormularioProduto.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (FileNotFoundException ex) {
-           Logger.getLogger(TelaFormularioProduto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(TelaFormularioProduto.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "img/" + nomeImagem;
+            return "img/" + nomeImagem;
+        }else{
+            return produto.getImagem();
+        }        
     }
     
     private void carregaImagem(String caminho, String nomeImagem){
@@ -132,8 +136,7 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
 
         labelImagem.setIcon(icon);
         
-        labelNomeImagem.setText(nomeImagem);
-   
+        labelNomeImagem.setText(nomeImagem);   
     }
 
     /**
@@ -410,8 +413,6 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         
         if (res == JFileChooser.APPROVE_OPTION){
             arquivo = jFileChooser.getSelectedFile();
-            
-            System.out.println(arquivo.getAbsolutePath());
             
             carregaImagem(arquivo.getAbsolutePath(), arquivo.getName());
         }
