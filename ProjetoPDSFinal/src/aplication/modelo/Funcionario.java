@@ -45,10 +45,7 @@ public class Funcionario implements Serializable {
     @Column(name="funlogin")
     private String login;
     @Column(name = "funsenha")
-    private String senha; 
-    @OneToMany
-    private Collection<Telefone> telefones;
-    @ManyToOne
+    private String senha;
     @JoinColumn(name = "funfunid" , nullable = false)
     private Funcao funcao;
     @ManyToOne
@@ -113,14 +110,6 @@ public class Funcionario implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-
-    public Collection<Telefone> getTelefones() {
-        return telefones;
-    }
-
-    public void setTelefones(Collection<Telefone> telefones) {
-        this.telefones = telefones;
-    }
     public Funcao getFuncao() {
         return funcao;
     }
@@ -144,10 +133,4 @@ public class Funcionario implements Serializable {
     public void setCidade(Cidade cidade) {
         this.cidade = cidade;
     }
-    
-
-   
-    
-    
-    
 }
