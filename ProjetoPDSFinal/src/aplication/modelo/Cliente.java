@@ -7,9 +7,11 @@ package aplication.modelo;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -20,8 +22,8 @@ public class Cliente implements Serializable{
     @Id
     @GeneratedValue
     private Long id;
-    private String nome;
     
+    private String nome;    
     private String numHabilitacao;
     private char sexo;
     private Calendar dataDasc;
