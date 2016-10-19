@@ -31,7 +31,7 @@ public class TelaVerDetalhesCliente extends javax.swing.JFrame {
         labelNome.setText(cliente.getNome());
         labelCpf.setText(cliente.getCpf());
         labelHabilitacao.setText(cliente.getNumHabilitacao());
-        labelTelefone.setText(cliente.getClifone());
+        //labelTelefone.setText(cliente.getClifone());
         labelDtNascimento.setText(dataLimpa);
 
         if (cliente.getSexo() == 'm'){
