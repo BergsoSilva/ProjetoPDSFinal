@@ -8,7 +8,7 @@ package aplication.testesUnitario;
 import aplication.dao.FuncionarioDAO;
 import aplication.dao.TelefoneDAO;
 import aplication.modelo.Funcionario;
-import aplication.view.funcionario.Telefone;
+import aplication.modelo.Telefone;
 
 /**
  *
