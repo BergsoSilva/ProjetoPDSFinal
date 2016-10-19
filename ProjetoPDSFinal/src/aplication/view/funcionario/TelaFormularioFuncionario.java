@@ -22,6 +22,7 @@ import aplication.modelo.Cliente;
 import aplication.modelo.EstadoCivil;
 import aplication.modelo.Funcao;
 import aplication.modelo.Funcionario;
+import javax.print.attribute.standard.JobOriginatingUserName;
 
 
 public class TelaFormularioFuncionario extends javax.swing.JFrame {
@@ -93,8 +94,9 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
     }
     
     private void setarValores(Funcionario funcionario){
-       // String cpfLimpo = funcionario.getCpf().replace("-", "").replace(".", "");
-        //String telefoneLimpo = funcionario.getTelefones().replace("()", "").replace("-", "");
+        FuncionarioDAO  dao = new FuncionarioDAO();
+       /// String cpfLimpo = funcionario.getCpf().replace("-", "").replace(".", "");
+        String telefoneLimpo = funcionario.getTelefone().replace("()", "").replace("-", "");
                
         SimpleDateFormat datadissao = new SimpleDateFormat("ddMMyyyy");
 	String dataLimpa = datadissao.format(funcionario.getDataadimissao().getTime());
@@ -109,8 +111,29 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
         campoSalario1.setText(funcionario.getSalario()+"");
         campoLogin.setText(funcionario.getLogin());
         campoSenha.setText(funcionario.getSenha());
+        campoTelefone.setText(telefoneLimpo);
+        String idfuncao= funcionario.getFuncao().getId()+"";
+        comboFuncao.setSelectedIndex(Integer.parseInt(idfuncao));
+        String idestcivil= funcionario.getEstadocivil().getId()+"";
+        comboEstadoCivil.setSelectedIndex(Integer.parseInt(idestcivil));
+        
+        String idCidade= funcionario.getCidade().getId()+"";
+        comboCidade.setSelectedIndex(Integer.parseInt(idCidade));
         
        
+    }
+    
+    private void validadacoCampos(){
+        
+        if (campoNome.getText().equals("")){
+             
+             JOptionPane.showMessageDialog(null, "Campo vazio");
+             campoNome.setFocusable(true);
+            return ;
+        }
+        if (campoDtAdminissao.getText().equals(" /  /  ")){
+            return;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -288,7 +311,7 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
      return  null;
     }
     private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
-       
+        validadacoCampos();
         Funcionario funcioario = new Funcionario();        
     
         
@@ -301,6 +324,7 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
         funcioario.setSalario(Double.parseDouble(campoSalario1.getText()));
         funcioario.setCidade((Cidade) comboCidade.getSelectedItem());
         funcioario.setFuncao((Funcao) comboFuncao.getSelectedItem());
+        funcioario.setTelefone(campoTelefone.getText());
         funcioario.setEstadocivil((EstadoCivil) comboEstadoCivil.getSelectedItem());
         funcioario.setLogin(campoLogin.getText());
         funcioario.setSenha(campoSenha.getText());
@@ -320,8 +344,11 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
     }//GEN-LAST:event_campoSalario1ActionPerformed
     
     private void cadastrar(Funcionario funcionario){
+      
         FuncionarioDAO dao = new FuncionarioDAO();
+        
         try {
+           validadacoCampos();
             dao.inserir(funcionario);
             limpar();
      
@@ -332,12 +359,13 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
     }
     
     private void alterar(Funcionario funcionario){
+        validadacoCampos();
         FuncionarioDAO dao = new FuncionarioDAO();
         
         funcionario.setId(this.funcionario.getId());
         
         try {
-            dao.inserir(funcionario);
+            dao.alterar(funcionario);
             limpar();
             dispose();
         } catch (Exception e) {

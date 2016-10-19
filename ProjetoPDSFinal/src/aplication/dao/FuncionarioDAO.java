@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import aplication.modelo.Funcionario;
+import aplication.modelo.Usuario;
 import aplication.util.ConnectioinFactory;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -52,23 +53,33 @@ public class FuncionarioDAO {
           
      }
     
-   /* public void alterar(Funcionario funcionarios){        
-       // EntityManagerFactory factory = Persistence.createEntityManagerFactory("ProjetoPDSFinalPU");
-       // EntityManager manager = factory.createEntityManager();
-       EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+    public void alterar(Funcionario funcinario){        
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         
-        Cliente cliente = new Cliente();
-        
-        manager.getTransaction().begin();
-            cliente = manager.find(Cliente.class, funcionarios.getId());
-            cliente.setNome(funcionarios.getNome());
-            cliente.setClifone(funcionarios.getClifone());
-            cliente.setNumHabilitacao(funcionarios.getNumHabilitacao());
-            cliente.setSexo(funcionarios.getSexo());
-            cliente.setDataDasc(funcionarios.getDataDasc());
-        manager.getTransaction().commit();
-        manager.close();
-    }*/
+        Funcionario fun = new Funcionario();
+       try { 
+            manager.getTransaction().begin();
+                fun = manager.find(Funcionario.class, funcinario.getId());
+                fun.setNome(funcinario.getNome());
+                fun.setDataadimissao(funcinario.getDataadimissao());
+                fun.setDatademissao(funcinario.getDatademissao());
+                fun.setSalario(funcinario.getSalario());
+                fun.setFuncao(funcinario.getFuncao());
+                fun.setCidade(funcinario.getCidade());
+                fun.setEstadocivil(funcinario.getEstadocivil());
+                fun.setLogin(funcinario.getLogin());
+                fun.setSenha(funcinario.getSenha());
+                fun.setTelefones(funcinario.getTelefones());
+            manager.getTransaction().commit();
+           JOptionPane.showMessageDialog(null, BDMensagensPadrao.INSTRUCAO_SUCESSO);
+            manager.close();
+       }catch(Exception ex){
+           JOptionPane.showMessageDialog(null, BDMensagensPadrao.INSTRUCAO_ERRO);
+           manager.getTransaction().rollback();
+       }finally{
+           manager.close();
+       }
+    }
     
     public List<Funcionario> pesquisar(Funcionario funcinario){
         
@@ -149,5 +160,20 @@ public class FuncionarioDAO {
         return estadocivis;
         
         
+    }
+    
+    public Usuario  validarUsuario( String login , String senha){
+        
+        Usuario usuario =new Usuario();
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        manager.getTransaction().begin();
+        Query query = manager.createQuery("select f.login, f. from Funcionario f  WHERE f.login=:plogin and f.senha=:psenha");
+        query.setParameter("plogin","berg");
+        query.setParameter("psenha","123");
+        //usuario = query
+        manager.getTransaction();
+        manager.close();
+        
+        return  usuario;
     }
 }
