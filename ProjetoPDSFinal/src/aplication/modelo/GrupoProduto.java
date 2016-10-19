@@ -17,6 +17,11 @@ public class GrupoProduto implements Serializable{
    
    private String descricao;
 
+    @Override
+    public String toString() {
+        return descricao;
+    }
+
     public Long getId() {
         return id;
     }
