@@ -6,7 +6,6 @@
 package aplication.view.cliente;
 
 import aplication.dao.ClienteDAO;
-import java.awt.HeadlessException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,7 +14,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import aplication.modelo.Cliente;
-import aplication.modelo.Funcionario;
+import java.util.ArrayList;
+import javax.swing.JFormattedTextField;
+import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 
 
 public class TelaFormularioCliente extends javax.swing.JFrame {
@@ -23,6 +25,9 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
     private List<Cliente> clientes;
     private Cliente cliente;
     private String opcao;
+    private List<JTextField> telefones = new ArrayList<JTextField>();
+    private int cont = 0;
+    private int somaDesce;
     
     //Tela cadastrar
     public TelaFormularioCliente(List<Cliente> clientes){
@@ -31,7 +36,9 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
         this.opcao = "Cadastrar";
         
         preparaNomes();
-        getRootPane().setDefaultButton(botaoCadastrar);
+        getRootPane().setDefaultButton(botaoCadastrar);       
+        
+        construiTextFieldDinamico(0);
     }
 
     //Tela Alterar
@@ -45,6 +52,23 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
         setarValores(cliente);
     }    
     
+    private void construiTextFieldDinamico(int desce){
+        if (cont < 3){
+            JTextField jTextField = null;
+            try {
+                jTextField = new JFormattedTextField(new MaskFormatter("(##)#####-####"));
+            } catch (ParseException ex) {
+                Logger.getLogger(TelaFormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }        
+            telefones.add(jTextField);
+
+            jPanel1.add(telefones.get(cont));
+            telefones.get(cont).setBounds(18, 241 + desce, 201, 28);
+
+            cont++;
+            System.out.println(desce);
+        }        
+    }
     
     //prepara os nomes pro título da tela e o nome do botão
     private void preparaNomes(){
@@ -62,7 +86,7 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
         campoNome.setText(cliente.getNome());
         campoCpf.setText(cpfLimpo);
         campoHabilitacao.setText(cliente.getNumHabilitacao());
-        campoTelefone.setText(telefoneLimpo);
+        //campoTelefone.setText(telefoneLimpo);
         campoDtNascimento.setText(dataLimpa);
 
         if (cliente.getSexo() == 'm'){
@@ -96,8 +120,8 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
         radioMasculino = new javax.swing.JRadioButton();
         radioFeminino = new javax.swing.JRadioButton();
         campoCpf = new javax.swing.JFormattedTextField();
-        campoTelefone = new javax.swing.JFormattedTextField();
         campoDtNascimento = new javax.swing.JFormattedTextField();
+        botaoAdicionar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -157,16 +181,18 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
         }
 
         try {
-            campoTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##)#####-####")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-
-        try {
             campoDtNascimento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+
+        botaoAdicionar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        botaoAdicionar.setText("Adicionar");
+        botaoAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoAdicionarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -175,7 +201,6 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(campoTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
@@ -183,11 +208,13 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(campoHabilitacao, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(campoNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(botaoCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(campoNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(botaoAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jLabel6)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(campoCpf, javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,8 +245,8 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(campoTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(botaoAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campoDtNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -227,7 +254,7 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(campoHabilitacao, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addGap(50, 50, 50)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -242,7 +269,9 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -258,7 +287,7 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
         char sexo;
         
         cliente.setNome(campoNome.getText());
-        cliente.setClifone(campoTelefone.getText());
+        //cliente.setClifone(campoTelefone.getText());
         cliente.setCpf(campoCpf.getText());
         cliente.setNumHabilitacao(campoHabilitacao.getText());
         
@@ -288,6 +317,11 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
             alterar(cliente);
         }
     }//GEN-LAST:event_botaoCadastrarActionPerformed
+
+    private void botaoAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAdicionarActionPerformed
+        somaDesce = somaDesce + 50;
+        construiTextFieldDinamico(somaDesce);
+    }//GEN-LAST:event_botaoAdicionarActionPerformed
     
     private void cadastrar(Cliente cliente){
         ClienteDAO dao = new ClienteDAO();
@@ -319,13 +353,13 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botaoAdicionar;
     private javax.swing.JButton botaoCadastrar;
     private javax.swing.JButton botaoCancelar;
     private javax.swing.JFormattedTextField campoCpf;
     private javax.swing.JFormattedTextField campoDtNascimento;
     private javax.swing.JTextField campoHabilitacao;
     private javax.swing.JTextField campoNome;
-    private javax.swing.JFormattedTextField campoTelefone;
     private javax.swing.ButtonGroup grupoSexo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
