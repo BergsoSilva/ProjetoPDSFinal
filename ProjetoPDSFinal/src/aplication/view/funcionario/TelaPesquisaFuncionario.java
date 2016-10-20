@@ -1,10 +1,6 @@
 
 package aplication.view.funcionario;
 
-
-import aplication.view.cliente.*;
-import aplication.modelo.Cliente;
-import aplication.dao.ClienteDAO;
 import aplication.dao.FuncionarioDAO;
 import aplication.modelo.Funcionario;
 import java.awt.event.ActionEvent;
@@ -126,7 +122,7 @@ public class TelaPesquisaFuncionario extends javax.swing.JFrame {
         tabelaFuncionario = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Pesquisar Cliente");
+        setTitle("Pesquisar Funcionario");
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
                 formWindowGainedFocus(evt);

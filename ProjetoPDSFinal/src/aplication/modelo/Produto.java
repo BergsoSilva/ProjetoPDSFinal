@@ -25,6 +25,7 @@ public class Produto implements Serializable{
     private int qtde;
     private String imagem;
     private boolean ativo;
+    
     @Transient
     private Icon imagemProduto;
     

@@ -5,12 +5,10 @@
  */
 package aplication.view.funcionario;
 
-import aplication.Exceptions.BDMensagensPadrao;
-import aplication.view.cliente.*;
-import aplication.dao.ClienteDAO;
+
 import aplication.dao.FuncionarioDAO;
+import aplication.dao.TelefoneDAO;
 import aplication.modelo.Cidade;
-import java.awt.HeadlessException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,11 +16,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import aplication.modelo.Cliente;
 import aplication.modelo.EstadoCivil;
 import aplication.modelo.Funcao;
 import aplication.modelo.Funcionario;
-import javax.print.attribute.standard.JobOriginatingUserName;
+import aplication.modelo.Telefone;
 
 
 public class TelaFormularioFuncionario extends javax.swing.JFrame {
@@ -30,6 +27,7 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
     private List<Funcionario> funcionarios;
     private Funcionario funcionario;
     private String opcao;
+    private Telefone telefone;
     
     /*  listas paca combo */
     
@@ -43,6 +41,8 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
         preencherCombos();
         preparaNomes();
         getRootPane().setDefaultButton(botaoCadastrar);
+        
+        campoDtDemissao.setEnabled(false);
     }
 
     //Tela Alterar
@@ -94,24 +94,31 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
     }
     
     private void setarValores(Funcionario funcionario){
-        FuncionarioDAO  dao = new FuncionarioDAO();
-       /// String cpfLimpo = funcionario.getCpf().replace("-", "").replace(".", "");
-        String telefoneLimpo = funcionario.getTelefone().replace("()", "").replace("-", "");
+        TelefoneDAO telefoneDAO = new TelefoneDAO();
+        int i = 0;
+        for (Telefone telefone : telefoneDAO.pesquisarTelefoneFuncionario(funcionario.getId())) {
+            
+            String telefoneLimpo = telefone.getNumero().replace("()", "").replace("-", "");
+            campoTelefone.setText(telefoneLimpo);
+            i++;
+            this.telefone = telefone;
+        }
                
         SimpleDateFormat datadissao = new SimpleDateFormat("ddMMyyyy");
 	String dataLimpa = datadissao.format(funcionario.getDataadimissao().getTime());
         
-         SimpleDateFormat datademissao = new SimpleDateFormat("ddMMyyyy");
-         String data = datademissao.format(funcionario.getDataadimissao().getTime());
-
-        
+        try {
+            SimpleDateFormat datademissao = new SimpleDateFormat("ddMMyyyy");
+            String data = datademissao.format(funcionario.getDatademissao().getTime());
+        } catch (Exception e) {
+        }
         campoNome.setText(funcionario.getNome());
         campoDtAdminissao.setText(dataLimpa);
-        campoDtDemissao.setText(data);
+        //campoDtDemissao.setText(data);
         campoSalario1.setText(funcionario.getSalario()+"");
         campoLogin.setText(funcionario.getLogin());
         campoSenha.setText(funcionario.getSenha());
-        campoTelefone.setText(telefoneLimpo);
+        //campoTelefone.setText(telefoneLimpo);
         String idfuncao= funcionario.getFuncao().getId()+"";
         comboFuncao.setSelectedIndex(Integer.parseInt(idfuncao));
         String idestcivil= funcionario.getEstadocivil().getId()+"";
@@ -119,8 +126,6 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
         
         String idCidade= funcionario.getCidade().getId()+"";
         comboCidade.setSelectedIndex(Integer.parseInt(idCidade));
-        
-       
     }
     
     private void validadacoCampos(){
@@ -173,7 +178,7 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Senha:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 470, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 490, -1, -1));
 
         campoNome.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jPanel1.add(campoNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 48, 342, 28));
@@ -189,7 +194,7 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
                 botaoCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(botaoCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 540, 104, 35));
+        jPanel1.add(botaoCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 570, 104, 35));
 
         botaoCadastrar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         botaoCadastrar.setText("Salvar");
@@ -198,7 +203,7 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
                 botaoCadastrarActionPerformed(evt);
             }
         });
-        jPanel1.add(botaoCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 540, 104, 35));
+        jPanel1.add(botaoCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 570, 104, 35));
 
         try {
             campoDtAdminissao.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
@@ -223,41 +228,41 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 27, -1, -1));
 
         comboFuncao.setModel(new javax.swing.DefaultComboBoxModel<>(new Object[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(comboFuncao, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 230, 40));
+        jPanel1.add(comboFuncao, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 230, 40));
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Telefone:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
 
         comboEstadoCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new Object[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(comboEstadoCivil, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 230, 40));
+        jPanel1.add(comboEstadoCivil, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, 230, 40));
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel2.setText("Funcão:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, -1, -1));
 
         comboCidade.setModel(new javax.swing.DefaultComboBoxModel<>(new Object[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(comboCidade, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 230, 40));
+        jPanel1.add(comboCidade, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, 230, 40));
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel3.setText("Estado Civil:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel9.setText("Salario");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
-        jPanel1.add(campoLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 490, 150, 30));
+        jPanel1.add(campoLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, 150, 30));
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel5.setText("Cidade:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel10.setText("Login");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, -1, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 490, -1, -1));
 
         campoSenha.setText("jPasswordField1");
-        jPanel1.add(campoSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 490, 150, 30));
+        jPanel1.add(campoSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 510, 150, 30));
 
         campoSalario1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -271,7 +276,6 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        campoTelefone.setText("(  )     -    ");
         jPanel1.add(campoTelefone, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 230, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -285,7 +289,7 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -296,46 +300,51 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
     private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_botaoCancelarActionPerformed
-    private Calendar formatarData(String data ){
-        SimpleDateFormat stringData = new SimpleDateFormat("dd/MM/yyyy");
-        
-        Calendar calendar = Calendar.getInstance();
-        
+    private Calendar formatarData(String data){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar dataConvertida = Calendar.getInstance();     
         try {
-            calendar.setTime(stringData.parse(data));
-            
-            return  calendar;
+            dataConvertida.setTime(sdf.parse(data));
         } catch (ParseException ex) {
             Logger.getLogger(TelaFormularioFuncionario.class.getName()).log(Level.SEVERE, null, ex);
         }
-     return  null;
+        return dataConvertida;
     }
     private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
         validadacoCampos();
-        Funcionario funcioario = new Funcionario();        
+        Funcionario funcionario = new Funcionario();        
     
+        funcionario.setNome(campoNome.getText());
         
-        funcioario.setNome(campoNome.getText());
-        
-      
-        
-        funcioario.setDataadimissao(formatarData(campoDtAdminissao.getText() ));
-        funcioario.setDatademissao(formatarData(campoDtDemissao.getText() ));
-        funcioario.setSalario(Double.parseDouble(campoSalario1.getText()));
-        funcioario.setCidade((Cidade) comboCidade.getSelectedItem());
-        funcioario.setFuncao((Funcao) comboFuncao.getSelectedItem());
-        funcioario.setTelefone(campoTelefone.getText());
-        funcioario.setEstadocivil((EstadoCivil) comboEstadoCivil.getSelectedItem());
-        funcioario.setLogin(campoLogin.getText());
-        funcioario.setSenha(campoSenha.getText());
-        
-        
-        
+        funcionario.setDataadimissao(formatarData(campoDtAdminissao.getText() ));
+        funcionario.setSalario(Double.parseDouble(campoSalario1.getText()));
+        funcionario.setCidade((Cidade) comboCidade.getSelectedItem());
+        funcionario.setFuncao((Funcao) comboFuncao.getSelectedItem());
+        funcionario.setEstadocivil((EstadoCivil) comboEstadoCivil.getSelectedItem());
+        funcionario.setLogin(campoLogin.getText());
+        funcionario.setSenha(campoSenha.getText());
         
         if (opcao.equals("Cadastrar")){
-            cadastrar(funcioario);
+            funcionario.setDatademissao(formatarData(campoDtDemissao.getText() ));
+            cadastrar(funcionario);
+            
+            Telefone telefone = new Telefone();
+            telefone.setCliente(null);
+            telefone.setFuncionario(funcionario);
+            telefone.setNumero(campoTelefone.getText());
+            
+            TelefoneDAO telefoneDAO = new TelefoneDAO();
+            telefoneDAO.inserir(telefone);
         }else{
-            alterar(funcioario);
+            funcionario.setDatademissao(formatarData(campoDtDemissao.getText() ));
+            alterar(funcionario);
+            
+            telefone.setCliente(null);
+            telefone.setFuncionario(funcionario);
+            telefone.setNumero(campoTelefone.getText());
+            
+            TelefoneDAO telefoneDAO = new TelefoneDAO();
+            telefoneDAO.alterar(telefone);
         } 
     }//GEN-LAST:event_botaoCadastrarActionPerformed
 
@@ -344,7 +353,7 @@ public class TelaFormularioFuncionario extends javax.swing.JFrame {
     }//GEN-LAST:event_campoSalario1ActionPerformed
     
     private void cadastrar(Funcionario funcionario){
-      
+        funcionario.setDatademissao(null);
         FuncionarioDAO dao = new FuncionarioDAO();
         
         try {

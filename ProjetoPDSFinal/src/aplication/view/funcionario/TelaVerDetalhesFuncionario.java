@@ -40,7 +40,7 @@ public class TelaVerDetalhesFuncionario extends javax.swing.JFrame {
         labelNome.setText(funcionario.getNome());
         labelAdmissao.setText(pegarDta(funcionario.getDataadimissao()));
         labelDataDemissao.setText(pegarDta(funcionario.getDatademissao()));
-        labelTelefone.setText(funcionario.getTelefone());
+        //labelTelefone.setText(funcionario.getTelefone());
         labelSalario.setText(funcionario.getSalario()+"");
         labelFuncao.setText(funcionario.getFuncao().getDescricao());
         labelEstadoCivil.setText(funcionario.getEstadocivil().getDescricao());

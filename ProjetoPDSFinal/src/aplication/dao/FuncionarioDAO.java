@@ -69,7 +69,6 @@ public class FuncionarioDAO {
                 fun.setEstadocivil(funcinario.getEstadocivil());
                 fun.setLogin(funcinario.getLogin());
                 fun.setSenha(funcinario.getSenha());
-                fun.setTelefone(funcinario.getTelefone());
             manager.getTransaction().commit();
            JOptionPane.showMessageDialog(null, BDMensagensPadrao.INSTRUCAO_SUCESSO);
             manager.close();
