@@ -46,6 +46,7 @@ public class Funcionario implements Serializable {
     private String login;
     @Column(name = "funsenha")
     private String senha;
+    @ManyToOne
     @JoinColumn(name = "funfunid" , nullable = false)
     private Funcao funcao;
     @ManyToOne

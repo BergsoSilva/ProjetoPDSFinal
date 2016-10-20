@@ -7,7 +7,7 @@ package aplication.testesUnitario;
 
 import aplication.dao.ProdutoDAO;
 import aplication.modelo.Produto;
-import aplication.rererizardor.JTableRenderer;
+import aplication.renderizador.JTableRenderer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

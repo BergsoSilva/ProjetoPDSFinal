@@ -291,8 +291,7 @@ public class TelaVerDetalhesAluguel extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaAlterarActionPerformed
-        TelaFormularioProduto telaFormularioProduto = new TelaFormularioProduto(produto);
-        telaFormularioProduto.setVisible(true);
+       JOptionPane.showMessageDialog(null,"Tela de Cadastro de Aluguel");
         dispose();
     }//GEN-LAST:event_botaAlterarActionPerformed
 

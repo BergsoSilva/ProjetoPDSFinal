@@ -291,11 +291,11 @@ public class TelaPesquisaGrupoProduto extends javax.swing.JFrame {
         pesquisar();
         carregarTabela();
     }//GEN-LAST:event_botaoPesquisarActionPerformed
-
+/*
     public static void main(String[] args) {
         TelaPesquisaGrupoProduto telaPesquisaGrupoProduto = new TelaPesquisaGrupoProduto();
         telaPesquisaGrupoProduto.setVisible(true);
-    }
+    }*/
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoPesquisar;

@@ -5,13 +5,19 @@
  */
 package aplication.view.telaPrincipal;
 
-import aplication.rererizardor.JTableRenderer;
+import aplication.renderizador.JTableRenderer;
 import aplication.dao.ProdutoDAO;
 import aplication.modelo.Produto;
-import aplication.rererizardor.ColProduto;
+import aplication.renderizador.ColProduto;
+import aplication.renderizador.ImageRederer;
 import aplication.view.aluguel.TelaVerDetalhesAluguel;
+import aplication.view.cliente.TelaFormularioCliente;
+import aplication.view.cliente.TelaPesquisaCliente;
 import aplication.view.funcionario.TelaPesquisaFuncionario;
+import aplication.view.grupoproduto.TelaPesquisaGrupoProduto;
+import aplication.view.produto.TelaPesquisaProduto;
 import aplication.view.produto.TelaVerDetalhesProduto;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,11 +26,15 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.Icon;
+
 import javax.swing.ImageIcon;
+
 import javax.swing.JMenuItem;
-import javax.swing.table.DefaultTableModel;
+
+import javax.swing.table.DefaultTableCellRenderer;
+
 import javax.swing.table.TableColumnModel;
+
 
 /**
  *
@@ -33,8 +43,7 @@ import javax.swing.table.TableColumnModel;
 public class TelaPrincipal extends javax.swing.JFrame {
     private Produto produto=new Produto();
     private List<Produto> produtos= new ArrayList<>();
-    private DefaultTableModel modelo = new DefaultTableModel();
-    private TabelaModeloCatalago tableModeoCatalogo= new TabelaModeloCatalago();
+    private DefaultTableCellRenderer celrenCellRenderer;
    
     public TelaPrincipal() {
         initComponents();
@@ -53,56 +62,22 @@ public class TelaPrincipal extends javax.swing.JFrame {
         JTableRenderer renderer = new JTableRenderer();
         
         tabelaCatalog.setModel(new TabelaModeloCatalago(produtos));
+        
         tabelaCatalog.setAutoCreateRowSorter(true);
-        tabelaCatalog.setRowHeight(40);
+        tabelaCatalog.setRowHeight(50);
+        
         tabelaCatalog.getColumnModel().getColumn(0).setPreferredWidth(10);
         tabelaCatalog.getColumnModel().getColumn(1).setPreferredWidth(200);
         tabelaCatalog.getColumnModel().getColumn(2).setPreferredWidth(10);
         tabelaCatalog.getColumnModel().getColumn(3).setPreferredWidth(20);
-       
-        try {
-            File file = new File("");
-            
-            getModel().limpar();
-        
-          
-            for (Produto p : produtos) {
-                //addProduto(p.getId()+"", p.getNome(),p.getSaldo()+"",produtoImagen)
-                String caminho = file.getAbsolutePath() + "/src/" + p.getImagem();
-                Icon produtoImagen = new ImageIcon(caminho);
-                columModel.getColumn(3).setCellRenderer(renderer);
-                modelo=(DefaultTableModel) tabelaCatalog.getModel();
-                modelo.addRow(new Object[]{
-                   // new ImageIcon(caminho)
-                    new ImageIcon(caminho)
-                   });
-            }
-            
       
-            
-        } catch (Exception erro) {
-        }
+        tabelaCatalog.getColumnModel().getColumn(3).setCellRenderer( new ImageRederer());
+       
+       
+        
     }
     
-    private TabelaModeloCatalago getModel() {
-        if (tableModeoCatalogo == null) {
-            tableModeoCatalogo = (TabelaModeloCatalago) tabelaCatalog.getModel();
-        }
-        return tableModeoCatalogo;
-    }
     
-    private Produto getProduto(String id, String descricao, String preco, Icon pro) {
-        Produto colProduto = new  Produto();
-        colProduto.setId(Long.parseLong(id));
-        colProduto.setNome(descricao);
-        colProduto.setPrecoAluguel(Double.parseDouble(preco));
-        colProduto.setImagemProduto(pro);
-        return colProduto;
-    }
-    
-    private  void addProduto(String id, String descricao, String valor,Icon prod) {
-        getModel().addProdutos(getProduto(id, descricao, valor,prod));
-    }
 
     private void pesquisar(){        
         preencherProduto();
@@ -192,6 +167,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         popupMenuProduto = new javax.swing.JPopupMenu();
+        jMenu3 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaCatalog = new javax.swing.JTable();
         campoPesquisa = new javax.swing.JTextField();
@@ -200,7 +177,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        minFuncionario = new javax.swing.JMenuItem();
+        miCliente = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        miGrupoProduto = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+
+        jMenu3.setText("jMenu3");
+
+        jMenu4.setText("jMenu4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -222,7 +207,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tabelaCatalog);
 
-        campoPesquisa.setText("Pesquisar produto");
         campoPesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 campoPesquisaKeyPressed(evt);
@@ -250,15 +234,42 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jMenu2.setText("Cadastro");
 
-        jMenuItem2.setText("Funcinario");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        minFuncionario.setText("Funcionario");
+        minFuncionario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                minFuncionarioActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenu2.add(minFuncionario);
+
+        miCliente.setText("Cliente");
+        miCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miClienteActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miCliente);
+
+        jMenuItem4.setText("Produto");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
+        miGrupoProduto.setText("Gurpo Produto");
+        miGrupoProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miGrupoProdutoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miGrupoProduto);
 
         jMenuBar1.add(jMenu2);
+
+        jMenu5.setText("Relatórios");
+        jMenuBar1.add(jMenu5);
 
         setJMenuBar(jMenuBar1);
 
@@ -297,10 +308,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
        System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void minFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minFuncionarioActionPerformed
        TelaPesquisaFuncionario funcionario =new TelaPesquisaFuncionario();
        funcionario.setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_minFuncionarioActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         pesquisar();
@@ -319,15 +330,37 @@ public class TelaPrincipal extends javax.swing.JFrame {
         realizarAcao(evt);
     }//GEN-LAST:event_tabelaCatalogMouseReleased
 
+    private void miClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miClienteActionPerformed
+        TelaPesquisaCliente telaCadastroCliente = new TelaPesquisaCliente();
+        telaCadastroCliente.setVisible(true);
+                                             
+    }//GEN-LAST:event_miClienteActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        TelaPesquisaProduto produto = new TelaPesquisaProduto();
+        produto.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void miGrupoProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miGrupoProdutoActionPerformed
+        TelaPesquisaGrupoProduto grupo = new TelaPesquisaGrupoProduto();
+        grupo.setVisible(true);
+    }//GEN-LAST:event_miGrupoProdutoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField campoPesquisa;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem miCliente;
+    private javax.swing.JMenuItem miGrupoProduto;
+    private javax.swing.JMenuItem minFuncionario;
     private javax.swing.JPopupMenu popupMenuProduto;
     private javax.swing.JTable tabelaCatalog;
     // End of variables declaration//GEN-END:variables
