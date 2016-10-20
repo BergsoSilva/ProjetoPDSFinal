@@ -35,38 +35,33 @@ public class TelefoneDAO {
         
     }
     
-    /*public void alterar(Telefone fone){        
+    public void alterar(Telefone fone){        
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         
-        Telefone telefone;
+        Telefone telefone = new Telefone();
         try{
             
         manager.getTransaction().begin();
-            telefone = manager.find(Telefone.class, fone.getClass());
-            telefone.setTipo(fone.getTipo());
-            telefone.setNumero(fone.getNumero());
-            
+            telefone = manager.find(Telefone.class, fone.getId());
+            telefone.setCliente(fone.getCliente());
+            telefone.setFuncionario(fone.getFuncionario());
+            telefone.setNumero(fone.getNumero());            
             
             manager.getTransaction().commit();
-            JOptionPane.showMessageDialog(null,BDMensagensPadrao.CADASTRADO_COM_SUCESSO);
             manager.close();
         }catch(Exception ex ){
-               JOptionPane.showMessageDialog(null,BDMensagensPadrao.INSTRUCAO_ERRO);
-               manager.getTransaction().rollback();
-        }finally{
-               manager.close();
+            manager.close();
         }
-    }*/
+    }
     
-    public List<Telefone> pesquisarTelefoneCliente(){
+    public List<Telefone> pesquisarTelefoneCliente(Long id){
         List<Telefone> telefones = new ArrayList<>();
-        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
-        
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();        
        
         manager.getTransaction().begin();
         
-        Query query = manager.createQuery("SELECT t FROM Telefone t where t.cliente is not null");
-                
+        Query query = manager.createQuery("SELECT t FROM Telefone t where t.cliente.id = :idRecebido");
+        query.setParameter("idRecebido", id);        
         telefones = query.getResultList();
         System.out.println(telefones);
         
@@ -77,5 +72,22 @@ public class TelefoneDAO {
         return telefones;    
     }
     
-    // falta o delete
+    public List<Telefone> pesquisarTelefoneFuncionario(Long id){
+        List<Telefone> telefones = new ArrayList<>();
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        
+        manager.getTransaction().begin();
+        
+        Query query = manager.createQuery("SELECT t FROM Telefone t where t.funcionario.id = :idRecebido");
+        query.setParameter("idRecebido", id);     
+                
+        telefones = query.getResultList();
+        System.out.println(telefones);
+        
+        manager.getTransaction();
+        
+        manager.close();
+        
+        return telefones;    
+    }
 }
