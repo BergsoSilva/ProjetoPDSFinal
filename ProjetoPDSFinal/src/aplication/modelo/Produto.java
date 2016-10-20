@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+import javax.swing.Icon;
 
 /**
  *
@@ -23,6 +25,9 @@ public class Produto implements Serializable{
     private int qtde;
     private String imagem;
     private boolean ativo;
+    @Transient
+    private Icon imagemProduto;
+    
     
     @ManyToOne
     private GrupoProduto grupoProduto;
@@ -90,4 +95,14 @@ public class Produto implements Serializable{
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+
+    public Icon getImagemProduto() {
+        return imagemProduto;
+    }
+
+    public void setImagemProduto(Icon imagemProduto) {
+        this.imagemProduto = imagemProduto;
+    }
+    
+    
 }

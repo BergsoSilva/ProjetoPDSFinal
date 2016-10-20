@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -56,8 +57,9 @@ public class GrupoProdutoDAO {
         manager.getTransaction().begin();
             grupoProdutoNova = manager.find(GrupoProduto.class, id);
             manager.remove(grupoProdutoNova);
-            //JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
+            JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
         manager.getTransaction().commit();
         manager.close();
     }
+    
 }

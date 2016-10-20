@@ -80,6 +80,7 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
     }
     
     private void preencherComboGrupoProduto(){
+        
         comboGrupoProduto.removeAllItems();
         comboGrupoProduto.addItem("");
         
@@ -87,7 +88,7 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         
         grupoProduto = new GrupoProduto();
         grupoProduto.setId(Long.parseLong("0"));
-        grupoProduto.setDescricao("teste");
+        grupoProduto.setDescricao("");
         
         for (GrupoProduto g : dao.pesquisar(grupoProduto)) {
             comboGrupoProduto.addItem(g);

@@ -6,8 +6,10 @@
 package aplication.testesUnitario;
 
 import aplication.dao.FuncionarioDAO;
+import aplication.dao.GrupoProdutoDAO;
 import aplication.dao.TelefoneDAO;
 import aplication.modelo.Funcionario;
+import aplication.modelo.GrupoProduto;
 import aplication.modelo.Telefone;
 
 /**
@@ -17,11 +19,14 @@ import aplication.modelo.Telefone;
 public class TesteMetodo {
     public static void main(String[] args) {
         
-        TelefoneDAO dao= new TelefoneDAO();
-        StringBuilder strngTelefone= new StringBuilder();
+        GrupoProdutoDAO dao= new GrupoProdutoDAO();
         
-        Funcionario f = new Funcionario();
-        f.setId(Long.parseLong("1"));
+        GrupoProduto p = new GrupoProduto();
+        p.setDescricao("");
+        
+        for (GrupoProduto arg : dao.pesquisar(p)) {
+            System.out.println("-"+arg.getDescricao());
+        }
   
         /*for (Telefone tel : dao.pesquisar(f)) {
             System.out.println(""+ tel.getTipo() +"\n" + tel.getNumero());
