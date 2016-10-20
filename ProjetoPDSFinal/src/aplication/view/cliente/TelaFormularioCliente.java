@@ -28,8 +28,10 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
     private Cliente cliente;
     private String opcao;
     private List<JTextField> telefones = new ArrayList<JTextField>();
+    private List<Telefone> listTelefones = new ArrayList<>();
     private int cont = 0;
     private int somaDesce;
+    private Long idTelefone;
     
     //Tela cadastrar
     public TelaFormularioCliente(List<Cliente> clientes){
@@ -81,13 +83,15 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
     private void setarValores(Cliente cliente){
         TelefoneDAO telefoneDAO = new TelefoneDAO();
         int i = 0;
-        for (Telefone telefone : telefoneDAO.pesquisarTelefoneCliente()) { 
+        
+        for (Telefone telefone : telefoneDAO.pesquisarTelefoneCliente(cliente.getId())) { 
             System.out.println(somaDesce);
             construiTextFieldDinamico();
             
             String telefoneLimpo = telefone.getNumero().replace("()", "").replace("-", "");
             telefones.get(i).setText(telefoneLimpo);
             i++;
+            idTelefone = telefone.getId();
         }
         String cpfLimpo = cliente.getCpf().replace("-", "").replace(".", "");
         //String telefoneLimpo = this.cliente.getClifone().replace("()", "").replace("-", "");
@@ -300,6 +304,8 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_botaoCancelarActionPerformed
 
     private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
+        Telefone telefone = null;
+        
         Cliente cliente = new Cliente();        
         char sexo;
         
@@ -327,21 +333,34 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
         }
         
         cliente.setDataDasc(dataConvertida);       
-        
+        TelefoneDAO telefoneDAO = null;
         if (opcao.equals("Cadastrar")){
             cadastrar(cliente);
             
             for (JTextField jt : telefones) {
-                Telefone telefone = new Telefone();
+                telefone = new Telefone();
                 telefone.setNumero(jt.getText());
                 telefone.setCliente(cliente);
                 telefone.setFuncionario(null);
                 
-                TelefoneDAO dao = new TelefoneDAO();
-                dao.inserir(telefone);
+                telefoneDAO = new TelefoneDAO();
+                telefoneDAO.inserir(telefone);
             }
         }else{
             alterar(cliente);
+            int i = 0;
+            telefone = null;
+            for (JTextField jt : telefones) {
+                telefone = new Telefone();
+                telefone.setId(idTelefone);
+                telefone.setNumero(jt.getText());
+                telefone.setCliente(cliente);
+                telefone.setFuncionario(null);
+                
+                telefoneDAO = new TelefoneDAO();
+                telefoneDAO.alterar(telefone);
+                i++;
+            }
         }
     }//GEN-LAST:event_botaoCadastrarActionPerformed
 
@@ -368,6 +387,8 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
         cliente.setId(this.cliente.getId());
         try {
             dao.alterar(cliente);
+            
+            
             JOptionPane.showMessageDialog(null, "Alterado com sucesso!!");
             limpar();
             dispose();
