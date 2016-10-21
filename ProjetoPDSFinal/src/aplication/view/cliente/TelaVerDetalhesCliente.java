@@ -2,11 +2,16 @@
 package aplication.view.cliente;
 
 import aplication.dao.ClienteDAO;
+import aplication.dao.TelefoneDAO;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import aplication.modelo.Cliente;
+import aplication.modelo.Telefone;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JLabel;
 
 /**
  *
@@ -15,6 +20,9 @@ import aplication.modelo.Cliente;
 public class TelaVerDetalhesCliente extends javax.swing.JFrame {
 
     private Cliente cliente;
+    private List<JLabel> labels = new ArrayList<>();
+    private int somaDesce;
+    private int cont;
     
     public TelaVerDetalhesCliente(Cliente cliente) {
         initComponents();
@@ -22,6 +30,7 @@ public class TelaVerDetalhesCliente extends javax.swing.JFrame {
         this.cliente = cliente;
         
         setar();
+        criaLabelDinamico();
     }
 
     private void setar(){        
@@ -39,6 +48,22 @@ public class TelaVerDetalhesCliente extends javax.swing.JFrame {
         }else{
             labelSexo.setText("Feminino");
         }
+    }
+    
+    private void criaLabelDinamico(){
+        TelefoneDAO telefoneDAO = new TelefoneDAO();
+        List<Telefone> telefones = telefoneDAO.pesquisarTelefoneCliente(this.cliente.getId());
+        
+        for (int i = 0; i < telefones.size(); i++) {
+            somaDesce = somaDesce + 50;
+            JLabel label = new JLabel();
+
+            labels.add(label);
+            add(labels.get(i));
+
+            labels.get(i).setBounds(12, 180 + somaDesce, 245, 20);
+            labels.get(i).setText(telefones.get(i).getNumero());
+        }        
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -180,7 +205,7 @@ public class TelaVerDetalhesCliente extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -188,7 +213,7 @@ public class TelaVerDetalhesCliente extends javax.swing.JFrame {
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelHabilitacao, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGap(34, 34, 34)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
