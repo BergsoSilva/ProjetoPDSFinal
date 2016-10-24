@@ -65,7 +65,10 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         botaoCadastrar.setText(opcao);
     }
     
-    private void setarValores(){        
+    private void setarValores(){
+        preencherComboGrupoProduto();
+        
+        
         campoNome.setText(produto.getNome());
         campoPrecoAluguel.setText(produto.getPrecoAluguel()+"");
         campoSaldo.setText(produto.getSaldo()+"");

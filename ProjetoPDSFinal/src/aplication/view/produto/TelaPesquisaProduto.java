@@ -269,12 +269,12 @@ public class TelaPesquisaProduto extends javax.swing.JFrame {
         pesquisar();
         carregarTabela();
     }//GEN-LAST:event_botaoPesquisarActionPerformed
-/*
+
     public static void main(String[] args) {
         TelaPesquisaProduto telaPesquisaGrupoProduto = new TelaPesquisaProduto();
         telaPesquisaGrupoProduto.setVisible(true);
     }
-    */
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoPesquisar;
     private javax.swing.JButton campoCadastrar;
