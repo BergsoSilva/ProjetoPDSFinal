@@ -8,28 +8,21 @@ package aplication.view.telaPrincipal;
 import aplication.renderizador.JTableRenderer;
 import aplication.dao.ProdutoDAO;
 import aplication.modelo.Produto;
-import aplication.renderizador.ColProduto;
 import aplication.renderizador.ImageRederer;
 import aplication.view.aluguel.TelaVerDetalhesAluguel;
-import aplication.view.cliente.TelaFormularioCliente;
 import aplication.view.cliente.TelaPesquisaCliente;
 import aplication.view.funcionario.TelaPesquisaFuncionario;
 import aplication.view.grupoproduto.TelaPesquisaGrupoProduto;
 import aplication.view.produto.TelaPesquisaProduto;
-import aplication.view.produto.TelaVerDetalhesProduto;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -52,8 +45,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         pesquisar();
         carregarTabela();
         carregarMenuFlutuante();
-        
-       carregarTabela();
+     
     }
     
     private void carregarTabela(){
@@ -154,11 +146,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         }
     }
-    
-    
+   
     private void verDetalhes(){
         TelaVerDetalhesAluguel verdtalhesProdutoAuguel = new TelaVerDetalhesAluguel(produto);
         verdtalhesProdutoAuguel.setVisible(true);
+    }
+    
+     public static void main(String[] args) {
+        TelaPrincipal principal = new TelaPrincipal();
+        principal.setVisible(true);
     }
     
     
@@ -169,23 +165,29 @@ public class TelaPrincipal extends javax.swing.JFrame {
         popupMenuProduto = new javax.swing.JPopupMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaCatalog = new javax.swing.JTable();
         campoPesquisa = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        barraDeMenu = new javax.swing.JMenuBar();
+        menuFile = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        menuCadastro = new javax.swing.JMenu();
         minFuncionario = new javax.swing.JMenuItem();
         miCliente = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         miGrupoProduto = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
+        menuRalatorios = new javax.swing.JMenu();
+        menuAutenticação = new javax.swing.JMenu();
+        miLogin = new javax.swing.JMenuItem();
+        miLogaut = new javax.swing.JMenuItem();
 
         jMenu3.setText("jMenu3");
 
         jMenu4.setText("jMenu4");
+
+        jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -220,7 +222,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jMenu1.setText("File");
+        menuFile.setText("File");
+        menuFile.setEnabled(false);
 
         jMenuItem1.setText("Sair");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -228,11 +231,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        menuFile.add(jMenuItem1);
 
-        jMenuBar1.add(jMenu1);
+        barraDeMenu.add(menuFile);
 
-        jMenu2.setText("Cadastro");
+        menuCadastro.setText("Cadastro");
+        menuCadastro.setEnabled(false);
 
         minFuncionario.setText("Funcionario");
         minFuncionario.addActionListener(new java.awt.event.ActionListener() {
@@ -240,7 +244,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 minFuncionarioActionPerformed(evt);
             }
         });
-        jMenu2.add(minFuncionario);
+        menuCadastro.add(minFuncionario);
 
         miCliente.setText("Cliente");
         miCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -248,7 +252,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 miClienteActionPerformed(evt);
             }
         });
-        jMenu2.add(miCliente);
+        menuCadastro.add(miCliente);
 
         jMenuItem4.setText("Produto");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
@@ -256,7 +260,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 jMenuItem4ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem4);
+        menuCadastro.add(jMenuItem4);
 
         miGrupoProduto.setText("Gurpo Produto");
         miGrupoProduto.addActionListener(new java.awt.event.ActionListener() {
@@ -264,14 +268,36 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 miGrupoProdutoActionPerformed(evt);
             }
         });
-        jMenu2.add(miGrupoProduto);
+        menuCadastro.add(miGrupoProduto);
 
-        jMenuBar1.add(jMenu2);
+        barraDeMenu.add(menuCadastro);
 
-        jMenu5.setText("Relatórios");
-        jMenuBar1.add(jMenu5);
+        menuRalatorios.setText("Relatórios");
+        menuRalatorios.setEnabled(false);
+        barraDeMenu.add(menuRalatorios);
 
-        setJMenuBar(jMenuBar1);
+        menuAutenticação.setText("Autenticar");
+
+        miLogin.setText("Login");
+        miLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miLoginActionPerformed(evt);
+            }
+        });
+        menuAutenticação.add(miLogin);
+
+        miLogaut.setText("Logaut");
+        miLogaut.setEnabled(false);
+        miLogaut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miLogautActionPerformed(evt);
+            }
+        });
+        menuAutenticação.add(miLogaut);
+
+        barraDeMenu.add(menuAutenticação);
+
+        setJMenuBar(barraDeMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -325,6 +351,28 @@ public class TelaPrincipal extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_campoPesquisaKeyPressed
 
+    public void liberRecursos( String usuario ){
+            
+            this.menuCadastro.setEnabled(true);
+            this.menuCadastro.setEnabled(true);
+            this.menuFile.setEnabled(true);
+            this.menuRalatorios.setEnabled(true);
+            this.miLogin.setEnabled(false);
+            this.miLogaut.setEnabled(true);
+            
+            JOptionPane.showMessageDialog(null,"Liberaddo para : "+ usuario);
+    }
+    
+    
+     public void travarRecursos( ){
+            
+            this.menuCadastro.setEnabled(false);
+            this.menuCadastro.setEnabled(false);
+            this.menuFile.setEnabled(false);
+            this.menuRalatorios.setEnabled(false);
+            this.miLogin.setEnabled(true);
+            this.miLogaut.setEnabled(false);
+    }
     private void tabelaCatalogMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseReleased
         selecionarProduto(evt);
         realizarAcao(evt);
@@ -346,20 +394,33 @@ public class TelaPrincipal extends javax.swing.JFrame {
         grupo.setVisible(true);
     }//GEN-LAST:event_miGrupoProdutoActionPerformed
 
+    private void miLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLoginActionPerformed
+       Login login= new Login(this);
+       login.setVisible(true);
+    }//GEN-LAST:event_miLoginActionPerformed
+
+    private void miLogautActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLogautActionPerformed
+        travarRecursos();
+    }//GEN-LAST:event_miLogautActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuBar barraDeMenu;
     private javax.swing.JTextField campoPesquisa;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenu menuAutenticação;
+    private javax.swing.JMenu menuCadastro;
+    private javax.swing.JMenu menuFile;
+    private javax.swing.JMenu menuRalatorios;
     private javax.swing.JMenuItem miCliente;
     private javax.swing.JMenuItem miGrupoProduto;
+    private javax.swing.JMenuItem miLogaut;
+    private javax.swing.JMenuItem miLogin;
     private javax.swing.JMenuItem minFuncionario;
     private javax.swing.JPopupMenu popupMenuProduto;
     private javax.swing.JTable tabelaCatalog;

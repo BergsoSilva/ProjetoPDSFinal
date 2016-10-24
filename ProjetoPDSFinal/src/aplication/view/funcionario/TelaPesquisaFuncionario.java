@@ -3,6 +3,7 @@ package aplication.view.funcionario;
 
 import aplication.dao.FuncionarioDAO;
 import aplication.modelo.Funcionario;
+import aplication.view.telaPrincipal.TelaPrincipal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -270,6 +271,7 @@ public class TelaPesquisaFuncionario extends javax.swing.JFrame {
         carregarTabela();
     }//GEN-LAST:event_botaoPesquisarActionPerformed
 
+   
     public static void main(String[] args) {
         TelaPesquisaFuncionario telaPesquisaCliente = new TelaPesquisaFuncionario();
         telaPesquisaCliente.setVisible(true);
