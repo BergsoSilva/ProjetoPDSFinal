@@ -179,6 +179,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         miGrupoProduto = new javax.swing.JMenuItem();
         menuRalatorios = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         menuAutenticação = new javax.swing.JMenu();
         miLogin = new javax.swing.JMenuItem();
         miLogaut = new javax.swing.JMenuItem();
@@ -275,6 +277,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         menuRalatorios.setText("Relatórios");
         menuRalatorios.setEnabled(false);
         barraDeMenu.add(menuRalatorios);
+
+        jMenu2.setText("Aluguel");
+
+        jMenuItem2.setText("Pedidos");
+        jMenu2.add(jMenuItem2);
+
+        barraDeMenu.add(jMenu2);
 
         menuAutenticação.setText("Autenticar");
 
@@ -408,9 +417,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField campoPesquisa;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu menuAutenticação;
