@@ -8,6 +8,7 @@ package aplication.view.telaPrincipal;
 import aplication.renderizador.JTableRenderer;
 import aplication.dao.ProdutoDAO;
 import aplication.modelo.Produto;
+import aplication.renderizador.ButtonRederer;
 import aplication.renderizador.ImageRederer;
 import aplication.view.aluguel.TelaVerDetalhesAluguel;
 import aplication.view.cliente.TelaPesquisaCliente;
@@ -51,20 +52,27 @@ public class TelaPrincipal extends javax.swing.JFrame {
     
     private void carregarTabela(){
         pesquisar();
-        TableColumnModel columModel=tabelaCatalog.getColumnModel();
-        JTableRenderer renderer = new JTableRenderer();
         
+        ImageRederer imagem= new ImageRederer();
+        
+        ButtonRederer button= new ButtonRederer();
+       
         tabelaCatalog.setModel(new TabelaModeloCatalago(produtos));
         
         tabelaCatalog.setAutoCreateRowSorter(true);
-        tabelaCatalog.setRowHeight(50);
+        tabelaCatalog.setRowHeight(80);
+        tabelaCatalog.setUpdateSelectionOnSort(true);
         
         tabelaCatalog.getColumnModel().getColumn(0).setPreferredWidth(10);
         tabelaCatalog.getColumnModel().getColumn(1).setPreferredWidth(200);
         tabelaCatalog.getColumnModel().getColumn(2).setPreferredWidth(10);
-        tabelaCatalog.getColumnModel().getColumn(3).setPreferredWidth(20);
-      
-        tabelaCatalog.getColumnModel().getColumn(3).setCellRenderer( new ImageRederer());       
+        tabelaCatalog.getColumnModel().getColumn(3).setPreferredWidth(50);
+        tabelaCatalog.getColumnModel().getColumn(4).setPreferredWidth(5);
+        
+        
+        tabelaCatalog.getColumnModel().getColumn(3).setCellRenderer(imagem);
+        
+        tabelaCatalog.getColumnModel().getColumn(4).setCellRenderer(button);   
     }
     
     

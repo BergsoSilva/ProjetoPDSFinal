@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 /**
  *
@@ -25,13 +27,13 @@ public class Produto implements Serializable{
     private int qtde;
     private String imagem;
     private boolean ativo;
-    
-    @Transient
-    private Icon imagemProduto;
-    
-    
     @ManyToOne
     private GrupoProduto grupoProduto;
+    
+    @Transient
+    private ImageIcon imagemProduto;
+    @Transient
+    private JButton botao;
 
     public Long getId() {
         return id;
@@ -81,14 +83,6 @@ public class Produto implements Serializable{
         this.imagem = imagem;
     }
 
-    public GrupoProduto getGrupoProduto() {
-        return grupoProduto;
-    }
-
-    public void setGrupoProduto(GrupoProduto grupoProduto) {
-        this.grupoProduto = grupoProduto;
-    }
-
     public boolean isAtivo() {
         return ativo;
     }
@@ -97,13 +91,31 @@ public class Produto implements Serializable{
         this.ativo = ativo;
     }
 
-    public Icon getImagemProduto() {
+    public GrupoProduto getGrupoProduto() {
+        return grupoProduto;
+    }
+
+    public void setGrupoProduto(GrupoProduto grupoProduto) {
+        this.grupoProduto = grupoProduto;
+    }
+
+    public ImageIcon getImagemProduto() {
         return imagemProduto;
     }
 
-    public void setImagemProduto(Icon imagemProduto) {
+    public void setImagemProduto(ImageIcon imagemProduto) {
         this.imagemProduto = imagemProduto;
     }
+
+    public JButton getBotao() {
+        return botao;
+    }
+
+    public void setBotao(JButton botao) {
+        this.botao = botao;
+    }
+
     
+
     
 }

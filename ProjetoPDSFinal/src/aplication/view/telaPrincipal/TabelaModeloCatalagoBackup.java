@@ -3,7 +3,6 @@ package aplication.view.telaPrincipal;
 import aplication.view.produto.*;
 import aplication.modelo.GrupoProduto;
 import aplication.modelo.Produto;
-import aplication.renderizador.ImageRederer;
 import aplication.renderizador.JTableRenderer;
 import java.awt.Image;
 import java.io.File;
@@ -11,18 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-public class TabelaModeloCatalago extends AbstractTableModel{
+public class TabelaModeloCatalagoBackup extends AbstractTableModel{
     
-    private String colunas[] = {"Código", "Descrição", "Preço Aluguel","Imagem","Adicionar"}; 
+    private String colunas[] = {"Código", "Descrição", "Preço Aluguel","Imagem"}; 
     private List<Produto> produtos;
 
- public TabelaModeloCatalago(List<Produto> produtos) {
+ public TabelaModeloCatalagoBackup(List<Produto> produtos) {
         this.produtos = produtos;
     }
     
@@ -48,8 +45,6 @@ public class TabelaModeloCatalago extends AbstractTableModel{
                 return String.class;
             case 3:
                 return Image.class;
-            case 4:
-                return JButton.class;
            
             default:
                 throw new IndexOutOfBoundsException("ColumnIndex out of bounds");
@@ -69,16 +64,7 @@ public class TabelaModeloCatalago extends AbstractTableModel{
             case 2:
                 return produto.getPrecoAluguel();
             case 3:
-            {
-                ImageIcon icon = new ImageIcon(getClass().getResource("/"+produto.getImagem()));
-                return icon;
-            }
-            case 4:
-            {
-               return produto.getBotao();
-               
-            }
-    
+                 return produto.getImagemProduto();
         }
         return null;
     }
