@@ -3,7 +3,6 @@ package aplication.view.pedido;
 
 import aplication.dao.PedidoDAO;
 import aplication.modelo.ItemAluguel;
-import aplication.view.produto.*;
 import aplication.modelo.Produto;
 import aplication.modelo.Status;
 import java.awt.Image;
@@ -26,6 +25,10 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         this.itemAluguel = itemAluguel;
         
         setar();
+        
+        Status status = this.itemAluguel.getStatus();
+        
+        botaoAlugar.setEnabled(status.getId() == 1 ? true : false);
     }
     
     private void carregaImagem(String caminho, String nomeImagem){
@@ -47,6 +50,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         labelId.setText(itemAluguel.getProduto().getId()+"");
         labelSaldo.setText(itemAluguel.getProduto().getSaldo()+"");
         labelCliente.setText(itemAluguel.getAluguel().getCliente().getNome());
+        labelTempo.setText(itemAluguel.getTempo() + "");
         
         File file = new File("");
         String caminho = file.getAbsolutePath() + "/src/" + itemAluguel.getProduto().getImagem();
@@ -80,6 +84,8 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         labelId = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         labelCliente = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        labelTempo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -208,6 +214,11 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
         labelCliente.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel8.setText("Tempo:");
+
+        labelTempo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -218,7 +229,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(12, Short.MAX_VALUE))
+                        .addContainerGap(18, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -235,7 +246,9 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labelSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelGrupoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(labelGrupoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelTempo, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(23, 23, 23))))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -277,9 +290,13 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelGrupoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelTempo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
@@ -292,19 +309,24 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoAlugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAlugarActionPerformed
-        Status status = itemAluguel.getAluguel().getStatus();
-        status.setId(Long.parseLong("2"));
-        
         Produto produto = itemAluguel.getProduto();
-        produto.setSaldo(produto.getSaldo() - itemAluguel.getQuantidade());
+        Double contaSaldo = produto.getSaldo() - itemAluguel.getQuantidade(); 
         
-        itemAluguel.setProduto(produto);
-        itemAluguel.getAluguel().setStatus(status);
-        
-        PedidoDAO pedidoDAO = new PedidoDAO();
-        pedidoDAO.finalizaPedido(itemAluguel);
-        
-        JOptionPane.showMessageDialog(this, "Produto Alugado!!");
+        if (contaSaldo > 0){            
+            Status status = itemAluguel.getStatus();
+            status.setId(Long.parseLong("2"));
+
+
+            produto.setSaldo(contaSaldo);
+
+            itemAluguel.setProduto(produto);
+            itemAluguel.getStatus();
+
+            PedidoDAO pedidoDAO = new PedidoDAO();
+            pedidoDAO.finalizaPedido(itemAluguel);
+
+            JOptionPane.showMessageDialog(this, "Produto Alugado!!");
+        }
     }//GEN-LAST:event_botaoAlugarActionPerformed
 
     private void botaoCancelar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelar3ActionPerformed
@@ -322,6 +344,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -335,6 +358,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     private javax.swing.JLabel labelImagem;
     private javax.swing.JLabel labelNome;
     private javax.swing.JLabel labelSaldo;
+    private javax.swing.JLabel labelTempo;
     private javax.swing.JPanel panelImagem;
     // End of variables declaration//GEN-END:variables
 }

@@ -23,10 +23,7 @@ public class Aluguel implements Serializable{
     
     @ManyToOne
     private FormPagamento formPagamento;
-    
-    @ManyToOne
-    private Status status;
-    
+        
     @ManyToOne
     private Cliente cliente;
     
@@ -63,14 +60,6 @@ public class Aluguel implements Serializable{
 
     public void setFormPagamento(FormPagamento formPagamento) {
         this.formPagamento = formPagamento;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 
     public Cliente getCliente() {

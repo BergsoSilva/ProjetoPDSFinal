@@ -13,6 +13,7 @@ import aplication.view.aluguel.TelaVerDetalhesAluguel;
 import aplication.view.cliente.TelaPesquisaCliente;
 import aplication.view.funcionario.TelaPesquisaFuncionario;
 import aplication.view.grupoproduto.TelaPesquisaGrupoProduto;
+import aplication.view.pedido.TelaPesquisaPedido;
 import aplication.view.produto.TelaPesquisaProduto;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,10 +64,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         tabelaCatalog.getColumnModel().getColumn(2).setPreferredWidth(10);
         tabelaCatalog.getColumnModel().getColumn(3).setPreferredWidth(20);
       
-        tabelaCatalog.getColumnModel().getColumn(3).setCellRenderer( new ImageRederer());
-       
-       
-        
+        tabelaCatalog.getColumnModel().getColumn(3).setCellRenderer( new ImageRederer());       
     }
     
     
@@ -179,7 +177,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         miGrupoProduto = new javax.swing.JMenuItem();
         menuRalatorios = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        menuAluguel = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         menuAutenticação = new javax.swing.JMenu();
         miLogin = new javax.swing.JMenuItem();
@@ -278,12 +276,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
         menuRalatorios.setEnabled(false);
         barraDeMenu.add(menuRalatorios);
 
-        jMenu2.setText("Aluguel");
+        menuAluguel.setText("Aluguel");
+        menuAluguel.setEnabled(false);
 
         jMenuItem2.setText("Pedidos");
-        jMenu2.add(jMenuItem2);
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        menuAluguel.add(jMenuItem2);
 
-        barraDeMenu.add(jMenu2);
+        barraDeMenu.add(menuAluguel);
 
         menuAutenticação.setText("Autenticar");
 
@@ -364,6 +368,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             
             this.menuCadastro.setEnabled(true);
             this.menuCadastro.setEnabled(true);
+            this.menuAluguel.setEnabled(true);
             this.menuFile.setEnabled(true);
             this.menuRalatorios.setEnabled(true);
             this.miLogin.setEnabled(false);
@@ -373,14 +378,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
     
     
-     public void travarRecursos( ){
-            
+     public void travarRecursos( ){            
             this.menuCadastro.setEnabled(false);
             this.menuCadastro.setEnabled(false);
             this.menuFile.setEnabled(false);
             this.menuRalatorios.setEnabled(false);
             this.miLogin.setEnabled(true);
             this.miLogaut.setEnabled(false);
+            this.menuAluguel.setVisible(false);
     }
     private void tabelaCatalogMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseReleased
         selecionarProduto(evt);
@@ -412,18 +417,23 @@ public class TelaPrincipal extends javax.swing.JFrame {
         travarRecursos();
     }//GEN-LAST:event_miLogautActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        TelaPesquisaPedido telaPesquisaPedido = new TelaPesquisaPedido();
+        telaPesquisaPedido.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraDeMenu;
     private javax.swing.JTextField campoPesquisa;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenu menuAluguel;
     private javax.swing.JMenu menuAutenticação;
     private javax.swing.JMenu menuCadastro;
     private javax.swing.JMenu menuFile;

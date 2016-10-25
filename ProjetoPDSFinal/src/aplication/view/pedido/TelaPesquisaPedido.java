@@ -15,6 +15,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
 
    private List<ItemAluguel> itensAlugueis = new ArrayList<>();
    private ItemAluguel itemAluguel = new ItemAluguel();
+   private Long idStatus = Long.parseLong("1");
     
     public TelaPesquisaPedido(){
         initComponents();      
@@ -28,11 +29,10 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         preencherCliente();
         try {            
             PedidoDAO pedidoDAO = new PedidoDAO();
-            this.itensAlugueis = (List<ItemAluguel>) pedidoDAO.pesquisar();
+            this.itensAlugueis = (List<ItemAluguel>) pedidoDAO.pesquisar(idStatus);
         }catch(Exception e){
             e.printStackTrace();
-        }           
-        
+        }                   
     }
     
     @SuppressWarnings("unchecked")
@@ -112,6 +112,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     private void initComponents() {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
+        grupoRadio = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         campoNome = new javax.swing.JTextField();
         botaoPesquisar = new javax.swing.JButton();
@@ -119,6 +120,8 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaPedido = new javax.swing.JTable();
+        radioPedido = new javax.swing.JRadioButton();
+        radioAlugado = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisar Pedido");
@@ -189,6 +192,25 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        grupoRadio.add(radioPedido);
+        radioPedido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        radioPedido.setSelected(true);
+        radioPedido.setText("Pedido(s)");
+        radioPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioPedidoActionPerformed(evt);
+            }
+        });
+
+        grupoRadio.add(radioAlugado);
+        radioAlugado.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        radioAlugado.setText("Alugado(s)");
+        radioAlugado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioAlugadoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -202,14 +224,22 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
                         .addComponent(botaoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
+                        .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(181, 181, 181)
-                .addComponent(campoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(199, 199, 199)
+                        .addComponent(campoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(radioPedido)
+                                .addGap(18, 18, 18)
+                                .addComponent(radioAlugado))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,8 +251,12 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
                     .addComponent(botaoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioPedido)
+                    .addComponent(radioAlugado))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(campoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -253,6 +287,16 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         carregarTabela();
     }//GEN-LAST:event_botaoPesquisarActionPerformed
 
+    private void radioPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioPedidoActionPerformed
+        idStatus = Long.parseLong("1");
+        carregarTabela();
+    }//GEN-LAST:event_radioPedidoActionPerformed
+
+    private void radioAlugadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioAlugadoActionPerformed
+        idStatus = Long.parseLong("2");
+        carregarTabela();
+    }//GEN-LAST:event_radioAlugadoActionPerformed
+
     public static void main(String[] args) {
         TelaPesquisaPedido telaPesquisaCliente = new TelaPesquisaPedido();
         telaPesquisaCliente.setVisible(true);
@@ -262,10 +306,13 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     private javax.swing.JButton botaoPesquisar;
     private javax.swing.JButton campoCancelar;
     private javax.swing.JTextField campoNome;
+    private javax.swing.ButtonGroup grupoRadio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton radioAlugado;
+    private javax.swing.JRadioButton radioPedido;
     private javax.swing.JTable tabelaPedido;
     // End of variables declaration//GEN-END:variables
 }

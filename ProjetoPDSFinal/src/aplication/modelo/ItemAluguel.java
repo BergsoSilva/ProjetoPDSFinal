@@ -25,6 +25,17 @@ public class ItemAluguel implements Serializable{
     
     @ManyToOne
     private Aluguel aluguel;
+    
+    @ManyToOne
+    private Status status;
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
