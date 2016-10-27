@@ -6,6 +6,7 @@ import aplication.modelo.Produto;
 import aplication.renderizador.ImageRederer;
 import aplication.renderizador.JTableRenderer;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,20 +58,27 @@ public class TabelaModeloCatalago extends AbstractTableModel{
     public Object getValueAt(int rowIndex, int columnIndex) {
         Produto produto = produtos.get(rowIndex);
         
-         
+        JLabel j = new JLabel();
+        j.setBounds(0, 0, 200, 150);
+        Rectangle rectangle = j.getBounds();
+        
+        //ImageIcon icon = new ImageIcon(getClass().getResource("/img/add.jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/"+produto.getImagem()));
+        Image image = icon.getImage().getScaledInstance(rectangle.width, rectangle.height, Image.SCALE_SMOOTH);
+        icon = new ImageIcon(image);
+        
         switch(columnIndex){
             case 0:
                 {
-                    ImageIcon icon = new ImageIcon(getClass().getResource("/"+produto.getImagem()));
+                    //ImageIcon icon2 = new ImageIcon(getClass().getResource("/"+produto.getImagem()));
                     return icon;
                  }
             case 1:
                 return produto.getNome() +" \n Preço Alugel : "+ produto.getPrecoAluguel();
-            case 2:
-            
-               ImageIcon icon = new ImageIcon(getClass().getResource("/img/add.jpg"));
+            case 2:       
                
-               return icon;
+                ImageIcon icon2 = new ImageIcon(getClass().getResource("/img/add.jpg"));
+               return icon2;
             
         }
         return null;

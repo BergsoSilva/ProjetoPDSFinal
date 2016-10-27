@@ -296,6 +296,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 botaFecharPedidoMouseReleased(evt);
             }
         });
+        botaFecharPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaFecharPedidoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -548,6 +553,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void botaFecharPedidoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaFecharPedidoMouseReleased
        JOptionPane.showMessageDialog(null,"Carregar Item Alugel");
     }//GEN-LAST:event_botaFecharPedidoMouseReleased
+
+    private void botaFecharPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaFecharPedidoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botaFecharPedidoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraDeMenu;

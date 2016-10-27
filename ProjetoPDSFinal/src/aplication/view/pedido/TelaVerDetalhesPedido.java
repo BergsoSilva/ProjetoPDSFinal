@@ -36,7 +36,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
         Rectangle rectangle = labelImagem.getBounds();
 
-        Image image = icon.getImage().getScaledInstance(rectangle.width, rectangle.height, Image.SCALE_DEFAULT);
+        Image image = icon.getImage().getScaledInstance(rectangle.width, rectangle.height, Image.SCALE_SMOOTH);
         icon = new ImageIcon(image);
 
         labelImagem.setIcon(icon);
