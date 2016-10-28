@@ -25,6 +25,8 @@ import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -38,7 +40,7 @@ import javax.swing.table.TableColumnModel;
 public class TelaPrincipal extends javax.swing.JFrame {
     private Produto produto=new Produto();
     private List<Produto> produtos= new ArrayList<>();
-    private DefaultTableCellRenderer celrenCellRenderer;
+    private List<Produto> procarrinhoMemo= new ArrayList<>();
    
     public TelaPrincipal() {
         initComponents();
@@ -47,6 +49,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         pesquisar();
         carregarTabela();
         carregarMenuFlutuante();
+        
      
     }
     
@@ -54,29 +57,37 @@ public class TelaPrincipal extends javax.swing.JFrame {
         pesquisar();
         
         ImageRederer imagem= new ImageRederer();
+        ImageRederer imagem2= new ImageRederer();
         
-        ButtonRederer button= new ButtonRederer();
+        
+        
        
         tabelaCatalog.setModel(new TabelaModeloCatalago(produtos));
         
+        
+        
         tabelaCatalog.setAutoCreateRowSorter(true);
-        tabelaCatalog.setRowHeight(80);
+        tabelaCatalog.setRowHeight(150);
         tabelaCatalog.setUpdateSelectionOnSort(true);
         
-        tabelaCatalog.getColumnModel().getColumn(0).setPreferredWidth(10);
-        tabelaCatalog.getColumnModel().getColumn(1).setPreferredWidth(200);
-        tabelaCatalog.getColumnModel().getColumn(2).setPreferredWidth(10);
-        tabelaCatalog.getColumnModel().getColumn(3).setPreferredWidth(50);
-        tabelaCatalog.getColumnModel().getColumn(4).setPreferredWidth(5);
+        /**  Coluna com imagen na celular*/
+        tabelaCatalog.getColumnModel().getColumn(0).setPreferredWidth(100);
+        
+        tabelaCatalog.getColumnModel().getColumn(1).setPreferredWidth(30);
+        tabelaCatalog.getColumnModel().getColumn(2).setPreferredWidth(5);
+       
+        
+       
+        tabelaCatalog.getColumnModel().getColumn(0).setCellRenderer(imagem);
+        
+        tabelaCatalog.getColumnModel().getColumn(2).setCellRenderer(imagem2); 
         
         
-        tabelaCatalog.getColumnModel().getColumn(3).setCellRenderer(imagem);
         
-        tabelaCatalog.getColumnModel().getColumn(4).setCellRenderer(button);   
+        //alinhaTableCentro(tabelaCatalog, tabelaCatalog.getSelectedColumns());
     }
     
-    
-
+ 
     private void pesquisar(){        
         preencherProduto();
         try {            
@@ -120,12 +131,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             popupMenuProduto.add(menuItem1);
         }
     }
+ 
     /**
      * pegar referencia produto ao clicar em cima com o muose
      * @param evt 
      */
     private void selecionarProduto(MouseEvent evt){
         int linha = tabelaCatalog.rowAtPoint(evt.getPoint());
+        int coluna = tabelaCatalog.columnAtPoint(evt.getPoint());
         
         if(linha >= 0){
             tabelaCatalog.setRowSelectionInterval(linha, linha);
@@ -145,6 +158,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
             
             if(evt.getClickCount() > 1){
                 verDetalhes();
+            }
+            if (evt.getClickCount()==1){
+                
             }
         }else{
             if(evt.getButton() == evt.BUTTON3){
@@ -176,6 +192,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
         tabelaCatalog = new javax.swing.JTable();
         campoPesquisa = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableCarrinhoPedido = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        labelTotal = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        valorAPagar = new javax.swing.JLabel();
+        botaFecharPedido = new javax.swing.JButton();
         barraDeMenu = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -198,7 +222,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
+        tabelaCatalog.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 51, 51)));
         tabelaCatalog.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -210,7 +242,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabelaCatalog.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tabelaCatalog.setShowHorizontalLines(false);
+        tabelaCatalog.setShowVerticalLines(false);
         tabelaCatalog.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaCatalogMouseClicked(evt);
+            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tabelaCatalogMouseReleased(evt);
             }
@@ -229,6 +267,71 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        tableCarrinhoPedido.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tableCarrinhoPedido.setShowVerticalLines(false);
+        jScrollPane2.setViewportView(tableCarrinhoPedido);
+
+        jLabel1.setText("Total Produto:");
+
+        labelTotal.setText("..");
+
+        jLabel2.setText("Valor R$: ");
+
+        valorAPagar.setText("..");
+
+        botaFecharPedido.setText("Fechar Pedido");
+        botaFecharPedido.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                botaFecharPedidoMouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(valorAPagar)
+                            .addComponent(labelTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(botaFecharPedido))
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(labelTotal))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(valorAPagar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addComponent(botaFecharPedido))
+        );
 
         menuFile.setText("File");
         menuFile.setEnabled(false);
@@ -328,24 +431,26 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 641, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(22, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(campoPesquisa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addGap(36, 36, 36))))
+                        .addComponent(jButton1)))
+                .addGap(36, 36, 36))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(campoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
@@ -430,17 +535,37 @@ public class TelaPrincipal extends javax.swing.JFrame {
         telaPesquisaPedido.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void tabelaCatalogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseClicked
+        adicionarCarrinho(evt);
+        perrencherTabelaCarrinho();
+        realizaCalculos();
+    }//GEN-LAST:event_tabelaCatalogMouseClicked
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+       perrencherTabelaCarrinho();
+    }//GEN-LAST:event_formWindowGainedFocus
+
+    private void botaFecharPedidoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaFecharPedidoMouseReleased
+       JOptionPane.showMessageDialog(null,"Carregar Item Alugel");
+    }//GEN-LAST:event_botaFecharPedidoMouseReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraDeMenu;
+    private javax.swing.JButton botaFecharPedido;
     private javax.swing.JTextField campoPesquisa;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel labelTotal;
     private javax.swing.JMenu menuAluguel;
     private javax.swing.JMenu menuAutenticação;
     private javax.swing.JMenu menuCadastro;
@@ -453,5 +578,50 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem minFuncionario;
     private javax.swing.JPopupMenu popupMenuProduto;
     private javax.swing.JTable tabelaCatalog;
+    private javax.swing.JTable tableCarrinhoPedido;
+    private javax.swing.JLabel valorAPagar;
     // End of variables declaration//GEN-END:variables
+
+    private void adicionarCarrinho(MouseEvent evt) {
+        int coluna = tabelaCatalog.columnAtPoint(evt.getPoint());
+        if (coluna== 2){
+            int linha = tabelaCatalog.rowAtPoint(evt.getPoint());
+            if(linha >= 0){
+            tabelaCatalog.setRowSelectionInterval(linha, linha);
+            linha = tabelaCatalog.getSelectedRow();
+            
+              
+             carregarCarrinho(produtos.get(linha));
+        }
+            
+          
+        }
+     
+    }
+    
+    private void carregarCarrinho(Produto produto){
+         
+         if (procarrinhoMemo.contains(produto)){
+             JOptionPane.showMessageDialog(null, "Produto ja existe");
+         }else
+              procarrinhoMemo.add(produto);
+    }
+    
+    private void perrencherTabelaCarrinho(){
+        tableCarrinhoPedido.setModel(new TabelaModeloCarrinhoPedido(this.procarrinhoMemo));
+        
+    }
+    
+    private void realizaCalculos(){
+        labelTotal.setText(procarrinhoMemo.size()+"");
+        
+        valorAPagar.setText("");
+        Double valorApagar=0.0;
+        
+        for (Produto p : procarrinhoMemo) {
+            valorApagar=valorApagar+p.getPrecoAluguel();
+        }
+         valorAPagar.setText(valorApagar+"");
+         
+    }
 }

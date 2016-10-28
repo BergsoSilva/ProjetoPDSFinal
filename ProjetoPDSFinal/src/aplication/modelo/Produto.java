@@ -33,7 +33,7 @@ public class Produto implements Serializable{
     @Transient
     private ImageIcon imagemProduto;
     @Transient
-    private JButton botao;
+    private ImageIcon imagemAdd;
 
     public Long getId() {
         return id;
@@ -107,15 +107,12 @@ public class Produto implements Serializable{
         this.imagemProduto = imagemProduto;
     }
 
-    public JButton getBotao() {
-        return botao;
+    public ImageIcon getImagemAdd() {
+        return imagemAdd;
     }
 
-    public void setBotao(JButton botao) {
-        this.botao = botao;
+    public void setImagemAdd(ImageIcon imagemAdd) {
+        this.imagemAdd = imagemAdd;
     }
-
-    
-
     
 }

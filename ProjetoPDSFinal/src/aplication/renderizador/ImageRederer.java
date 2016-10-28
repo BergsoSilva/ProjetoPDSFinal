@@ -5,16 +5,10 @@
  */
 package aplication.renderizador;
 
-import aplication.dao.ProdutoDAO;
-import java.awt.Component;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.io.File;
-import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 
 /**
@@ -23,9 +17,9 @@ import javax.swing.table.TableCellRenderer;
  */
 public class ImageRederer extends JLabel implements TableCellRenderer {
     
-   public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table,
+   public java.awt.Component getTableCellRendererComponent( JTable table,
                Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-         
+         setHorizontalAlignment( SwingConstants.CENTER);
            if (value instanceof ImageIcon) {
 	            if (value != null) {
 	                ImageIcon d = (ImageIcon) value;

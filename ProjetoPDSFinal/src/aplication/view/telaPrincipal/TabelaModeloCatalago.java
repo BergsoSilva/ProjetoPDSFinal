@@ -19,7 +19,7 @@ import javax.swing.table.TableColumnModel;
 
 public class TabelaModeloCatalago extends AbstractTableModel{
     
-    private String colunas[] = {"Código", "Descrição", "Preço Aluguel","Imagem","Adicionar"}; 
+    private String colunas[] = {"Imagem","Descrição","Ação"}; 
     private List<Produto> produtos;
 
  public TabelaModeloCatalago(List<Produto> produtos) {
@@ -41,15 +41,12 @@ public class TabelaModeloCatalago extends AbstractTableModel{
        
         switch(columnIndex){
            case 0:
-                return String.class;
+                 return Image.class;
             case 1:
                 return String.class;
+         
             case 2:
-                return String.class;
-            case 3:
                 return Image.class;
-            case 4:
-                return JButton.class;
            
             default:
                 throw new IndexOutOfBoundsException("ColumnIndex out of bounds");
@@ -63,22 +60,18 @@ public class TabelaModeloCatalago extends AbstractTableModel{
          
         switch(columnIndex){
             case 0:
-                return produto.getId();
+                {
+                    ImageIcon icon = new ImageIcon(getClass().getResource("/"+produto.getImagem()));
+                    return icon;
+                 }
             case 1:
-                return produto.getNome();
+                return produto.getNome() +" \n Preço Alugel : "+ produto.getPrecoAluguel();
             case 2:
-                return produto.getPrecoAluguel();
-            case 3:
-            {
-                ImageIcon icon = new ImageIcon(getClass().getResource("/"+produto.getImagem()));
-                return icon;
-            }
-            case 4:
-            {
-               return produto.getBotao();
+            
+               ImageIcon icon = new ImageIcon(getClass().getResource("/img/add.jpg"));
                
-            }
-    
+               return icon;
+            
         }
         return null;
     }
@@ -86,7 +79,13 @@ public class TabelaModeloCatalago extends AbstractTableModel{
     @Override
     public String getColumnName(int column) {            
         return colunas[column];       
-    }
+    } 
 
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return false;
+    }
+    
+    
     
 }
