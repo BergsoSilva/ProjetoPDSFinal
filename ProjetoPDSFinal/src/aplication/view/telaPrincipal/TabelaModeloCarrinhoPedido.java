@@ -19,7 +19,7 @@ import javax.swing.table.TableColumnModel;
 
 public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
     
-    private String colunas[] = {"Descrição"," Val unit"}; 
+    private String colunas[] = {"Descrição"," Val unit","Qtde"}; 
     private List<Produto> produtos;
 
  public TabelaModeloCarrinhoPedido(List<Produto> produtos) {
@@ -44,6 +44,8 @@ public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
                  return String.class;
             case 1:
                 return String.class;
+            case 2:
+                return String.class;
             default:
                 throw new IndexOutOfBoundsException("ColumnIndex out of bounds");
        }
@@ -59,9 +61,9 @@ public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
             case 0:
                 return produto.getNome();
             case 1:
-            
                return  produto.getPrecoAluguel();
-            
+            case 2:
+                return "2";
         }
         return null;
     }
@@ -73,7 +75,7 @@ public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
+        return true;
     }
     
     

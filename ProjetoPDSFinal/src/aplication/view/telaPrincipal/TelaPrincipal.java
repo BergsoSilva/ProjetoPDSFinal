@@ -1,12 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+ 
 package aplication.view.telaPrincipal;
 
+import aplication.dao.GrupoProdutoDAO;
 import aplication.renderizador.JTableRenderer;
 import aplication.dao.ProdutoDAO;
+import aplication.modelo.GrupoProduto;
 import aplication.modelo.Produto;
 import aplication.renderizador.ButtonRederer;
 import aplication.renderizador.ImageRederer;
@@ -44,11 +43,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
    
     public TelaPrincipal() {
         initComponents();
-        setResizable(false);
+       
         setLocationRelativeTo(this);
         pesquisar();
         carregarTabela();
         carregarMenuFlutuante();
+        prencherComboCategoria();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setResizable(false);
         
      
     }
@@ -174,6 +176,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
         verdtalhesProdutoAuguel.setVisible(true);
     }
     
+    private void prencherComboCategoria(){
+        GrupoProdutoDAO dao = new GrupoProdutoDAO();
+        
+        comboCategoria.removeAllItems();
+        comboCategoria.addItem("");
+        
+        for (GrupoProduto gp : dao.findAll()) {
+            comboCategoria.addItem(gp);
+        }
+        
+    }
+    
      public static void main(String[] args) {
         TelaPrincipal principal = new TelaPrincipal();
         principal.setVisible(true);
@@ -200,6 +214,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         valorAPagar = new javax.swing.JLabel();
         botaFecharPedido = new javax.swing.JButton();
+        comboCategoria = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
         barraDeMenu = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -243,7 +259,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         ));
         tabelaCatalog.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tabelaCatalog.setShowHorizontalLines(false);
         tabelaCatalog.setShowVerticalLines(false);
         tabelaCatalog.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -309,17 +324,19 @@ public class TelaPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(valorAPagar)
-                            .addComponent(labelTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(botaFecharPedido))
-                .addContainerGap(14, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(valorAPagar)
+                                    .addComponent(labelTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(botaFecharPedido))
+                        .addContainerGap(141, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,6 +354,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(botaFecharPedido))
         );
+
+        comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel3.setText("Categoria");
 
         menuFile.setText("File");
         menuFile.setEnabled(false);
@@ -436,22 +457,31 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(comboCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(campoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1)))
+                        .addGap(36, 36, 36))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(campoPesquisa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
-                .addGap(36, 36, 36))
+                        .addComponent(jLabel3)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(comboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campoPesquisa))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -562,9 +592,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar barraDeMenu;
     private javax.swing.JButton botaFecharPedido;
     private javax.swing.JTextField campoPesquisa;
+    private javax.swing.JComboBox comboCategoria;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
@@ -591,40 +623,65 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel valorAPagar;
     // End of variables declaration//GEN-END:variables
 
+    
+    /** *
+     * Metodos para realizar a ação  de inserção no carrinho
+     */
     private void adicionarCarrinho(MouseEvent evt) {
+        
+        /*  Seleciona a coluna clicada*/
         int coluna = tabelaCatalog.columnAtPoint(evt.getPoint());
+        
+        /* Verifica se a coluna clicada e a coluna que esta a imagem de ADD */
         if (coluna== 2){
+            /*  Seleciona a linha da JTable com o Objeto*/
             int linha = tabelaCatalog.rowAtPoint(evt.getPoint());
-            if(linha >= 0){
-            tabelaCatalog.setRowSelectionInterval(linha, linha);
-            linha = tabelaCatalog.getSelectedRow();
             
-              
-             carregarCarrinho(produtos.get(linha));
-        }
+            /* Se houver clik*/
+            if(linha >= 0){
+                
+                tabelaCatalog.setRowSelectionInterval(linha, linha);
+                
+                linha = tabelaCatalog.getSelectedRow();
+                /**
+                 * Metodo@carregarCarrinho
+                 * Possui um paramentro do tipo produto
+                 * Esse metedo será responsavel por adicionar
+                 * o Objeto aa List<procarrinhoMemo> 
+                 */
+                carregarCarrinho(produtos.get(linha));
+             }
             
           
         }
      
     }
     
+    /**
+     * Metodo carregarCarrinho
+     * @param produto 
+     */
     private void carregarCarrinho(Produto produto){
          
+         /* Verifiação se produto da existe na lista*/
          if (procarrinhoMemo.contains(produto)){
              JOptionPane.showMessageDialog(null, "Produto ja existe");
          }else
               procarrinhoMemo.add(produto);
     }
-    
+    /**
+     * Metodo responsavéil por preencher a JTable tableCarrinhoPedido
+     */
     private void perrencherTabelaCarrinho(){
         tableCarrinhoPedido.setModel(new TabelaModeloCarrinhoPedido(this.procarrinhoMemo));
-        
     }
     
     private void realizaCalculos(){
+        
         labelTotal.setText(procarrinhoMemo.size()+"");
         
         valorAPagar.setText("");
+        
         Double valorApagar=0.0;
         
         for (Produto p : procarrinhoMemo) {

@@ -53,32 +53,38 @@ public class TabelaModeloCatalago extends AbstractTableModel{
                 throw new IndexOutOfBoundsException("ColumnIndex out of bounds");
        }
     }
-
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        Produto produto = produtos.get(rowIndex);
+    
+    private Icon  tmImagem(int x , int y, String caminho){        
         
         JLabel j = new JLabel();
-        j.setBounds(0, 0, 200, 150);
+        j.setBounds(0, 0, x, y);
         Rectangle rectangle = j.getBounds();
         
         //ImageIcon icon = new ImageIcon(getClass().getResource("/img/add.jpg"));
-        ImageIcon icon = new ImageIcon(getClass().getResource("/"+produto.getImagem()));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/"+caminho));
         Image image = icon.getImage().getScaledInstance(rectangle.width, rectangle.height, Image.SCALE_SMOOTH);
         icon = new ImageIcon(image);
+        
+        return  icon;
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+       Produto produto = produtos.get(rowIndex);
         
         switch(columnIndex){
             case 0:
                 {
                     //ImageIcon icon2 = new ImageIcon(getClass().getResource("/"+produto.getImagem()));
-                    return icon;
+                    return tmImagem(200, 150, produto.getImagem());
                  }
             case 1:
                 return produto.getNome() +" \n Preço Alugel : "+ produto.getPrecoAluguel();
             case 2:       
                
-                ImageIcon icon2 = new ImageIcon(getClass().getResource("/img/add.jpg"));
-               return icon2;
+                String c="img/add.png";
+                
+               return tmImagem(25, 25, c);
             
         }
         return null;
