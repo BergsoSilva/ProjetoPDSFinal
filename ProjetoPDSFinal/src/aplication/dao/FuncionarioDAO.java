@@ -179,4 +179,23 @@ public class FuncionarioDAO {
         
         return  usuario;
     }
+    
+    public Funcionario descobreFuncao(String login, String senha){
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        manager.getTransaction().begin();
+        
+        Query query = manager.createQuery("SELECT f FROM Funcionario f "
+                + "INNER JOIN FETCH f.funcao "
+                + "WHERE f.login = ?1 AND f.senha = ?2");
+        
+        query.setParameter(1, login);
+        query.setParameter(2, senha);
+        
+        Funcionario funcionario = (Funcionario) query.getSingleResult();
+        
+        manager.getTransaction();
+        manager.close();
+        
+        return funcionario;
+    }
 }

@@ -6,6 +6,7 @@
 package aplication.view.telaPrincipal;
 
 import aplication.dao.FuncionarioDAO;
+import aplication.modelo.Funcao;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
@@ -30,8 +31,14 @@ public class Login extends javax.swing.JFrame {
     private void estrarTelaPricipal (String login , String senha){
         FuncionarioDAO dao = new FuncionarioDAO();
         
+        Funcao funcao = dao.descobreFuncao(login, senha).getFuncao();
+        
         if (dao.validarUsuario(login, senha)!= null) {
-            telaPrincipal.liberRecursos(login);
+            if (funcao.getId() == 2){                
+                telaPrincipal.liberRecursos(login, true);
+            }else{
+                telaPrincipal.liberRecursos(login, false);
+            }
            this.dispose();
         } else {
             JOptionPane.showMessageDialog(null,"Usuario invalido.");

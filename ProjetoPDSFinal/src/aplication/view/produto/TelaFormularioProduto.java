@@ -71,7 +71,6 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         
         campoNome.setText(produto.getNome());
         campoPrecoAluguel.setText(produto.getPrecoAluguel()+"");
-        campoSaldo.setText(produto.getSaldo()+"");
         comboGrupoProduto.getModel().setSelectedItem(produto.getGrupoProduto());
         spinnerQtde.setModel(new SpinnerNumberModel(produto.getQtde(), 1, 1000, 1));
         checkAtivo.setSelected(produto.isAtivo());
@@ -135,7 +134,7 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
 
         Rectangle rectangle = labelImagem.getBounds();
 
-        Image image = icon.getImage().getScaledInstance(rectangle.width, rectangle.height, Image.SCALE_DEFAULT);
+        Image image = icon.getImage().getScaledInstance(rectangle.width, rectangle.height, Image.SCALE_SMOOTH);
         icon = new ImageIcon(image);
 
         labelImagem.setIcon(icon);
@@ -169,8 +168,6 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         comboGrupoProduto = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
-        campoSaldo = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
         spinnerQtde = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -268,6 +265,10 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText("Grupo Produto:");
 
+        spinnerQtde.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        spinnerQtde.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spinnerQtde.setToolTipText("");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -276,7 +277,6 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoPrecoAluguel, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
                     .addComponent(comboGrupoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -284,10 +284,14 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
                         .addGap(359, 359, 359)
                         .addComponent(checkAtivo))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 317, Short.MAX_VALUE)
-                        .addComponent(jLabel7)
-                        .addContainerGap(28, Short.MAX_VALUE))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(campoPrecoAluguel, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(75, 75, 75)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(spinnerQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -300,30 +304,20 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
                     .addComponent(checkAtivo))
                 .addGap(2, 2, 2)
                 .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel6))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel7)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
                 .addGap(6, 6, 6)
-                .addComponent(campoPrecoAluguel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoPrecoAluguel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spinnerQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addGap(18, 18, 18)
                 .addComponent(comboGrupoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        campoSaldo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
-        jLabel9.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel9.setText("Saldo:");
-
-        spinnerQtde.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        spinnerQtde.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
-        spinnerQtde.setToolTipText("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -338,15 +332,6 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
                         .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(campoSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(88, 88, 88)
-                        .addComponent(spinnerQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(65, 65, 65))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -356,13 +341,7 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(108, 108, 108)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spinnerQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
+                .addContainerGap(275, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -386,12 +365,14 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
 
     private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
         Produto produto = new Produto();
+        int valorSpinner = Integer.parseInt(spinnerQtde.getValue().toString());
+        
         produto.setNome(campoNome.getText());
         produto.setPrecoAluguel(Double.parseDouble(campoPrecoAluguel.getText()));
-        produto.setSaldo(Double.parseDouble(campoSaldo.getText()));
+        produto.setSaldo(Double.parseDouble(valorSpinner+""));
         produto.setAtivo(checkAtivo.isSelected());
         produto.setGrupoProduto((GrupoProduto) comboGrupoProduto.getSelectedItem());
-        int valorSpinner = Integer.parseInt(spinnerQtde.getValue().toString());
+        
         produto.setQtde(valorSpinner);
         
         String caminhoImagem = null;
@@ -457,7 +438,6 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
     private javax.swing.JButton botaoCancelar;
     private javax.swing.JTextField campoNome;
     private javax.swing.JTextField campoPrecoAluguel;
-    private javax.swing.JTextField campoSaldo;
     private javax.swing.JCheckBox checkAtivo;
     private javax.swing.JComboBox<Object> comboGrupoProduto;
     private javax.swing.ButtonGroup grupoSexo;
@@ -465,7 +445,6 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel labelImagem;

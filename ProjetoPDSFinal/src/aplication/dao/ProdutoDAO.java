@@ -51,4 +51,16 @@ public class ProdutoDAO {
         
         return produtos;    
     }
+    
+    public void alteraStatus(Produto produtoNovo){
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        
+        Produto produto = new Produto();
+        
+        manager.getTransaction().begin();
+            produto = manager.find(Produto.class, produtoNovo.getId());
+            produto.setSaldo(produtoNovo.getSaldo());
+        manager.getTransaction().commit();
+        manager.close();
+    }
 }

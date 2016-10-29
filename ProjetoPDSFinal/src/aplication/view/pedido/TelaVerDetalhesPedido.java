@@ -2,6 +2,7 @@
 package aplication.view.pedido;
 
 import aplication.dao.PedidoDAO;
+import aplication.dao.ProdutoDAO;
 import aplication.modelo.ItemAluguel;
 import aplication.modelo.Produto;
 import aplication.modelo.Status;
@@ -36,7 +37,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
         Rectangle rectangle = labelImagem.getBounds();
 
-        Image image = icon.getImage().getScaledInstance(rectangle.width, rectangle.height, Image.SCALE_SMOOTH);
+        Image image = icon.getImage().getScaledInstance(rectangle.width, rectangle.height, Image.SCALE_DEFAULT);
         icon = new ImageIcon(image);
 
         labelImagem.setIcon(icon);
@@ -316,15 +317,15 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             Status status = itemAluguel.getStatus();
             status.setId(Long.parseLong("2"));
 
-
             produto.setSaldo(contaSaldo);
-
-            itemAluguel.setProduto(produto);
+            
             itemAluguel.getStatus();
 
             PedidoDAO pedidoDAO = new PedidoDAO();
             pedidoDAO.finalizaPedido(itemAluguel);
-
+            
+            ProdutoDAO produtoDAO = new ProdutoDAO();
+            produtoDAO.alteraStatus(produto);
             JOptionPane.showMessageDialog(this, "Produto Alugado!!");
         }
     }//GEN-LAST:event_botaoAlugarActionPerformed

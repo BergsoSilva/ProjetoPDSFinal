@@ -52,7 +52,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
         
-     
+        menuAluguel.setVisible(false);
+        menuCadastro.setVisible(false);
+        menuRalatorios.setVisible(false);
     }
     
     private void carregarTabela(){
@@ -360,7 +362,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabel3.setText("Categoria");
 
         menuFile.setText("File");
-        menuFile.setEnabled(false);
 
         jMenuItem1.setText("Sair");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -373,7 +374,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         barraDeMenu.add(menuFile);
 
         menuCadastro.setText("Cadastro");
-        menuCadastro.setEnabled(false);
 
         minFuncionario.setText("Funcionario");
         minFuncionario.addActionListener(new java.awt.event.ActionListener() {
@@ -410,11 +410,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         barraDeMenu.add(menuCadastro);
 
         menuRalatorios.setText("Relatórios");
-        menuRalatorios.setEnabled(false);
         barraDeMenu.add(menuRalatorios);
 
         menuAluguel.setText("Aluguel");
-        menuAluguel.setEnabled(false);
 
         jMenuItem2.setText("Pedidos");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -478,10 +476,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(comboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoPesquisa))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(campoPesquisa)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1)
+                        .addComponent(comboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -512,28 +511,26 @@ public class TelaPrincipal extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_campoPesquisaKeyPressed
 
-    public void liberRecursos( String usuario ){
+    public void liberRecursos( String usuario, boolean bool ){            
+        this.menuCadastro.setVisible(true);
+        this.menuAluguel.setVisible(true);
+        this.menuRalatorios.setVisible(true);
+        this.miLogin.setEnabled(false);
+        this.miLogaut.setEnabled(true);
+           
+        this.minFuncionario.setEnabled(bool);
             
-            this.menuCadastro.setEnabled(true);
-            this.menuCadastro.setEnabled(true);
-            this.menuAluguel.setEnabled(true);
-            this.menuFile.setEnabled(true);
-            this.menuRalatorios.setEnabled(true);
-            this.miLogin.setEnabled(false);
-            this.miLogaut.setEnabled(true);
-            
-            JOptionPane.showMessageDialog(null,"Liberaddo para : "+ usuario);
+        JOptionPane.showMessageDialog(null,"Liberado para : "+ usuario);
     }
     
-    
-     public void travarRecursos( ){            
-            this.menuCadastro.setEnabled(false);
-            this.menuCadastro.setEnabled(false);
-            this.menuFile.setEnabled(false);
-            this.menuRalatorios.setEnabled(false);
-            this.miLogin.setEnabled(true);
-            this.miLogaut.setEnabled(false);
-            this.menuAluguel.setVisible(false);
+    public void travarRecursos( ){            
+    this.menuCadastro.setEnabled(false);
+    this.menuCadastro.setEnabled(false);
+    this.menuFile.setEnabled(false);
+    this.menuRalatorios.setEnabled(false);
+    this.miLogin.setEnabled(true);
+    this.miLogaut.setEnabled(false);
+    this.menuAluguel.setVisible(false);
     }
     private void tabelaCatalogMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseReleased
         selecionarProduto(evt);
