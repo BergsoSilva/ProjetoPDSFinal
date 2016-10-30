@@ -63,4 +63,18 @@ public class ProdutoDAO {
         manager.getTransaction().commit();
         manager.close();
     }
+    
+    public List<Produto> pesquisarProdutoCategoria(Produto produto){
+        
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        
+        manager.getTransaction().begin();
+            Query query = manager.createQuery("select c from Produto c where c.grupoProduto.id =:pgrupoProduto");
+            query.setParameter("pgrupoProduto",produto.getGrupoProduto().getId());
+            List<Produto> produtos = query.getResultList();
+        manager.getTransaction();
+        manager.close();
+        
+        return produtos;    
+    }
 }

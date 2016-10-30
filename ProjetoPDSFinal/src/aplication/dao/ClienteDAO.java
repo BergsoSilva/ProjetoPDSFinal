@@ -60,5 +60,23 @@ public class ClienteDAO {
         return clientes;    
     }
     
+     public Cliente clienteFind(Long id){
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        
+        try{
+            manager.getTransaction().begin();
+            Cliente c = manager.find(Cliente.class,id);
+            manager.getTransaction();
+            return c;
+        } catch(Exception e){
+            e.getLocalizedMessage();
+        }finally{
+            manager.close();
+        }
+        
+        return null;
+                
+    }
+    
     // falta o delete
 }

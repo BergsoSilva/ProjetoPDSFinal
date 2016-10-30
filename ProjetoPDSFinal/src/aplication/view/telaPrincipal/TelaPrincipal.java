@@ -2,11 +2,15 @@
  
 package aplication.view.telaPrincipal;
 
+import aplication.dao.ClienteDAO;
 import aplication.dao.GrupoProdutoDAO;
 import aplication.renderizador.JTableRenderer;
 import aplication.dao.ProdutoDAO;
+import aplication.modelo.Carrinho;
+import aplication.modelo.Cliente;
 import aplication.modelo.GrupoProduto;
 import aplication.modelo.Produto;
+import aplication.regraDeNegocio.retornarValor;
 import aplication.renderizador.ButtonRederer;
 import aplication.renderizador.ImageRederer;
 import aplication.view.aluguel.TelaVerDetalhesAluguel;
@@ -38,8 +42,12 @@ import javax.swing.table.TableColumnModel;
  */
 public class TelaPrincipal extends javax.swing.JFrame {
     private Produto produto=new Produto();
+    Carrinho carrinho;
     private List<Produto> produtos= new ArrayList<>();
-    private List<Produto> procarrinhoMemo= new ArrayList<>();
+    private final List<Carrinho> procarrinhoMemo= new ArrayList<>();
+    
+    Double sutotal=0.0;
+    Integer qtde=1;
    
     public TelaPrincipal() {
         initComponents();
@@ -58,10 +66,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
     
     private void carregarTabela(){
-        pesquisar();
+         pesquisar();
         
         ImageRederer imagem= new ImageRederer();
-        ImageRederer imagem2= new ImageRederer();
+       // ImageRederer imagem2= new ImageRederer();
         
         
         
@@ -71,11 +79,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         
         tabelaCatalog.setAutoCreateRowSorter(true);
-        tabelaCatalog.setRowHeight(150);
+        tabelaCatalog.setRowHeight(200);
         tabelaCatalog.setUpdateSelectionOnSort(true);
         
         /**  Coluna com imagen na celular*/
-        tabelaCatalog.getColumnModel().getColumn(0).setPreferredWidth(100);
+        tabelaCatalog.getColumnModel().getColumn(0).setPreferredWidth(200);
         
         tabelaCatalog.getColumnModel().getColumn(1).setPreferredWidth(30);
         tabelaCatalog.getColumnModel().getColumn(2).setPreferredWidth(5);
@@ -83,8 +91,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
        
         tabelaCatalog.getColumnModel().getColumn(0).setCellRenderer(imagem);
-        
-        tabelaCatalog.getColumnModel().getColumn(2).setCellRenderer(imagem2); 
+        tabelaCatalog.getColumnModel().getColumn(2).setCellRenderer(imagem);
         
         
         
@@ -92,11 +99,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
     
  
-    private void pesquisar(){        
+   private void pesquisar(){  
+        
         preencherProduto();
         try {            
             ProdutoDAO dao = new ProdutoDAO();
-            this.produtos = (List<Produto>) dao.pesquisar(produto);
+            if (comboCategoria.getSelectedIndex() >0)
+                this.produtos=dao.pesquisarProdutoCategoria(produto);
+            else
+                 this.produtos = (List<Produto>) dao.pesquisar(produto);
         }catch(Exception e){
             e.printStackTrace();
         }           
@@ -104,9 +115,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
   
     private void preencherProduto(){
+        if (comboCategoria.getSelectedIndex() >0)        
+             this.produto.setGrupoProduto((GrupoProduto) comboCategoria.getSelectedItem());
+     
         this.produto.setNome(campoPesquisa.getText());
+          
     }
-    
     private void carregarMenuFlutuante(){
         
         JMenuItem menuItem[] = {new JMenuItem("Ver detalhes"), new JMenuItem("Alugar Produto")};
@@ -211,8 +225,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableCarrinhoPedido = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        labelTotal = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         valorAPagar = new javax.swing.JLabel();
         botaFecharPedido = new javax.swing.JButton();
@@ -297,11 +309,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         ));
         tableCarrinhoPedido.setShowVerticalLines(false);
+        tableCarrinhoPedido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tableCarrinhoPedidoKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tableCarrinhoPedidoKeyTyped(evt);
+            }
+        });
         jScrollPane2.setViewportView(tableCarrinhoPedido);
-
-        jLabel1.setText("Total Produto:");
-
-        labelTotal.setText("..");
 
         jLabel2.setText("Valor R$: ");
 
@@ -330,26 +346,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(valorAPagar)
-                                    .addComponent(labelTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel2)
+                                .addGap(28, 28, 28)
+                                .addComponent(valorAPagar))
                             .addComponent(botaFecharPedido))
-                        .addContainerGap(141, Short.MAX_VALUE))))
+                        .addContainerGap(164, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(labelTotal))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(valorAPagar))
@@ -477,11 +485,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(campoPesquisa)
+                    .addComponent(campoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton1)
                         .addComponent(comboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -585,13 +593,33 @@ public class TelaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_botaFecharPedidoActionPerformed
 
+    private void tableCarrinhoPedidoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableCarrinhoPedidoKeyPressed
+       if (evt.getKeyCode()==KeyEvent.VK_ENTER){
+          qtde=(Integer) tableCarrinhoPedido.getModel().getValueAt(tableCarrinhoPedido.getSelectedRow(),2);
+          reserva(this.produto,"U");
+          realizaCalculos();
+          tableCarrinhoPedido.repaint();
+          
+       }
+    }//GEN-LAST:event_tableCarrinhoPedidoKeyPressed
+
+    private void tableCarrinhoPedidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableCarrinhoPedidoKeyTyped
+       
+         qtde=(Integer) tableCarrinhoPedido.getModel().getValueAt(tableCarrinhoPedido.getSelectedRow(),2);
+         
+          reserva(this.produto,"U");
+          
+          realizaCalculos();
+          
+          tableCarrinhoPedido.repaint();
+    }//GEN-LAST:event_tableCarrinhoPedidoKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraDeMenu;
     private javax.swing.JButton botaFecharPedido;
     private javax.swing.JTextField campoPesquisa;
     private javax.swing.JComboBox comboCategoria;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
@@ -603,7 +631,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel labelTotal;
     private javax.swing.JMenu menuAluguel;
     private javax.swing.JMenu menuAutenticação;
     private javax.swing.JMenu menuCadastro;
@@ -620,71 +647,97 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel valorAPagar;
     // End of variables declaration//GEN-END:variables
 
+    private Carrinho reserva(Produto produto, String acao){
+         if (acao.equals("N")){
+           
+            Carrinho c = new Carrinho();
+            ClienteDAO dao = new ClienteDAO();
+            Cliente clidefault=dao.clienteFind(Long.parseLong("1"));
+
+            c.setNomeProduto(produto.getNome());
+            c.setValorAluguel(produto.getPrecoAluguel());
+            c.setQntde(qtde);
+            c.setCliente(clidefault);
+
+            sutotal= retornarValor.subtotalItens(c.getQntde(), c.getValorAluguel());
+
+            c.setSubtotal(sutotal);
+            carrinho=c;
+            return c;
+         }else
+            if (acao.endsWith("U")){
+               carrinho.setQntde(qtde);
+               sutotal= retornarValor.subtotalItens(carrinho.getQntde(), carrinho.getValorAluguel());
+               carrinho.setSubtotal(sutotal);
+               
+               qtde=1;
+               return this.carrinho;
+         }
+         return  null;
+     }
     
-    /** *
-     * Metodos para realizar a ação  de inserção no carrinho
-     */
     private void adicionarCarrinho(MouseEvent evt) {
-        
-        /*  Seleciona a coluna clicada*/
+       
         int coluna = tabelaCatalog.columnAtPoint(evt.getPoint());
-        
-        /* Verifica se a coluna clicada e a coluna que esta a imagem de ADD */
         if (coluna== 2){
-            /*  Seleciona a linha da JTable com o Objeto*/
             int linha = tabelaCatalog.rowAtPoint(evt.getPoint());
-            
-            /* Se houver clik*/
             if(linha >= 0){
-                
-                tabelaCatalog.setRowSelectionInterval(linha, linha);
-                
-                linha = tabelaCatalog.getSelectedRow();
-                /**
-                 * Metodo@carregarCarrinho
-                 * Possui um paramentro do tipo produto
-                 * Esse metedo será responsavel por adicionar
-                 * o Objeto aa List<procarrinhoMemo> 
-                 */
-                carregarCarrinho(produtos.get(linha));
-             }
+            tabelaCatalog.setRowSelectionInterval(linha, linha);
+            linha = tabelaCatalog.getSelectedRow();
+            
+            produto=produtos.get(linha);
+            
+              
+             carregarCarrinho(reserva(this.produto,"N"));
+        }
             
           
         }
      
     }
     
-    /**
-     * Metodo carregarCarrinho
-     * @param produto 
-     */
-    private void carregarCarrinho(Produto produto){
-         
-         /* Verifiação se produto da existe na lista*/
-         if (procarrinhoMemo.contains(produto)){
+    private void carregarCarrinho(Carrinho carrinho){
+        
+         if (procarrinhoMemo.contains(carrinho)){
              JOptionPane.showMessageDialog(null, "Produto ja existe");
-         }else
-              procarrinhoMemo.add(produto);
+                        
+         }else{
+              procarrinhoMemo.add(carrinho);
+              
+         }
     }
-    /**
-     * Metodo responsavéil por preencher a JTable tableCarrinhoPedido
-     */
+    
     private void perrencherTabelaCarrinho(){
+        ImageRederer r= new ImageRederer();
+        
         tableCarrinhoPedido.setModel(new TabelaModeloCarrinhoPedido(this.procarrinhoMemo));
+        
+        tableCarrinhoPedido.getColumnModel().getColumn(4).setCellRenderer(r);
+        
+      
+        
     }
     
     private void realizaCalculos(){
-        
-        labelTotal.setText(procarrinhoMemo.size()+"");
-        
+               
         valorAPagar.setText("");
-        
         Double valorApagar=0.0;
         
-        for (Produto p : procarrinhoMemo) {
-            valorApagar=valorApagar+p.getPrecoAluguel();
+        for (Carrinho p : procarrinhoMemo) {
+            valorApagar=valorApagar+p.getSubtotal();
         }
          valorAPagar.setText(valorApagar+"");
          
     }
+    
+    private void prencheCombo(){
+        GrupoProdutoDAO dao = new GrupoProdutoDAO();
+        comboCategoria.removeAllItems();
+        comboCategoria.addItem("Selecione categogia..");
+        
+        for (GrupoProduto p : dao.findAll()) {
+            comboCategoria.addItem(p);
+        }
+    }
+
 }
