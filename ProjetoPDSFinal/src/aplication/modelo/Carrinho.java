@@ -10,13 +10,24 @@ package aplication.modelo;
  * @author unkwow
  */
 public class Carrinho {
+    private Long codReferncia=0l;
     private String nomeProduto;
     private Double valorAluguel;
     private Integer qntde;
     private Cliente cliente;
     private Double subtotal;
+    
 
     public Carrinho() {
+        this.codReferncia=codReferncia+1;
+    }
+
+    public Long getCodReferncia() {
+        return codReferncia;
+    }
+
+    public void setCodReferncia() {
+        this.codReferncia = codReferncia;
     }
 
     public String getNomeProduto() {

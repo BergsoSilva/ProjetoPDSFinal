@@ -1,6 +1,7 @@
 package aplication.view.telaPrincipal;
 
 import aplication.modelo.Carrinho;
+import aplication.renderizador.EditarCelalrJTable;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
@@ -10,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 
 
 public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
@@ -82,11 +84,7 @@ public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
         return colunas[column];       
     } 
 
-    @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return true;
-    }
-
+       
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         Carrinho carrinho = (Carrinho)produtos.get(rowIndex);
@@ -98,7 +96,7 @@ public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
    
     }
     
-      private Icon  retornaIcone(int x, int y, String caminho){
+    private Icon  retornaIcone(int x, int y, String caminho){
      
         JLabel label = new JLabel();
         label.setBounds(0, 0, x, y);
@@ -125,11 +123,29 @@ public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
         }
         return  null;
     }
-    
-    
 
-      
-     
+    // aqui defino a celula que ficará editavel
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        
+       switch(columnIndex){
+           case 0:
+               return false;
+           case 1:
+               return  false;
+           case 2:// coluna editavel
+               return true;
+           case 3: 
+               return false;
+           case 4:
+               return false;
+           default:
+               return false;
+               
+       }
+    }
+    
+    
     
     
     

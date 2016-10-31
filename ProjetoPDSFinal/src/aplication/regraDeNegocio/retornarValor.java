@@ -5,6 +5,11 @@
  */
 package aplication.regraDeNegocio;
 
+import aplication.modelo.Carrinho;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import javax.swing.JTable;
+
 /**
  *
  * @author unkwow
@@ -20,5 +25,6 @@ public class retornarValor {
       
         return qtdeItem*valorItem;
     }
+    
     
 }

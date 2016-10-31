@@ -10,10 +10,13 @@ import aplication.modelo.Carrinho;
 import aplication.modelo.Cliente;
 import aplication.modelo.GrupoProduto;
 import aplication.modelo.Produto;
+import aplication.regraDeNegocio.OperationsCarrinho;
 import aplication.regraDeNegocio.retornarValor;
 import aplication.renderizador.ButtonRederer;
+import aplication.renderizador.EditarCelalrJTable;
 import aplication.renderizador.ImageRederer;
 import aplication.view.aluguel.TelaVerDetalhesAluguel;
+import aplication.view.cliente.IndentificacaoUser;
 import aplication.view.cliente.TelaPesquisaCliente;
 import aplication.view.funcionario.TelaPesquisaFuncionario;
 import aplication.view.grupoproduto.TelaPesquisaGrupoProduto;
@@ -32,6 +35,8 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 
 import javax.swing.table.TableColumnModel;
 
@@ -63,6 +68,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         menuAluguel.setVisible(false);
         menuCadastro.setVisible(false);
         menuRalatorios.setVisible(false);
+         TableColumn col = tableCarrinhoPedido.getColumnModel().getColumn(2);  
+        col.setCellEditor(new EditarCelalrJTable()); 
     }
     
     private void carregarTabela(){
@@ -92,8 +99,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
        
         tabelaCatalog.getColumnModel().getColumn(0).setCellRenderer(imagem);
         tabelaCatalog.getColumnModel().getColumn(2).setCellRenderer(imagem);
-        
-        
         
         //alinhaTableCentro(tabelaCatalog, tabelaCatalog.getSelectedColumns());
     }
@@ -155,6 +160,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
      * @param evt 
      */
     private void selecionarProduto(MouseEvent evt){
+        
         int linha = tabelaCatalog.rowAtPoint(evt.getPoint());
         int coluna = tabelaCatalog.columnAtPoint(evt.getPoint());
         
@@ -309,6 +315,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         ));
         tableCarrinhoPedido.setShowVerticalLines(false);
+        tableCarrinhoPedido.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableCarrinhoPedidoMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tableCarrinhoPedidoMouseReleased(evt);
+            }
+        });
         tableCarrinhoPedido.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tableCarrinhoPedidoKeyPressed(evt);
@@ -576,7 +590,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void tabelaCatalogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseClicked
-        adicionarCarrinho(evt);
+        pegarCarrinho(evt);
         perrencherTabelaCarrinho();
         realizaCalculos();
     }//GEN-LAST:event_tabelaCatalogMouseClicked
@@ -586,7 +600,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowGainedFocus
 
     private void botaFecharPedidoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaFecharPedidoMouseReleased
-       JOptionPane.showMessageDialog(null,"Carregar Item Alugel");
+      IndentificacaoUser user = new IndentificacaoUser();
+      user.setVisible(true);
     }//GEN-LAST:event_botaFecharPedidoMouseReleased
 
     private void botaFecharPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaFecharPedidoActionPerformed
@@ -613,6 +628,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
           
           tableCarrinhoPedido.repaint();
     }//GEN-LAST:event_tableCarrinhoPedidoKeyTyped
+
+    private void tableCarrinhoPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCarrinhoPedidoMouseClicked
+       
+      
+    }//GEN-LAST:event_tableCarrinhoPedidoMouseClicked
+
+    private void tableCarrinhoPedidoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCarrinhoPedidoMouseReleased
+            removerCarrinho(evt);
+    }//GEN-LAST:event_tableCarrinhoPedidoMouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraDeMenu;
@@ -648,7 +672,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private Carrinho reserva(Produto produto, String acao){
-         if (acao.equals("N")){
+         
+        if (acao.equals("N")){
            
             Carrinho c = new Carrinho();
             ClienteDAO dao = new ClienteDAO();
@@ -662,7 +687,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             sutotal= retornarValor.subtotalItens(c.getQntde(), c.getValorAluguel());
 
             c.setSubtotal(sutotal);
-            carrinho=c;
+            this.carrinho=c;
             return c;
          }else
             if (acao.endsWith("U")){
@@ -676,7 +701,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
          return  null;
      }
     
-    private void adicionarCarrinho(MouseEvent evt) {
+    private void pegarCarrinho(MouseEvent evt) {
        
         int coluna = tabelaCatalog.columnAtPoint(evt.getPoint());
         if (coluna== 2){
@@ -685,10 +710,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
             tabelaCatalog.setRowSelectionInterval(linha, linha);
             linha = tabelaCatalog.getSelectedRow();
             
-            produto=produtos.get(linha);
+            this.produto=produtos.get(linha);
             
               
-             carregarCarrinho(reserva(this.produto,"N"));
+             adicionarCarrinho(reserva(this.produto,"N"));
         }
             
           
@@ -696,15 +721,47 @@ public class TelaPrincipal extends javax.swing.JFrame {
      
     }
     
-    private void carregarCarrinho(Carrinho carrinho){
-        
-         if (procarrinhoMemo.contains(carrinho)){
-             JOptionPane.showMessageDialog(null, "Produto ja existe");
-                        
-         }else{
-              procarrinhoMemo.add(carrinho);
-              
-         }
+    private void removerCarrinho(MouseEvent evt) {
+       
+        int coluna = tableCarrinhoPedido.columnAtPoint(evt.getPoint());
+        if (coluna== 4){
+            int linha = tableCarrinhoPedido.rowAtPoint(evt.getPoint());
+            if(linha >= 0){
+            tableCarrinhoPedido.setRowSelectionInterval(linha, linha);
+            linha = tableCarrinhoPedido.getSelectedRow();
+             int i = JOptionPane.showConfirmDialog(null, "Excluir?","Atenção",JOptionPane.YES_NO_OPTION);
+             if (i==JOptionPane.YES_OPTION)
+                     procarrinhoMemo.remove( this.carrinho=procarrinhoMemo.get(linha));
+             else
+                 JOptionPane.showMessageDialog(null, "Operação concelada..");
+        }
+            
+          
+        }
+     
+    }
+    
+    private void adicionarCarrinho(Carrinho carrinho){
+        boolean v=false;
+        int r=procarrinhoMemo.size();
+   
+            
+            if(r>0){
+                
+                for (Carrinho c : procarrinhoMemo) {
+                     if (carrinho.getNomeProduto().equals(c.getNomeProduto())){
+                        JOptionPane.showMessageDialog(null, "Produto ja existe");
+                        v=true;
+                        break;
+                     }
+                 }
+                    if(v==false){
+                        procarrinhoMemo.add(carrinho);
+                    }
+           }else 
+                 procarrinhoMemo.add(carrinho);
+            
+       
     }
     
     private void perrencherTabelaCarrinho(){
@@ -714,7 +771,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         tableCarrinhoPedido.getColumnModel().getColumn(4).setCellRenderer(r);
         
-      
         
     }
     
@@ -739,5 +795,22 @@ public class TelaPrincipal extends javax.swing.JFrame {
             comboCategoria.addItem(p);
         }
     }
+    
+    private void editarTabela(){
+
+        int linha =tableCarrinhoPedido.getSelectedRow();
+        //int coluna = tableCarrinhoPedido.getSelectedColumn();
+
+        if(linha != -1){
+
+            tableCarrinhoPedido.getModel().isCellEditable(linha,2);
+           
+
+
+        }
+
+
+    }
+    
 
 }

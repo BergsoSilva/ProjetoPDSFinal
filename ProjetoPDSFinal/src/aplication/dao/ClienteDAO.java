@@ -77,6 +77,16 @@ public class ClienteDAO {
         return null;
                 
     }
-    
+     public Cliente clienteCPF(String cpf){
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+     
+        manager.getTransaction().begin();
+            Query query = manager.createQuery("select c from Cliente c where c.cpf =:pcpf");
+            query.setParameter("pcpf",cpf);
+            Cliente cliente = (Cliente) query.getSingleResult();
+        manager.getTransaction();
+        manager.close();
+        return cliente;
+     }
     // falta o delete
 }
