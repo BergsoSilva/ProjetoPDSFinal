@@ -14,18 +14,20 @@ import javax.persistence.Query;
  */
 public class PedidoDAO {
     
-    public List<ItemAluguel> pesquisar(Long idStatus){
+    public List<ItemAluguel> pesquisar(ItemAluguel itemAluguel){
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
-        //System.out.println(cliente.getNome());
+        System.out.println(itemAluguel.getAluguel().getCliente().getNome());
         manager.getTransaction().begin();
             Query query = manager.createQuery("select i from ItemAluguel i "
                     + "INNER JOIN FETCH i.status "
                     + "INNER JOIN FETCH i.produto "
                     + "INNER JOIN FETCH i.aluguel a "
                     + "INNER JOIN FETCH a.cliente "
-                    + "WHERE i.status.id = :id");
+                    + "WHERE i.status.id = ?1 AND i.aluguel.cliente.nome like ?2");
             
-            query.setParameter("id", idStatus);
+            query.setParameter(1, itemAluguel.getStatus().getId());
+            query.setParameter(2, "%"+itemAluguel.getAluguel().getCliente().getNome()+"%");
+            
             List<ItemAluguel> itemAluguels = query.getResultList();
         manager.getTransaction();
         manager.close();
@@ -39,9 +41,21 @@ public class PedidoDAO {
         
         manager.getTransaction().begin();
             itemAluguel = manager.find(ItemAluguel.class, itemAluguelFinalizado.getId());
-            itemAluguel.setProduto(itemAluguelFinalizado.getProduto());
             itemAluguel.setStatus(itemAluguelFinalizado.getStatus());
         manager.getTransaction().commit();
         manager.close();
+    }
+    
+    public ItemAluguel inserir(ItemAluguel item) throws Exception {
+      // Inserido a classe de util
+           
+           EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        
+            manager.getTransaction().begin();
+            manager.persist(item);
+            manager.getTransaction().commit();
+            manager.close();
+            
+            return item;
     }
 }

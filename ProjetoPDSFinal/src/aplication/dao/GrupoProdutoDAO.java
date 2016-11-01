@@ -62,4 +62,18 @@ public class GrupoProdutoDAO {
         manager.close();
     }
     
+    
+    public List<GrupoProduto> findAll(){
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        
+        manager.getTransaction().begin();
+            Query query = manager.createQuery("select c from GrupoProduto c");
+          
+            List<GrupoProduto> grupoProdutos = query.getResultList();
+        manager.getTransaction();
+        manager.close();
+        
+        return grupoProdutos;    
+    }
+    
 }

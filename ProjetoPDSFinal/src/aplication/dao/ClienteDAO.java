@@ -60,5 +60,33 @@ public class ClienteDAO {
         return clientes;    
     }
     
+     public Cliente clienteFind(Long id){
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        
+        try{
+            manager.getTransaction().begin();
+            Cliente c = manager.find(Cliente.class,id);
+            manager.getTransaction();
+            return c;
+        } catch(Exception e){
+            e.getLocalizedMessage();
+        }finally{
+            manager.close();
+        }
+        
+        return null;
+                
+    }
+     public Cliente clienteCPF(String cpf){
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+     
+        manager.getTransaction().begin();
+            Query query = manager.createQuery("select c from Cliente c where c.cpf =:pcpf");
+            query.setParameter("pcpf",cpf);
+            Cliente cliente = (Cliente) query.getSingleResult();
+        manager.getTransaction();
+        manager.close();
+        return cliente;
+     }
     // falta o delete
 }
