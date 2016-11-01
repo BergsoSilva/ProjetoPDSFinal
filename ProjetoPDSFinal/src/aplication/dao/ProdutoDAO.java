@@ -1,5 +1,7 @@
 package aplication.dao;
 
+import aplication.modelo.Cliente;
+import aplication.modelo.ItemAluguel;
 import aplication.modelo.Produto;
 import aplication.util.ConnectioinFactory;
 import java.util.List;
@@ -77,4 +79,24 @@ public class ProdutoDAO {
         
         return produtos;    
     }
+    
+     public Produto produtoFind(Long id){
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        
+        try{
+            manager.getTransaction().begin();
+            Produto c = manager.find(Produto.class,id);
+            manager.getTransaction();
+            return c;
+        } catch(Exception e){
+            e.getLocalizedMessage();
+        }finally{
+            manager.close();
+        }
+        
+        return null;
+                
+    }
+     
+     
 }

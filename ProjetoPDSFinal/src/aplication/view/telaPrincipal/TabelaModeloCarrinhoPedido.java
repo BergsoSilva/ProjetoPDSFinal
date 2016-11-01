@@ -1,7 +1,6 @@
 package aplication.view.telaPrincipal;
 
 import aplication.modelo.Carrinho;
-import aplication.renderizador.EditarCelalrJTable;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
@@ -11,7 +10,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
 
 
 public class TabelaModeloCarrinhoPedido extends AbstractTableModel{

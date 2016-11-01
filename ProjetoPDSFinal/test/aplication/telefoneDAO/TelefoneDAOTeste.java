@@ -5,6 +5,10 @@
  */
 package aplication.telefoneDAO;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -14,10 +18,15 @@ import static org.junit.Assert.*;
  */
 public class TelefoneDAOTeste {
     
-    public TelefoneDAOTeste() {
-    }
-
-    public void retornarLista (){
+    public static void main(String[] args) {
+        Date data = new Date(System.currentTimeMillis());  
+        SimpleDateFormat formatarDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+        System.out.print(formatarDate.format(data));
+        System.out.println("\n\n");
+        System.out.println("********************\n");
         
+        Calendar d= new GregorianCalendar();
+        System.out.println(Calendar.getInstance().getTime());
     }
+   
 }

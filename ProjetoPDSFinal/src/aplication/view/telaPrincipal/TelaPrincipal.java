@@ -53,6 +53,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     
     Double sutotal=0.0;
     Integer qtde=1;
+    
+    boolean carrinhoAtivo;
    
     public TelaPrincipal() {
         initComponents();
@@ -234,6 +236,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         valorAPagar = new javax.swing.JLabel();
         botaFecharPedido = new javax.swing.JButton();
+        botaoInicarPedido = new javax.swing.JButton();
         comboCategoria = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         barraDeMenu = new javax.swing.JMenuBar();
@@ -314,6 +317,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableCarrinhoPedido.setEnabled(false);
         tableCarrinhoPedido.setShowVerticalLines(false);
         tableCarrinhoPedido.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -333,11 +337,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tableCarrinhoPedido);
 
-        jLabel2.setText("Valor R$: ");
+        jLabel2.setText("Valor Total  R$: ");
 
         valorAPagar.setText("..");
 
         botaFecharPedido.setText("Fechar Pedido");
+        botaFecharPedido.setEnabled(false);
         botaFecharPedido.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 botaFecharPedidoMouseReleased(evt);
@@ -346,6 +351,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         botaFecharPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaFecharPedidoActionPerformed(evt);
+            }
+        });
+
+        botaoInicarPedido.setText("Fazer Pedido");
+        botaoInicarPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoInicarPedidoActionPerformed(evt);
             }
         });
 
@@ -362,21 +374,28 @@ public class TelaPrincipal extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(28, 28, 28)
-                                .addComponent(valorAPagar))
-                            .addComponent(botaFecharPedido))
-                        .addContainerGap(164, Short.MAX_VALUE))))
+                                .addComponent(valorAPagar)
+                                .addGap(0, 142, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(botaoInicarPedido)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(botaFecharPedido)))
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(valorAPagar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(botaFecharPedido))
+                .addGap(36, 36, 36)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botaFecharPedido)
+                    .addComponent(botaoInicarPedido))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -590,18 +609,29 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void tabelaCatalogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseClicked
-        pegarCarrinho(evt);
-        perrencherTabelaCarrinho();
-        realizaCalculos();
+        if (!carrinhoAtivo==true){
+             pegarCarrinho(evt);
+             perrencherTabelaCarrinho();
+             realizaCalculos();
+        }else{
+            JOptionPane.showMessageDialog(null, "Please initiation this operation.");
+        }
     }//GEN-LAST:event_tabelaCatalogMouseClicked
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
        perrencherTabelaCarrinho();
+       if (carrinhoAtivo==false){
+           procarrinhoMemo.clear();
+           carrinhoAtivo=true;
+       } 
     }//GEN-LAST:event_formWindowGainedFocus
 
     private void botaFecharPedidoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaFecharPedidoMouseReleased
-      IndentificacaoUser user = new IndentificacaoUser();
+      IndentificacaoUser user = new IndentificacaoUser(this.procarrinhoMemo);
       user.setVisible(true);
+      carrinhoAtivo=false;
+      botaoInicarPedido.setEnabled(true);
+      botaFecharPedido.setEnabled(false);
     }//GEN-LAST:event_botaFecharPedidoMouseReleased
 
     private void botaFecharPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaFecharPedidoActionPerformed
@@ -638,9 +668,17 @@ public class TelaPrincipal extends javax.swing.JFrame {
             removerCarrinho(evt);
     }//GEN-LAST:event_tableCarrinhoPedidoMouseReleased
 
+    private void botaoInicarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoInicarPedidoActionPerformed
+       tableCarrinhoPedido.setEnabled(true);
+       botaFecharPedido.setEnabled(true);
+       botaoInicarPedido.setEnabled(false);
+       carrinhoAtivo=false;
+    }//GEN-LAST:event_botaoInicarPedidoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraDeMenu;
     private javax.swing.JButton botaFecharPedido;
+    private javax.swing.JButton botaoInicarPedido;
     private javax.swing.JTextField campoPesquisa;
     private javax.swing.JComboBox comboCategoria;
     private javax.swing.JButton jButton1;
@@ -678,7 +716,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             Carrinho c = new Carrinho();
             ClienteDAO dao = new ClienteDAO();
             Cliente clidefault=dao.clienteFind(Long.parseLong("1"));
-
+            c.setCodReferncia(produto.getId());
             c.setNomeProduto(produto.getNome());
             c.setValorAluguel(produto.getPrecoAluguel());
             c.setQntde(qtde);

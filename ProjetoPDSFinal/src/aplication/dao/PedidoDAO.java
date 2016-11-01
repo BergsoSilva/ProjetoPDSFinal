@@ -45,4 +45,17 @@ public class PedidoDAO {
         manager.getTransaction().commit();
         manager.close();
     }
+    
+    public ItemAluguel inserir(ItemAluguel item) throws Exception {
+      // Inserido a classe de util
+           
+           EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        
+            manager.getTransaction().begin();
+            manager.persist(item);
+            manager.getTransaction().commit();
+            manager.close();
+            
+            return item;
+    }
 }
