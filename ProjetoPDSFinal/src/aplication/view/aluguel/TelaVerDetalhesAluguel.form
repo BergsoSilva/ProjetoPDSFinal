@@ -158,6 +158,8 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="botaAlterar" min="-2" pref="104" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="botaoDevolucao" min="-2" pref="101" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="botaoCancelar3" min="-2" pref="104" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -168,9 +170,12 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="botaAlterar" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                      <Component id="botaoCancelar3" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="botaoDevolucao" alignment="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="botaAlterar" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="botaoCancelar3" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -198,6 +203,17 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botaoCancelar3ActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="botaoDevolucao">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Arial" size="12" style="0"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Devolu&#xe7;&#xe3;o"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botaoDevolucaoActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

@@ -3,6 +3,8 @@ package aplication.view.aluguel;
 
 import aplication.view.produto.*;
 import aplication.modelo.Produto;
+import aplication.modelo.Status;
+import application.view.multa.TelaCadastroMulta;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
@@ -51,6 +53,24 @@ public class TelaVerDetalhesAluguel extends javax.swing.JFrame {
         String nomeImagem = produto.getImagem().replaceAll("img/", "");
         carregaImagem(caminho, nomeImagem);
     }
+    
+    //Verifica se alguma multa deve ser aplicada antes de finalizar
+    private void devolucao(){
+        int escolha = JOptionPane.showConfirmDialog(null, "Houve extravio de produtos ou há avarias em algum produto?");
+        
+        if (escolha == 1){
+            Status statusAluguel = new Status();
+            statusAluguel.setDescricao("Finalizado");
+            updateStatusAluguel(statusAluguel);
+        } else if (escolha == 0){
+            new TelaCadastroMulta().setVisible(true);
+        }
+    }
+    
+    private void updateStatusAluguel(Status status){
+        
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -60,6 +80,7 @@ public class TelaVerDetalhesAluguel extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         botaAlterar = new javax.swing.JButton();
         botaoCancelar3 = new javax.swing.JButton();
+        botaoDevolucao = new javax.swing.JButton();
         labelAluguel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         labelAQtde = new javax.swing.JLabel();
@@ -105,6 +126,14 @@ public class TelaVerDetalhesAluguel extends javax.swing.JFrame {
             }
         });
 
+        botaoDevolucao.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        botaoDevolucao.setText("Devolução");
+        botaoDevolucao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoDevolucaoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -112,6 +141,8 @@ public class TelaVerDetalhesAluguel extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(botaAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(botaoDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(botaoCancelar3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -120,9 +151,11 @@ public class TelaVerDetalhesAluguel extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botaAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoCancelar3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(botaoDevolucao, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(botaAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(botaoCancelar3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -299,10 +332,15 @@ public class TelaVerDetalhesAluguel extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_botaoCancelar3ActionPerformed
 
+    private void botaoDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoDevolucaoActionPerformed
+        devolucao();
+    }//GEN-LAST:event_botaoDevolucaoActionPerformed
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaAlterar;
     private javax.swing.JButton botaoCancelar3;
+    private javax.swing.JButton botaoDevolucao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

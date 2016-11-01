@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
 public class UtilTestesCreateEntity {
     
     public static void main(String[] args) {
-        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        EntityManager manager = ConnectioinFactory.getEntityManagerFactory();
     }
     
 }
