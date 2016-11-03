@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import aplication.modelo.Cliente;
 import aplication.util.ConnectioinFactory;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -79,14 +80,22 @@ public class ClienteDAO {
     }
      public Cliente clienteCPF(String cpf){
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
-     
-        manager.getTransaction().begin();
-            Query query = manager.createQuery("select c from Cliente c where c.cpf =:pcpf");
-            query.setParameter("pcpf",cpf);
-            Cliente cliente = (Cliente) query.getSingleResult();
-        manager.getTransaction();
-        manager.close();
-        return cliente;
+        try{
+           manager.getTransaction().begin();
+               Query query = manager.createQuery("select c from Cliente c where c.cpf =:pcpf");
+               query.setParameter("pcpf",cpf);
+               Cliente cliente = (Cliente) query.getSingleResult();
+          
+           manager.getTransaction();      
+           manager.close();
+              
+           return cliente;
+           
+        }catch(Exception ex ){
+            JOptionPane.showMessageDialog(null," Erro de execução JPQL {"+ ex.getLocalizedMessage()+"}");
+            manager.close();
+        } 
+        return null;
      }
     // falta o delete
 }

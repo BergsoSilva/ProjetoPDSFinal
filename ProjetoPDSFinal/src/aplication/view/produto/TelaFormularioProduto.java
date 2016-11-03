@@ -18,13 +18,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 
 
 public class TelaFormularioProduto extends javax.swing.JFrame {
@@ -45,6 +47,7 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         preparaNomes();
         getRootPane().setDefaultButton(botaoCadastrar);
         preencherComboGrupoProduto();
+        
     }
 
     //Tela Alterar
@@ -54,9 +57,11 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         
         this.opcao = "Alterar";
         preparaNomes();
-        
         setarValores();
+        
     }    
+    
+    
     
     
     //prepara os nomes pro título da tela e o nome do botão
@@ -67,8 +72,7 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
     
     private void setarValores(){
         preencherComboGrupoProduto();
-        
-        
+    
         campoNome.setText(produto.getNome());
         campoPrecoAluguel.setText(produto.getPrecoAluguel()+"");
         comboGrupoProduto.getModel().setSelectedItem(produto.getGrupoProduto());
@@ -163,12 +167,12 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         campoNome = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        campoPrecoAluguel = new javax.swing.JTextField();
         checkAtivo = new javax.swing.JCheckBox();
         jLabel7 = new javax.swing.JLabel();
-        comboGrupoProduto = new javax.swing.JComboBox<>();
+        comboGrupoProduto = new javax.swing.JComboBox<Object>();
         jLabel8 = new javax.swing.JLabel();
         spinnerQtde = new javax.swing.JSpinner();
+        campoPrecoAluguel = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -251,8 +255,6 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel6.setText("Preço Aluguel:");
 
-        campoPrecoAluguel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-
         checkAtivo.setSelected(true);
         checkAtivo.setText("Ativo");
 
@@ -266,8 +268,10 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         jLabel8.setText("Grupo Produto:");
 
         spinnerQtde.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        spinnerQtde.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spinnerQtde.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
         spinnerQtde.setToolTipText("");
+
+        campoPrecoAluguel.setText("jTextField1");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -284,10 +288,13 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
                         .addGap(359, 359, 359)
                         .addComponent(checkAtivo))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(campoPrecoAluguel, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(75, 75, 75)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(118, 118, 118))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(campoPrecoAluguel)
+                                .addGap(114, 114, 114)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(spinnerQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))))
@@ -309,10 +316,10 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jLabel7))
                 .addGap(6, 6, 6)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoPrecoAluguel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spinnerQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spinnerQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campoPrecoAluguel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8)
                 .addGap(18, 18, 18)
                 .addComponent(comboGrupoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -364,11 +371,13 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_botaoCancelarActionPerformed
 
     private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
+
         Produto produto = new Produto();
-        int valorSpinner = Integer.parseInt(spinnerQtde.getValue().toString());
         
+        int valorSpinner = Integer.parseInt(spinnerQtde.getValue().toString());
+       
         produto.setNome(campoNome.getText());
-        produto.setPrecoAluguel(Double.parseDouble(campoPrecoAluguel.getText()));
+        produto.setPrecoAluguel(Double.parseDouble( campoPrecoAluguel.getText()+""));
         produto.setSaldo(Double.parseDouble(valorSpinner+""));
         produto.setAtivo(checkAtivo.isSelected());
         produto.setGrupoProduto((GrupoProduto) comboGrupoProduto.getSelectedItem());

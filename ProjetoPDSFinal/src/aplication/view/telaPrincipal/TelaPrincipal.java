@@ -4,16 +4,12 @@ package aplication.view.telaPrincipal;
 
 import aplication.dao.ClienteDAO;
 import aplication.dao.GrupoProdutoDAO;
-import aplication.renderizador.JTableRenderer;
 import aplication.dao.ProdutoDAO;
 import aplication.modelo.Carrinho;
 import aplication.modelo.Cliente;
 import aplication.modelo.GrupoProduto;
 import aplication.modelo.Produto;
-import aplication.regraDeNegocio.OperationsCarrinho;
 import aplication.regraDeNegocio.retornarValor;
-import aplication.renderizador.ButtonRederer;
-import aplication.renderizador.EditarCelalrJTable;
 import aplication.renderizador.ImageRederer;
 import aplication.view.aluguel.TelaVerDetalhesAluguel;
 import aplication.view.cliente.IndentificacaoUser;
@@ -31,14 +27,7 @@ import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
 
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
-
-import javax.swing.table.TableColumnModel;
 
 
 /**
@@ -70,37 +59,26 @@ public class TelaPrincipal extends javax.swing.JFrame {
         menuAluguel.setVisible(false);
         menuCadastro.setVisible(false);
         menuRalatorios.setVisible(false);
-         TableColumn col = tableCarrinhoPedido.getColumnModel().getColumn(2);  
-        col.setCellEditor(new EditarCelalrJTable()); 
+       
     }
     
     private void carregarTabela(){
-         pesquisar();
+        pesquisar();
         
         ImageRederer imagem= new ImageRederer();
-       // ImageRederer imagem2= new ImageRederer();
-        
-        
-        
-       
+        ImageRederer imagem2= new ImageRederer();
         tabelaCatalog.setModel(new TabelaModeloCatalago(produtos));
-        
-        
-        
         tabelaCatalog.setAutoCreateRowSorter(true);
-        tabelaCatalog.setRowHeight(200);
+        tabelaCatalog.setRowHeight(250);
         tabelaCatalog.setUpdateSelectionOnSort(true);
         
         /**  Coluna com imagen na celular*/
-        tabelaCatalog.getColumnModel().getColumn(0).setPreferredWidth(200);
+        tabelaCatalog.getColumnModel().getColumn(0).setPreferredWidth(250);
         
-        tabelaCatalog.getColumnModel().getColumn(1).setPreferredWidth(30);
+        tabelaCatalog.getColumnModel().getColumn(1).setPreferredWidth(100);
         tabelaCatalog.getColumnModel().getColumn(2).setPreferredWidth(5);
-       
-        
-       
         tabelaCatalog.getColumnModel().getColumn(0).setCellRenderer(imagem);
-        tabelaCatalog.getColumnModel().getColumn(2).setCellRenderer(imagem);
+        tabelaCatalog.getColumnModel().getColumn(2).setCellRenderer(imagem2);
         
         //alinhaTableCentro(tabelaCatalog, tabelaCatalog.getSelectedColumns());
     }
@@ -237,6 +215,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         valorAPagar = new javax.swing.JLabel();
         botaFecharPedido = new javax.swing.JButton();
         botaoInicarPedido = new javax.swing.JButton();
+        botaoCancelarPedido = new javax.swing.JButton();
         comboCategoria = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         barraDeMenu = new javax.swing.JMenuBar();
@@ -361,6 +340,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        botaoCancelarPedido.setText("Cacelar Pedido");
+        botaoCancelarPedido.setEnabled(false);
+        botaoCancelarPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCancelarPedidoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -375,9 +362,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
                                 .addComponent(jLabel2)
                                 .addGap(28, 28, 28)
                                 .addComponent(valorAPagar)
-                                .addGap(0, 142, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(botaoInicarPedido)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(botaoCancelarPedido)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(botaFecharPedido)))
                         .addContainerGap())))
@@ -394,7 +383,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaFecharPedido)
-                    .addComponent(botaoInicarPedido))
+                    .addComponent(botaoInicarPedido)
+                    .addComponent(botaoCancelarPedido))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -498,8 +488,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(comboCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -536,8 +526,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void minFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minFuncionarioActionPerformed
-       TelaPesquisaFuncionario funcionario =new TelaPesquisaFuncionario();
-       funcionario.setVisible(true);
+        TelaPesquisaFuncionario funcionario =new TelaPesquisaFuncionario();
+        funcionario.setVisible(true);
     }//GEN-LAST:event_minFuncionarioActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -565,13 +555,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
     
     public void travarRecursos( ){            
-    this.menuCadastro.setEnabled(false);
-    this.menuCadastro.setEnabled(false);
-    this.menuFile.setEnabled(false);
-    this.menuRalatorios.setEnabled(false);
-    this.miLogin.setEnabled(true);
-    this.miLogaut.setEnabled(false);
-    this.menuAluguel.setVisible(false);
+        this.menuCadastro.setEnabled(false);
+        this.menuCadastro.setEnabled(false);
+        this.menuFile.setEnabled(false);
+        this.menuRalatorios.setEnabled(false);
+        this.miLogin.setEnabled(true);
+        this.miLogaut.setEnabled(false);
+        this.menuAluguel.setVisible(false);
     }
     private void tabelaCatalogMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseReleased
         selecionarProduto(evt);
@@ -610,28 +600,29 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void tabelaCatalogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseClicked
         if (!carrinhoAtivo==true){
-             pegarCarrinho(evt);
-             perrencherTabelaCarrinho();
-             realizaCalculos();
+            pegarCarrinho(evt);
+            perrencherTabelaCarrinho();
+            realizaCalculos();
         }else{
             JOptionPane.showMessageDialog(null, "Please initiation this operation.");
         }
     }//GEN-LAST:event_tabelaCatalogMouseClicked
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
-       perrencherTabelaCarrinho();
+      
        if (carrinhoAtivo==false){
            procarrinhoMemo.clear();
            carrinhoAtivo=true;
        } 
+        perrencherTabelaCarrinho();
     }//GEN-LAST:event_formWindowGainedFocus
 
     private void botaFecharPedidoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaFecharPedidoMouseReleased
-      IndentificacaoUser user = new IndentificacaoUser(this.procarrinhoMemo);
-      user.setVisible(true);
-      carrinhoAtivo=false;
-      botaoInicarPedido.setEnabled(true);
-      botaFecharPedido.setEnabled(false);
+        IndentificacaoUser user = new IndentificacaoUser(this.procarrinhoMemo);
+        user.setVisible(true);
+        carrinhoAtivo=false;
+        botaoInicarPedido.setEnabled(true);
+        botaFecharPedido.setEnabled(false);
     }//GEN-LAST:event_botaFecharPedidoMouseReleased
 
     private void botaFecharPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaFecharPedidoActionPerformed
@@ -640,23 +631,23 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void tableCarrinhoPedidoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableCarrinhoPedidoKeyPressed
        if (evt.getKeyCode()==KeyEvent.VK_ENTER){
-          qtde=(Integer) tableCarrinhoPedido.getModel().getValueAt(tableCarrinhoPedido.getSelectedRow(),2);
-          reserva(this.produto,"U");
-          realizaCalculos();
-          tableCarrinhoPedido.repaint();
+            qtde=(Integer) tableCarrinhoPedido.getModel().getValueAt(tableCarrinhoPedido.getSelectedRow(),2);
+            reserva(this.produto,"U");
+            realizaCalculos();
+            tableCarrinhoPedido.repaint();
           
        }
     }//GEN-LAST:event_tableCarrinhoPedidoKeyPressed
 
     private void tableCarrinhoPedidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableCarrinhoPedidoKeyTyped
        
-         qtde=(Integer) tableCarrinhoPedido.getModel().getValueAt(tableCarrinhoPedido.getSelectedRow(),2);
+        qtde=(Integer) tableCarrinhoPedido.getModel().getValueAt(tableCarrinhoPedido.getSelectedRow(),2);
          
-          reserva(this.produto,"U");
+        reserva(this.produto,"U");
           
-          realizaCalculos();
+        realizaCalculos();
           
-          tableCarrinhoPedido.repaint();
+        tableCarrinhoPedido.repaint();
     }//GEN-LAST:event_tableCarrinhoPedidoKeyTyped
 
     private void tableCarrinhoPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCarrinhoPedidoMouseClicked
@@ -672,12 +663,27 @@ public class TelaPrincipal extends javax.swing.JFrame {
        tableCarrinhoPedido.setEnabled(true);
        botaFecharPedido.setEnabled(true);
        botaoInicarPedido.setEnabled(false);
+       botaoCancelarPedido.setEnabled(true);
        carrinhoAtivo=false;
     }//GEN-LAST:event_botaoInicarPedidoActionPerformed
+
+    private void botaoCancelarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarPedidoActionPerformed
+       
+            this.procarrinhoMemo.clear();
+            botaFecharPedido.setEnabled(false);
+            botaoInicarPedido.setEnabled(true);
+            perrencherTabelaCarrinho();
+            valorAPagar.setText("");
+            botaoCancelarPedido.setEnabled(false);
+            carrinhoAtivo=true;
+      
+       
+    }//GEN-LAST:event_botaoCancelarPedidoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraDeMenu;
     private javax.swing.JButton botaFecharPedido;
+    private javax.swing.JButton botaoCancelarPedido;
     private javax.swing.JButton botaoInicarPedido;
     private javax.swing.JTextField campoPesquisa;
     private javax.swing.JComboBox comboCategoria;
