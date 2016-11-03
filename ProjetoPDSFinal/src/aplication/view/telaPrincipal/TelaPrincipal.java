@@ -610,10 +610,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
       
-       if (carrinhoAtivo==false){
-           procarrinhoMemo.clear();
-           carrinhoAtivo=true;
-       } 
+       //if (carrinhoAtivo==false){
+         //  procarrinhoMemo.clear();
+      //     carrinhoAtivo=true;
+      // } 
         perrencherTabelaCarrinho();
     }//GEN-LAST:event_formWindowGainedFocus
 
