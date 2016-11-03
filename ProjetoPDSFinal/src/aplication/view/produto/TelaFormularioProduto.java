@@ -169,7 +169,7 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         checkAtivo = new javax.swing.JCheckBox();
         jLabel7 = new javax.swing.JLabel();
-        comboGrupoProduto = new javax.swing.JComboBox<Object>();
+        comboGrupoProduto = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         spinnerQtde = new javax.swing.JSpinner();
         campoPrecoAluguel = new javax.swing.JTextField();
@@ -268,10 +268,8 @@ public class TelaFormularioProduto extends javax.swing.JFrame {
         jLabel8.setText("Grupo Produto:");
 
         spinnerQtde.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        spinnerQtde.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        spinnerQtde.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         spinnerQtde.setToolTipText("");
-
-        campoPrecoAluguel.setText("jTextField1");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

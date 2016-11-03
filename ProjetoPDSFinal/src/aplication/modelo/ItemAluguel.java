@@ -1,6 +1,7 @@
 package aplication.modelo;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,6 +21,8 @@ public class ItemAluguel implements Serializable{
     private int quantidade;
     private Double tempo;
     
+    private Calendar devolucao;
+    
     @ManyToOne
     private Produto produto;
     
@@ -28,6 +31,14 @@ public class ItemAluguel implements Serializable{
     
     @ManyToOne
     private Status status;
+
+    public Calendar getDevolucao() {
+        return devolucao;
+    }
+
+    public void setDevolucao(Calendar devolucao) {
+        this.devolucao = devolucao;
+    }
 
     public Status getStatus() {
         return status;

@@ -15,13 +15,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 
 public class TelaPesquisaPedido extends javax.swing.JFrame {
 
    private List<ItemAluguel> itensAlugueis = new ArrayList<>();
-   private ItemAluguel itemAluguel = new ItemAluguel();
-    
+   private ItemAluguel itemAluguel = new ItemAluguel(); 
+   
     public TelaPesquisaPedido(){
         initComponents();      
         
@@ -51,7 +52,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }
     
     private void carregarMenuFlutuante(){
-        JMenuItem menuItem[] = {new JMenuItem("Ver detalhes"), new JMenuItem("Alterar")};
+        JMenuItem menuItem[] = {new JMenuItem("Ver detalhes"), new JMenuItem("Devolução")};
         
         menuItem[0].addActionListener(new ActionListener() {
 
@@ -84,8 +85,12 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }
     
     private void alterar(){
-        //TelaFormularioCliente alterarCidade = new TelaFormularioCliente(cliente);
-        //alterarCidade.setVisible(true);
+        if (radioPedido.isSelected()){
+            JOptionPane.showMessageDialog(this, "Selecione a lista De 'Alugados'");
+        }else{
+            TelaDevolucao telaDevolucao = new TelaDevolucao(itemAluguel);
+            telaDevolucao.setVisible(true);
+        }        
     }
     
     private void preencherCliente(){

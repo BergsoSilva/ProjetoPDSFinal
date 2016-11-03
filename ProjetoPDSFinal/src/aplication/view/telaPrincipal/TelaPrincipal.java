@@ -81,6 +81,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         tabelaCatalog.getColumnModel().getColumn(2).setCellRenderer(imagem2);
         
         //alinhaTableCentro(tabelaCatalog, tabelaCatalog.getSelectedColumns());
+        tabelaCatalog.repaint();
+        imagem.repaint();
+        imagem2.repaint();
     }
     
  
@@ -609,7 +612,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaCatalogMouseClicked
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
-      
+        carregarTabela();
        //if (carrinhoAtivo==false){
          //  procarrinhoMemo.clear();
       //     carrinhoAtivo=true;
