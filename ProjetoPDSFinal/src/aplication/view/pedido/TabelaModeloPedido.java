@@ -1,21 +1,22 @@
 package aplication.view.pedido;
 
+import aplication.modelo.Aluguel;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import aplication.modelo.ItemAluguel;
+
 
 public class TabelaModeloPedido extends AbstractTableModel{
     
     private String colunas[] = {"Código", "Produto", "Cliente", "Quantidade"}; 
-    private List<ItemAluguel> itensAlugueis;
+    private List<Aluguel> alugueis;
 
-    public TabelaModeloPedido(List<ItemAluguel> itensAlugueis) {
-        this.itensAlugueis = itensAlugueis;
+    public TabelaModeloPedido(List<Aluguel> alugueis) {
+        this.alugueis = alugueis;
     }
     
     @Override
     public int getRowCount() {
-        return itensAlugueis.size();
+        return alugueis.size();
     }
 
     @Override
@@ -25,17 +26,17 @@ public class TabelaModeloPedido extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        ItemAluguel itemAluguel = itensAlugueis.get(rowIndex);
+        Aluguel aluguel = alugueis.get(rowIndex);
         
         switch(columnIndex){
             case 0:
-                return itemAluguel.getProduto().getId();
+                return aluguel.getProduto().getId();
             case 1:
-                return itemAluguel.getProduto().getNome();
+                return aluguel.getProduto().getNome();
             case 2:
-                return itemAluguel.getAluguel().getCliente().getNome();
+                return aluguel.getCliente().getNome();
             case 3:
-                return itemAluguel.getQuantidade();
+                return aluguel.getQuantidade();
         }
         return null;
     }

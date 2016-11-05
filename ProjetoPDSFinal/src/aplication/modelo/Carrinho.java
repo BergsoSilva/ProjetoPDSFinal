@@ -14,6 +14,7 @@ public class Carrinho {
     private String nomeProduto;
     private Double valorAluguel;
     private Integer qntde;
+    private Integer temposolicitado;
     private Cliente cliente;
     private Double subtotal;
     
@@ -75,8 +76,16 @@ public class Carrinho {
     public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
     }
+
+    public Integer getTemposolicitado() {
+        return temposolicitado;
+    }
+
+    public void setTemposolicitado(Integer temposolicitado) {
+        this.temposolicitado = temposolicitado;
+    }
     
-    
+   
     
     
 }

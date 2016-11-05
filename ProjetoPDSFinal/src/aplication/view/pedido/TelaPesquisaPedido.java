@@ -28,7 +28,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         
         Status status = new Status();
         status.setId(Long.parseLong("1"));
-        this.itemAluguel.setStatus(status);
+      //  this.itemAluguel.setStatus(status);
         
         carregarTabela();
         carregarMenuFlutuante();
@@ -48,7 +48,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     
     private void carregarTabela(){
         pesquisar();
-        tabelaPedido.setModel(new TabelaModeloPedido(itensAlugueis));
+       // tabelaPedido.setModel(new TabelaModeloPedido(itensAlugueis));
     }
     
     private void carregarMenuFlutuante(){
@@ -100,8 +100,8 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         Aluguel aluguel = new Aluguel();
         aluguel.setCliente(cliente);
         
-        this.itemAluguel.setAluguel(aluguel);
-        this.itemAluguel.getAluguel().setCliente(cliente);
+       // this.itemAluguel.setAluguel(aluguel);
+       // this.itemAluguel.getAluguel().setCliente(cliente);
     }
     
     private void selecionarCliente(MouseEvent evt){
@@ -284,9 +284,9 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
         if (radioPedido.isSelected()){
-            this.itemAluguel.getStatus().setId(Long.parseLong("1"));
+          //  this.itemAluguel.getStatus().setId(Long.parseLong("1"));
         }else{
-            this.itemAluguel.getStatus().setId(Long.parseLong("2"));
+          //  this.itemAluguel.getStatus().setId(Long.parseLong("2"));
         }
         carregarTabela();
     }//GEN-LAST:event_formWindowGainedFocus
@@ -310,12 +310,12 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_botaoPesquisarActionPerformed
 
     private void radioPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioPedidoActionPerformed
-        this.itemAluguel.getStatus().setId(Long.parseLong("1"));        
+       // this.itemAluguel.getStatus().setId(Long.parseLong("1"));        
         carregarTabela();
     }//GEN-LAST:event_radioPedidoActionPerformed
 
     private void radioAlugadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioAlugadoActionPerformed
-        this.itemAluguel.getStatus().setId(Long.parseLong("2"));
+     //   this.itemAluguel.getStatus().setId(Long.parseLong("2"));
         carregarTabela();
     }//GEN-LAST:event_radioAlugadoActionPerformed
 

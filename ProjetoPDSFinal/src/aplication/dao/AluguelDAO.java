@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
  * @author unkwow
  */
 public class AluguelDAO {
+    
     public Aluguel inserir(Aluguel aluguel) throws Exception {
       // Inserido a classe de util
            

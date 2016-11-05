@@ -16,7 +16,7 @@ public class PedidoDAO {
     
     public List<ItemAluguel> pesquisar(ItemAluguel itemAluguel){
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
-        System.out.println(itemAluguel.getAluguel().getCliente().getNome());
+       // System.out.println(itemAluguel.getAluguel().getCliente().getNome());
         manager.getTransaction().begin();
             Query query = manager.createQuery("select i from ItemAluguel i "
                     + "INNER JOIN FETCH i.status "
@@ -25,8 +25,8 @@ public class PedidoDAO {
                     + "INNER JOIN FETCH a.cliente "
                     + "WHERE i.status.id = ?1 AND i.aluguel.cliente.nome like ?2");
             
-            query.setParameter(1, itemAluguel.getStatus().getId());
-            query.setParameter(2, "%"+itemAluguel.getAluguel().getCliente().getNome()+"%");
+          //  query.setParameter(1, itemAluguel.getStatus().getId());
+           // query.setParameter(2, "%"+itemAluguel.getAluguel().getCliente().getNome()+"%");
             
             List<ItemAluguel> itemAluguels = query.getResultList();
         manager.getTransaction();
@@ -40,13 +40,13 @@ public class PedidoDAO {
         ItemAluguel itemAluguel = new ItemAluguel();
         
         manager.getTransaction().begin();
-            itemAluguel = manager.find(ItemAluguel.class, itemAluguelFinalizado.getId());
-            itemAluguel.setStatus(itemAluguelFinalizado.getStatus());
+          //  itemAluguel = manager.find(ItemAluguel.class, itemAluguelFinalizado.getId());
+          //  itemAluguel.setStatus(itemAluguelFinalizado.getStatus());
         manager.getTransaction().commit();
         manager.close();
     }
     
-    public ItemAluguel inserir(ItemAluguel item) throws Exception {
+   /* public ItemAluguel inserir(Aluguel aluguel) throws Exception {
       // Inserido a classe de util
            
            EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
@@ -57,5 +57,5 @@ public class PedidoDAO {
             manager.close();
             
             return item;
-    }
+    } */
 }

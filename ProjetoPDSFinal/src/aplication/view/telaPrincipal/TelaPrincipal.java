@@ -2,6 +2,7 @@
  
 package aplication.view.telaPrincipal;
 
+import aplication.controler.DialogControle;
 import aplication.dao.ClienteDAO;
 import aplication.dao.GrupoProdutoDAO;
 import aplication.dao.ProdutoDAO;
@@ -40,10 +41,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private List<Produto> produtos= new ArrayList<>();
     private final List<Carrinho> procarrinhoMemo= new ArrayList<>();
     
-    Double sutotal=0.0;
-    Integer qtde=1;
+    private Double sutotal=0.0;
+    public static Integer qtde=1;
+    public static Integer tempo=0;
+    
+    
     
     boolean carrinhoAtivo;
+    
    
     public TelaPrincipal() {
         initComponents();
@@ -59,6 +64,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
         menuAluguel.setVisible(false);
         menuCadastro.setVisible(false);
         menuRalatorios.setVisible(false);
+        if (carrinhoAtivo==false){
+           procarrinhoMemo.clear();
+           carrinhoAtivo=true;
+        } 
        
     }
     
@@ -219,6 +228,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         botaFecharPedido = new javax.swing.JButton();
         botaoInicarPedido = new javax.swing.JButton();
         botaoCancelarPedido = new javax.swing.JButton();
+        jInternalFrame1 = new javax.swing.JInternalFrame();
         comboCategoria = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         barraDeMenu = new javax.swing.JMenuBar();
@@ -351,6 +361,19 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jInternalFrame1.setVisible(false);
+
+        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
+        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
+        jInternalFrame1Layout.setHorizontalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jInternalFrame1Layout.setVerticalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -365,6 +388,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
                                 .addComponent(jLabel2)
                                 .addGap(28, 28, 28)
                                 .addComponent(valorAPagar)
+                                .addGap(52, 52, 52)
+                                .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(botaoInicarPedido)
@@ -380,10 +405,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(valorAPagar))
-                .addGap(36, 36, 36)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(valorAPagar))
+                    .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaFecharPedido)
                     .addComponent(botaoInicarPedido)
@@ -603,12 +630,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void tabelaCatalogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseClicked
         if (!carrinhoAtivo==true){
+            DialogControle control= new DialogControle("dialog");
+            control.executar();
             pegarCarrinho(evt);
             perrencherTabelaCarrinho();
             realizaCalculos();
+            
         }else{
-            JOptionPane.showMessageDialog(null, "Please initiation this operation.");
+            JOptionPane.showMessageDialog(null, "Inicie o pedido.");
         }
+        
     }//GEN-LAST:event_tabelaCatalogMouseClicked
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
@@ -691,6 +722,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField campoPesquisa;
     private javax.swing.JComboBox comboCategoria;
     private javax.swing.JButton jButton1;
+    private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;

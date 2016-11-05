@@ -27,9 +27,9 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         
         setar();
         
-        Status status = this.itemAluguel.getStatus();
+    //    Status status = this.itemAluguel.getStatus();
         
-        botaoAlugar.setEnabled(status.getId() == 1 ? true : false);
+        //botaoAlugar.setEnabled(status.getId() == 1 ? true : false);
     }
     
     private void carregaImagem(String caminho, String nomeImagem){
@@ -44,7 +44,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     }
 
     private void setar(){        
-        labelNome.setText(itemAluguel.getProduto().getNome());
+     /*   labelNome.setText(itemAluguel.getProduto().getNome());
         labelAluguel.setText(itemAluguel.getProduto().getPrecoAluguel()+"");
         labelAQtde.setText(itemAluguel.getQuantidade()+"");
         labelGrupoProduto.setText(itemAluguel.getProduto().getGrupoProduto().getDescricao());
@@ -56,7 +56,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         File file = new File("");
         String caminho = file.getAbsolutePath() + "/src/" + itemAluguel.getProduto().getImagem();
         String nomeImagem = itemAluguel.getProduto().getImagem().replaceAll("img/", "");
-        carregaImagem(caminho, nomeImagem);
+        carregaImagem(caminho, nomeImagem);*/
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -310,7 +310,8 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoAlugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAlugarActionPerformed
-        Produto produto = itemAluguel.getProduto();
+     
+     /*   Produto produto = itemAluguel.getProduto();
         Double contaSaldo = produto.getSaldo() - itemAluguel.getQuantidade(); 
         
         if (contaSaldo > 0){            
@@ -318,7 +319,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             status.setId(Long.parseLong("2"));
 
             produto.setSaldo(contaSaldo);
-            
+           
             itemAluguel.getStatus();
 
             PedidoDAO pedidoDAO = new PedidoDAO();
@@ -326,8 +327,9 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             
             ProdutoDAO produtoDAO = new ProdutoDAO();
             produtoDAO.alteraStatus(produto);
-            JOptionPane.showMessageDialog(this, "Produto Alugado!!");
+            JOptionPane.showMessageDialog(this, "Produto Alugado!!"); 
         }
+        */
     }//GEN-LAST:event_botaoAlugarActionPerformed
 
     private void botaoCancelar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelar3ActionPerformed

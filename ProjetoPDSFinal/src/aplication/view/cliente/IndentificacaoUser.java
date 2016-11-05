@@ -16,6 +16,7 @@ import aplication.modelo.Cliente;
 import aplication.modelo.FormPagamento;
 import aplication.modelo.Funcionario;
 import aplication.modelo.ItemAluguel;
+import aplication.modelo.Produto;
 import aplication.modelo.Status;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
@@ -41,8 +42,8 @@ public class IndentificacaoUser extends javax.swing.JFrame {
         setLocationRelativeTo(this);
         this.carrinhos=carrinhos;
         labelCadCliente.setVisible(false);
-         labelNome.setVisible(false);
-         camoNome.setVisible(false);
+        labelNome.setVisible(false);
+        camoNome.setVisible(false);
         carregarCleinte();
     }
 
@@ -98,6 +99,13 @@ public class IndentificacaoUser extends javax.swing.JFrame {
         camoNome = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         try {
@@ -171,57 +179,53 @@ public class IndentificacaoUser extends javax.swing.JFrame {
         
         
     private void butaoAutorizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butaoAutorizarActionPerformed
-    
-      //  if (getUsuario(campoCPF.getText())){
+           Calendar data= Calendar.getInstance();
            AluguelDAO daoaluguel= new AluguelDAO();
-           PedidoDAO itemdao= new PedidoDAO();
-           ProdutoDAO prodao = new ProdutoDAO();
-           
-           /* Setando status*/
-           Status status =new Status();
+           ProdutoDAO produtoDao = new ProdutoDAO();
+           Status status = new Status();
            status.setId(Long.parseLong("1"));
-           
-           Aluguel aluguel= new Aluguel();// cabeçalho alugel
-           ItemAluguel item;
-           
-           aluguel.setCliente(this.cliente);
-           /* Pega a data do sistema */
-           Calendar cal=Calendar.getInstance();
-           aluguel.setDtAluguel(cal);
-           /* Forma de pagamento padrão dinheiro*/
-           FormPagamento pgto= new FormPagamento();
-           pgto.setId(Long.parseLong("1"));
-           aluguel.setFormPagamento(pgto);
-           /*funcionario default */
-           Funcionario f= new Funcionario();
-           f.setId(Long.parseLong("1"));
-           aluguel.setFuncionario(f);
-           
-           try {
-               /* Inseri o aluguel e retorna a entity com o Id gerado*/
-               daoaluguel.inserir(aluguel);
-               
-               /*Lista de itens adicionado no carrinho */
-               for (Carrinho carrinho : carrinhos) {
-                      item= new ItemAluguel();// cria um novo item aluguel
-                      item.setAluguel(aluguel); // id aluguel no item
-                      item.setProduto(prodao.produtoFind(carrinho.getCodReferncia()));// id produto
-                      item.setQuantidade(carrinho.getQntde());// qntde solicitada 
-                      item.setStatus(status);// status do item
-                      item.setTempo(12.0);// empo default 12 horas
-                      
-                      itemdao.inserir(item);
-               }
-               JOptionPane.showMessageDialog(null,"<html>"
-                                                + "<h2><b><u>Pedido realizado com Sucesso.</u> </b></h2><br>"
-                                                + "<b> Cliene : </b>"+aluguel.getCliente().getNome()+"<br> "
-                                                + "<h3><b>CFP : "+aluguel.getCliente().getCpf()+"</b></h3>"
-                                                + "<h3><b> Valor Pedido R$ -"+realizaCalculos()+"</b></h3>"
-                                                + " <br><br>"
-                                                + "<b>Obrigado e volte sempre!!<b><br>"
-                                                + "<b><u> Digira-se ao balcão para finalizar a locação</u><b></html>");
-                cacelar();
-           } catch (Exception ex) {
+           FormPagamento fPagamento = new FormPagamento();
+           fPagamento.setId(Long.parseLong("1"));
+           Funcionario funcionario = new Funcionario();
+           funcionario.setId(Long.parseLong("1"));
+          try{  
+
+                    /* Setando status*/
+                    for (Carrinho c : carrinhos) {
+                         Aluguel aluguel= new Aluguel();// cabeçalho alugel
+
+                         aluguel.setDtAluguel(data);
+
+                         aluguel.setDtDevolucao(null);
+
+                         aluguel.setStatus(status);
+
+                         aluguel.setFormPagamento(fPagamento);
+
+                         aluguel.setCliente(this.cliente);
+
+                         aluguel.setFuncionario(funcionario);
+
+                         aluguel.setQuantidade(c.getQntde());
+
+
+                         aluguel.setTempo(c.getTemposolicitado());
+
+                         aluguel.setProduto(produtoDao.produtoFind(c.getCodReferncia()));
+
+                        daoaluguel.inserir(aluguel);
+                    }
+
+                        JOptionPane.showMessageDialog(null,"<html>"
+                                                         + "<h2><b><u>Pedido realizado com Sucesso.</u> </b></h2><br>"
+                                                         + "<b> Cliene : </b>"+this.cliente.getNome()+"<br> "
+                                                         + "<h3><b>CFP : "+this.cliente.getCpf()+"</b></h3>"
+                                                         + "<h3><b> Valor Pedido R$ -"+realizaCalculos()+"</b></h3>"
+                                                         + " <br><br>"
+                                                         + "<b>Obrigado e volte sempre!!<b><br>"
+                                                         + "<b><u> Digira-se ao balcão para finalizar a locação</u><b></html>");
+                         cacelar();
+           } catch (Exception ex){
                Logger.getLogger(IndentificacaoUser.class.getName()).log(Level.SEVERE, null, ex);
            }
            
@@ -254,7 +258,7 @@ public class IndentificacaoUser extends javax.swing.JFrame {
               
               butaoAutorizar.setEnabled(true);
           }else{
-             JOptionPane.showMessageDialog(null, "Sorry, client not found.");
+             JOptionPane.showMessageDialog(null, " Ciente não existe.");
              labelCadCliente.setVisible(true); 
              labelNome.setVisible(false);
              camoNome.setVisible(false);
@@ -263,6 +267,10 @@ public class IndentificacaoUser extends javax.swing.JFrame {
           }
       }
     }//GEN-LAST:event_campoCPFKeyPressed
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        carregarCleinte();
+    }//GEN-LAST:event_formWindowGainedFocus
     
     private void cacelar(){
         campoCPF.setText("");

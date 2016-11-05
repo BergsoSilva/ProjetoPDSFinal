@@ -40,11 +40,11 @@ public class TelaDevolucao extends javax.swing.JFrame {
     
     private void setDataDevolucao(){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/m/Y HH:mm");
-        Date date = itemAluguel.getAluguel().getDtAluguel().getTime();
+        //Date date = itemAluguel.getAluguel().getDtAluguel().getTime();
         
-        String dataHora = sdf.format(date);
+       // String dataHora = sdf.format(date);
         
-        labelDataDevolucao.setText(dataHora);
+        //labelDataDevolucao.setText(dataHora);
     }
 
     /**

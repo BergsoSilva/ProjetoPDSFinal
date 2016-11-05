@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package aplication.testesUnitario;
+package aplicarion.cliente;
 
 import aplication.dao.ClienteDAO;
 import org.junit.Test;

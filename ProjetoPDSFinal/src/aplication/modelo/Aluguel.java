@@ -2,10 +2,13 @@ package aplication.modelo;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -17,18 +20,29 @@ public class Aluguel implements Serializable{
     @Id
     @GeneratedValue
     private Long id;
-    
+    @Temporal(TemporalType.DATE)
+    @Column(name = "aludtaaluguel")
     private Calendar dtAluguel;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "aludtadedevolucao" , nullable = true)
     private Calendar dtDevolucao;
-    
+    @ManyToOne
+    private Status status;
     @ManyToOne
     private FormPagamento formPagamento;
-        
     @ManyToOne
     private Cliente cliente;
-    
     @ManyToOne
     private Funcionario funcionario;
+    @Column(name = "aluqtdeitem")
+    private Integer quantidade;
+    @Column(name = "alutempo")
+    private Integer tempo;
+    @ManyToOne
+    private Produto produto;
+
+    public Aluguel() {
+    }
 
     public Long getId() {
         return id;
@@ -77,4 +91,37 @@ public class Aluguel implements Serializable{
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
     }
+
+    public Integer getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public Integer getTempo() {
+        return tempo;
+    }
+
+    public void setTempo(Integer tempo) {
+        this.tempo = tempo;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+        
 }
