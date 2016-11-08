@@ -2,7 +2,6 @@
  
 package aplication.view.telaPrincipal;
 
-import aplication.controler.DialogControle;
 import aplication.dao.ClienteDAO;
 import aplication.dao.GrupoProdutoDAO;
 import aplication.dao.ProdutoDAO;
@@ -28,6 +27,7 @@ import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 
 
@@ -460,7 +460,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
         menuCadastro.add(jMenuItem4);
 
-        miGrupoProduto.setText("Gurpo Produto");
+        miGrupoProduto.setText("Grupo Produto");
         miGrupoProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miGrupoProdutoActionPerformed(evt);
@@ -537,11 +537,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(campoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton1)
-                        .addComponent(comboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(comboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(campoPesquisa))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -585,13 +585,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
     
     public void travarRecursos( ){            
-        this.menuCadastro.setEnabled(false);
-        this.menuCadastro.setEnabled(false);
-        this.menuFile.setEnabled(false);
-        this.menuRalatorios.setEnabled(false);
+        this.menuCadastro.setVisible(false);
+        this.menuRalatorios.setVisible(false);
         this.miLogin.setEnabled(true);
         this.miLogaut.setEnabled(false);
         this.menuAluguel.setVisible(false);
+      
     }
     private void tabelaCatalogMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseReleased
         selecionarProduto(evt);
@@ -627,14 +626,25 @@ public class TelaPrincipal extends javax.swing.JFrame {
         TelaPesquisaPedido telaPesquisaPedido = new TelaPesquisaPedido();
         telaPesquisaPedido.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
+    private Dialog abriTela(){
+        Dialog d =  new Dialog();
+        return d;
+    }
+    private String valores(){
+        Dialog d=abriTela();
+        return d.getValores();
+    }
     private void tabelaCatalogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseClicked
+        
         if (!carrinhoAtivo==true){
-            DialogControle control= new DialogControle("dialog");
-            control.executar();
-            pegarCarrinho(evt);
-            perrencherTabelaCarrinho();
-            realizaCalculos();
+              String q= JOptionPane.showInputDialog("Quantidade");
+              String t= JOptionPane.showInputDialog("Tempo");
+              
+              qtde=Integer.parseInt(q);
+              tempo=Integer.parseInt(t);
+              pegarCarrinho(evt);
+              perrencherTabelaCarrinho();
+              realizaCalculos();
             
         }else{
             JOptionPane.showMessageDialog(null, "Inicie o pedido.");
@@ -761,6 +771,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             c.setNomeProduto(produto.getNome());
             c.setValorAluguel(produto.getPrecoAluguel());
             c.setQntde(qtde);
+            c.setTemposolicitado(tempo);
             c.setCliente(clidefault);
 
             sutotal= retornarValor.subtotalItens(c.getQntde(), c.getValorAluguel());
@@ -803,7 +814,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void removerCarrinho(MouseEvent evt) {
        
         int coluna = tableCarrinhoPedido.columnAtPoint(evt.getPoint());
-        if (coluna== 4){
+        if (coluna== 5){
             int linha = tableCarrinhoPedido.rowAtPoint(evt.getPoint());
             if(linha >= 0){
             tableCarrinhoPedido.setRowSelectionInterval(linha, linha);
@@ -848,7 +859,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         tableCarrinhoPedido.setModel(new TabelaModeloCarrinhoPedido(this.procarrinhoMemo));
         
-        tableCarrinhoPedido.getColumnModel().getColumn(4).setCellRenderer(r);
+        tableCarrinhoPedido.getColumnModel().getColumn(5).setCellRenderer(r);
         
         
     }

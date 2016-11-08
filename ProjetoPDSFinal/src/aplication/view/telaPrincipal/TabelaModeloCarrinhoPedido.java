@@ -14,7 +14,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
     
-    private final String colunas[] = {"Descrição"," Val unit", "Qtde","subTotal","X"}; 
+    private final String colunas[] = {"Descrição"," Val unit", "Qtde","Tempo","Subtotal","X"}; 
     private final List<Carrinho> produtos;
 
  public TabelaModeloCarrinhoPedido(List<Carrinho> produtos) {
@@ -42,8 +42,10 @@ public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
             case 2:
                 return String.class;
             case 3: 
-                 return Double.class;
+                 return String.class;
             case 4:
+                return Double.class;
+            case 5:
                  return Image.class;
             default:
                 throw new IndexOutOfBoundsException("ColumnIndex out of bounds");
@@ -64,8 +66,10 @@ public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
             case 2:
                 return produto.getQntde();
             case 3:
-                return  produto.getSubtotal();
+                return produto.getTemposolicitado();
             case 4:
+                return  produto.getSubtotal();
+            case 5:
             {
                
                 String c= "img/delete.jpg";
@@ -89,7 +93,9 @@ public class TabelaModeloCarrinhoPedido extends AbstractTableModel{
 
     if (columnIndex == 2) 
         carrinho.setQntde(Integer.parseInt(aValue.toString()));
-    if (columnIndex == 3) 
+    if (columnIndex==3)
+        carrinho.setTemposolicitado(Integer.parseInt(aValue.toString()));
+    if (columnIndex == 4) 
         carrinho.setSubtotal(Double.parseDouble(aValue.toString()));
    
     }

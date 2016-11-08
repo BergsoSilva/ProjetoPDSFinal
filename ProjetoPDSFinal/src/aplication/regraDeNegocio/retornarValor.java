@@ -15,7 +15,7 @@ import javax.swing.JTable;
  * @author unkwow
  */
 public class retornarValor {
-    
+    private final double valor=0.0;
     static{
         
         

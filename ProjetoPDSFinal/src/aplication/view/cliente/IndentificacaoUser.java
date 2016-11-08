@@ -218,7 +218,7 @@ public class IndentificacaoUser extends javax.swing.JFrame {
 
                         JOptionPane.showMessageDialog(null,"<html>"
                                                          + "<h2><b><u>Pedido realizado com Sucesso.</u> </b></h2><br>"
-                                                         + "<b> Cliene : </b>"+this.cliente.getNome()+"<br> "
+                                                         + "<b> Cliente : </b>"+this.cliente.getNome()+"<br> "
                                                          + "<h3><b>CFP : "+this.cliente.getCpf()+"</b></h3>"
                                                          + "<h3><b> Valor Pedido R$ -"+realizaCalculos()+"</b></h3>"
                                                          + " <br><br>"
