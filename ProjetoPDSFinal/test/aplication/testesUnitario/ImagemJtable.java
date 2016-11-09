@@ -6,7 +6,6 @@
 package aplication.testesUnitario;
 
 import aplication.renderizador.ImageRederer;
-import aplication.renderizador.MyTalbeModel;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -21,16 +20,13 @@ public class ImagemJtable {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.getContentPane().setLayout(new BorderLayout());
-
-        MyTalbeModel model = new MyTalbeModel();
-
-        JTable table = new JTable(model);
+       /*JTable table = new JTable(model);
         table.setRowHeight(80);
         table.getColumnModel().getColumn(0).setCellRenderer( new ImageRederer());
         JScrollPane pane = new JScrollPane(table);
         frame.getContentPane().add(BorderLayout.CENTER, pane);
         frame.setSize(500, 400);
-        frame.setVisible(true);
+        frame.setVisible(true); */
   }
     
 }

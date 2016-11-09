@@ -11,6 +11,7 @@ import aplication.modelo.GrupoProduto;
 import aplication.modelo.Produto;
 import aplication.regraDeNegocio.retornarValor;
 import aplication.renderizador.ImageRederer;
+import aplication.renderizador.jPanelRederer;
 import aplication.view.aluguel.TelaVerDetalhesAluguel;
 import aplication.view.cliente.IndentificacaoUser;
 import aplication.view.cliente.TelaPesquisaCliente;
@@ -78,6 +79,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         ImageRederer imagem= new ImageRederer();
         ImageRederer imagem2= new ImageRederer();
+        jPanelRederer panel = new jPanelRederer();
         tabelaCatalog.setModel(new TabelaModeloCatalago(produtos));
         tabelaCatalog.setAutoCreateRowSorter(true);
         tabelaCatalog.setRowHeight(250);
@@ -87,8 +89,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         tabelaCatalog.getColumnModel().getColumn(0).setPreferredWidth(250);
         
         tabelaCatalog.getColumnModel().getColumn(1).setPreferredWidth(100);
-        tabelaCatalog.getColumnModel().getColumn(2).setPreferredWidth(5);
+        tabelaCatalog.getColumnModel().getColumn(2).setPreferredWidth(10);
         tabelaCatalog.getColumnModel().getColumn(0).setCellRenderer(imagem);
+        tabelaCatalog.getColumnModel().getColumn(1).setCellRenderer(panel);
         tabelaCatalog.getColumnModel().getColumn(2).setCellRenderer(imagem2);
         
         //alinhaTableCentro(tabelaCatalog, tabelaCatalog.getSelectedColumns());
@@ -657,8 +660,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void tabelaCatalogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCatalogMouseClicked
         
         if (!carrinhoAtivo==true){
-              String q= JOptionPane.showInputDialog("Quantidade");
-              String t= JOptionPane.showInputDialog("Tempo");
+              String q= JOptionPane.showInputDialog("Quantidade Item");
+              String t= JOptionPane.showInputDialog("Tempo em Horas");
               
               qtde=Integer.parseInt(q);
               tempo=Integer.parseInt(t);
