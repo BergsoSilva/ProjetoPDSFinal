@@ -16,15 +16,15 @@ import java.util.concurrent.TimeUnit;
  */
 public class TelaDevolucao extends javax.swing.JFrame {
 
-    private ItemAluguel itemAluguel;
+    private Aluguel aluguel;
 
     public TelaDevolucao(){
     }
     
-    public TelaDevolucao(ItemAluguel itemAluguel) {
+    public TelaDevolucao(Aluguel aluguel) {
         initComponents();
         
-        this.itemAluguel = itemAluguel;
+        this.aluguel = aluguel;
         
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 

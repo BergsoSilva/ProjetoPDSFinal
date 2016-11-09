@@ -17,6 +17,11 @@ import javax.persistence.TemporalType;
 @Entity
 public class Aluguel implements Serializable{
     
+    public static final Long PEDIDO = 1L;
+    public static final Long ALUGADO = 2L;
+    public static final Long FINALIZADO = 3L;
+    public static final Long FINALIZADO_COM_PENDENCIA = 4L;
+    
     @Id
     @GeneratedValue
     private Long id;

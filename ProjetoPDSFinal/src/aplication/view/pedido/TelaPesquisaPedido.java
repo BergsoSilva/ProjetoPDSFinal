@@ -20,15 +20,15 @@ import javax.swing.JOptionPane;
 
 public class TelaPesquisaPedido extends javax.swing.JFrame {
 
-   private List<ItemAluguel> itensAlugueis = new ArrayList<>();
-   private ItemAluguel itemAluguel = new ItemAluguel(); 
+   private List<Aluguel> aluugueis = new ArrayList<>();
+   private Aluguel aluguel = new Aluguel(); 
    
     public TelaPesquisaPedido(){
         initComponents();      
         
         Status status = new Status();
         status.setId(Long.parseLong("1"));
-      //  this.itemAluguel.setStatus(status);
+        this.aluguel.setStatus(status);
         
         carregarTabela();
         carregarMenuFlutuante();
@@ -38,7 +38,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         preencherCliente();
         try {            
             PedidoDAO pedidoDAO = new PedidoDAO();
-            this.itensAlugueis = (List<ItemAluguel>) pedidoDAO.pesquisar(itemAluguel);
+            this.aluugueis = pedidoDAO.pesquisar(aluguel);
         }catch(Exception e){
             e.printStackTrace();
         }                   
@@ -48,7 +48,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     
     private void carregarTabela(){
         pesquisar();
-       // tabelaPedido.setModel(new TabelaModeloPedido(itensAlugueis));
+        tabelaPedido.setModel(new TabelaModeloPedido(this.aluugueis));
     }
     
     private void carregarMenuFlutuante(){
@@ -80,7 +80,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }
     
     private void verDetalhes(){
-        TelaVerDetalhesPedido telaVerDetalhesPedido = new TelaVerDetalhesPedido(itemAluguel);
+        TelaVerDetalhesPedido telaVerDetalhesPedido = new TelaVerDetalhesPedido(aluguel);
         telaVerDetalhesPedido.setVisible(true);
     }
     
@@ -88,20 +88,15 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         if (radioPedido.isSelected()){
             JOptionPane.showMessageDialog(this, "Selecione a lista De 'Alugados'");
         }else{
-            TelaDevolucao telaDevolucao = new TelaDevolucao(itemAluguel);
+            TelaDevolucao telaDevolucao = new TelaDevolucao(aluguel);
             telaDevolucao.setVisible(true);
         }        
     }
     
     private void preencherCliente(){
         Cliente cliente = new Cliente();
-        cliente.setNome(campoNome.getText());
-        
-        Aluguel aluguel = new Aluguel();
-        aluguel.setCliente(cliente);
-        
-       // this.itemAluguel.setAluguel(aluguel);
-       // this.itemAluguel.getAluguel().setCliente(cliente);
+        cliente.setCpf(campoCpf.getText());
+        this.aluguel.setCliente(cliente);
     }
     
     private void selecionarCliente(MouseEvent evt){
@@ -111,7 +106,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
             tabelaPedido.setRowSelectionInterval(linha, linha);
             linha = tabelaPedido.getSelectedRow();
             
-            this.itemAluguel = itensAlugueis.get(linha);            
+            this.aluguel = aluugueis.get(linha);            
         }
     }
     
@@ -133,8 +128,6 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
         grupoRadio = new javax.swing.ButtonGroup();
-        jLabel1 = new javax.swing.JLabel();
-        campoNome = new javax.swing.JTextField();
         botaoPesquisar = new javax.swing.JButton();
         campoCancelar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -142,6 +135,8 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         tabelaPedido = new javax.swing.JTable();
         radioPedido = new javax.swing.JRadioButton();
         radioAlugado = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
+        campoCpf = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisar Pedido");
@@ -152,11 +147,6 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
             public void windowLostFocus(java.awt.event.WindowEvent evt) {
             }
         });
-
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel1.setText("Nome do Cliente:");
-
-        campoNome.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         botaoPesquisar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         botaoPesquisar.setText("Pesquisar");
@@ -214,7 +204,6 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
 
         grupoRadio.add(radioPedido);
         radioPedido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        radioPedido.setSelected(true);
         radioPedido.setText("Pedido(s)");
         radioPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -231,42 +220,55 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel2.setText("CPF:");
+
+        try {
+            campoCpf.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        campoCpf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoCpfActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(199, 199, 199)
                         .addComponent(campoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(radioPedido)
-                                .addGap(18, 18, 18)
-                                .addComponent(radioAlugado))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(radioPedido)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(radioAlugado))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(campoCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(36, 36, 36)
-                                .addComponent(botaoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(botaoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(campoCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioPedido)
@@ -283,12 +285,13 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        
         if (radioPedido.isSelected()){
-          //  this.itemAluguel.getStatus().setId(Long.parseLong("1"));
+            this.aluguel.getStatus().setId(Long.parseLong("1"));
         }else{
-          //  this.itemAluguel.getStatus().setId(Long.parseLong("2"));
+            this.aluguel.getStatus().setId(Long.parseLong("2"));
         }
-        carregarTabela();
+       carregarTabela(); 
     }//GEN-LAST:event_formWindowGainedFocus
 
     private void campoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoCancelarActionPerformed
@@ -305,7 +308,13 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaPedidoMouseReleased
 
     private void botaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPesquisarActionPerformed
-        pesquisar();
+        if (radioPedido.isSelected()){
+            this.aluguel.getStatus().setId(Long.parseLong("1"));
+        }else{
+            this.aluguel.getStatus().setId(Long.parseLong("2"));
+        }
+        
+      //  pesquisar();
         carregarTabela();
     }//GEN-LAST:event_botaoPesquisarActionPerformed
 
@@ -319,6 +328,10 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         carregarTabela();
     }//GEN-LAST:event_radioAlugadoActionPerformed
 
+    private void campoCpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoCpfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoCpfActionPerformed
+
     public static void main(String[] args) {
         TelaPesquisaPedido telaPesquisaCliente = new TelaPesquisaPedido();
         telaPesquisaCliente.setVisible(true);
@@ -327,9 +340,9 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoPesquisar;
     private javax.swing.JButton campoCancelar;
-    private javax.swing.JTextField campoNome;
+    private javax.swing.JFormattedTextField campoCpf;
     private javax.swing.ButtonGroup grupoRadio;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;

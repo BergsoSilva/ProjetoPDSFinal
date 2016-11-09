@@ -16,6 +16,8 @@ import aplication.view.cliente.IndentificacaoUser;
 import aplication.view.cliente.TelaPesquisaCliente;
 import aplication.view.funcionario.TelaPesquisaFuncionario;
 import aplication.view.grupoproduto.TelaPesquisaGrupoProduto;
+import aplication.view.multa.TelaPesquisarMulta;
+import aplication.view.pedido.TelaDevolucao;
 import aplication.view.pedido.TelaPesquisaPedido;
 import aplication.view.produto.TelaPesquisaProduto;
 import java.awt.event.ActionEvent;
@@ -239,9 +241,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         miCliente = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         miGrupoProduto = new javax.swing.JMenuItem();
+        miMulta = new javax.swing.JMenuItem();
         menuRalatorios = new javax.swing.JMenu();
         menuAluguel = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        miDevolucao = new javax.swing.JMenuItem();
         menuAutenticação = new javax.swing.JMenu();
         miLogin = new javax.swing.JMenuItem();
         miLogaut = new javax.swing.JMenuItem();
@@ -468,6 +472,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
         menuCadastro.add(miGrupoProduto);
 
+        miMulta.setText("Multa");
+        miMulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMultaActionPerformed(evt);
+            }
+        });
+        menuCadastro.add(miMulta);
+
         barraDeMenu.add(menuCadastro);
 
         menuRalatorios.setText("Relatórios");
@@ -482,6 +494,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
         menuAluguel.add(jMenuItem2);
+
+        miDevolucao.setText("Devolucão");
+        miDevolucao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDevolucaoActionPerformed(evt);
+            }
+        });
+        menuAluguel.add(miDevolucao);
 
         barraDeMenu.add(menuAluguel);
 
@@ -724,6 +744,17 @@ public class TelaPrincipal extends javax.swing.JFrame {
        
     }//GEN-LAST:event_botaoCancelarPedidoActionPerformed
 
+    private void miMultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMultaActionPerformed
+       TelaPesquisarMulta multa= new TelaPesquisarMulta();
+       multa.setVisible(true);
+              
+    }//GEN-LAST:event_miMultaActionPerformed
+
+    private void miDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDevolucaoActionPerformed
+        TelaDevolucao devolucao = new TelaDevolucao();
+        devolucao.setVisible(true);
+    }//GEN-LAST:event_miDevolucaoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraDeMenu;
     private javax.swing.JButton botaFecharPedido;
@@ -750,9 +781,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuRalatorios;
     private javax.swing.JMenuItem miCliente;
+    private javax.swing.JMenuItem miDevolucao;
     private javax.swing.JMenuItem miGrupoProduto;
     private javax.swing.JMenuItem miLogaut;
     private javax.swing.JMenuItem miLogin;
+    private javax.swing.JMenuItem miMulta;
     private javax.swing.JMenuItem minFuncionario;
     private javax.swing.JPopupMenu popupMenuProduto;
     private javax.swing.JTable tabelaCatalog;

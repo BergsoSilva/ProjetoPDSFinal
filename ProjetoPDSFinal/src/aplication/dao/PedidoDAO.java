@@ -14,48 +14,49 @@ import javax.persistence.Query;
  */
 public class PedidoDAO {
     
-    public List<ItemAluguel> pesquisar(ItemAluguel itemAluguel){
+    public List<Aluguel> pesquisar(Aluguel aluguel){
+        
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
-       // System.out.println(itemAluguel.getAluguel().getCliente().getNome());
+        System.out.println(aluguel.getCliente().getNome());
         manager.getTransaction().begin();
-            Query query = manager.createQuery("select i from ItemAluguel i "
-                    + "INNER JOIN FETCH i.status "
-                    + "INNER JOIN FETCH i.produto "
-                    + "INNER JOIN FETCH i.aluguel a "
-                    + "INNER JOIN FETCH a.cliente "
-                    + "WHERE i.status.id = ?1 AND i.aluguel.cliente.nome like ?2");
+            Query query = manager.createQuery(" select a from Aluguel a "
+                    + "INNER JOIN  a.status  "
+                    + "INNER JOIN  a.produto  "
+                    + "INNER JOIN  a.cliente  "
+                    + " WHERE a.status.id =?1 AND a.cliente.cpf =?2");
             
-          //  query.setParameter(1, itemAluguel.getStatus().getId());
-           // query.setParameter(2, "%"+itemAluguel.getAluguel().getCliente().getNome()+"%");
+           query.setParameter(1, aluguel.getStatus().getId());
+           query.setParameter(2, aluguel.getCliente().getCpf());
             
-            List<ItemAluguel> itemAluguels = query.getResultList();
+        List<Aluguel> itemAluguels = query.getResultList();
         manager.getTransaction();
         manager.close();
         return itemAluguels;    
     }
     
-    public void finalizaPedido(ItemAluguel itemAluguelFinalizado){
+    public void finalizaPedido(Aluguel aluguel){
+        
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         
-        ItemAluguel itemAluguel = new ItemAluguel();
+        Aluguel alu = new Aluguel();
         
         manager.getTransaction().begin();
-          //  itemAluguel = manager.find(ItemAluguel.class, itemAluguelFinalizado.getId());
-          //  itemAluguel.setStatus(itemAluguelFinalizado.getStatus());
+            alu = manager.find(Aluguel.class, aluguel.getId());
+            alu.setStatus(aluguel.getStatus());
         manager.getTransaction().commit();
         manager.close();
     }
     
-   /* public ItemAluguel inserir(Aluguel aluguel) throws Exception {
+    public Aluguel inserir(Aluguel aluguel) throws Exception {
       // Inserido a classe de util
            
            EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         
             manager.getTransaction().begin();
-            manager.persist(item);
+            manager.persist(aluguel);
             manager.getTransaction().commit();
             manager.close();
             
-            return item;
-    } */
+            return aluguel;
+    } 
 }

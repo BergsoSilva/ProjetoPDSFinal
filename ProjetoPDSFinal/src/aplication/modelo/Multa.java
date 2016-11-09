@@ -34,11 +34,9 @@ public class Multa implements Serializable {
     private Double valorPago;
     
     @ManyToOne
-    @JoinColumn(name = "mulaluid" , nullable = false)
     private Aluguel aluguel;
     
     @ManyToOne
-    @JoinColumn(name = "mulstmid" , nullable = false)
     private StatusMulta statusMulta;
     
     public Long getId() {

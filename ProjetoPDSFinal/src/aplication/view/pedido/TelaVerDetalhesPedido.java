@@ -1,14 +1,22 @@
 
 package aplication.view.pedido;
 
+import aplication.Exceptions.BDException;
+import aplication.dao.AluguelDAO;
+import aplication.dao.MultaDAO;
 import aplication.dao.PedidoDAO;
 import aplication.dao.ProdutoDAO;
-import aplication.modelo.ItemAluguel;
+import aplication.modelo.Aluguel;
+import aplication.modelo.Multa;
 import aplication.modelo.Produto;
 import aplication.modelo.Status;
+import aplication.view.multa.TelaFormularioMulta;
+import aplication.view.multa.TelaPesquisarMulta;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
+import java.util.Calendar;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -18,18 +26,29 @@ import javax.swing.JOptionPane;
  */
 public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
-    private ItemAluguel itemAluguel;
+    private Aluguel aluguel;
     
-    public TelaVerDetalhesPedido(ItemAluguel itemAluguel) {
+    public TelaVerDetalhesPedido(Aluguel alugel) {
         initComponents();
         
-        this.itemAluguel = itemAluguel;
+        this.aluguel = alugel;
         
         setar();
         
-    //    Status status = this.itemAluguel.getStatus();
+        Status status = this.aluguel.getStatus();
         
-        //botaoAlugar.setEnabled(status.getId() == 1 ? true : false);
+        botaoAlugar.setEnabled(status.getId() == Aluguel.PEDIDO ? true : false);
+        
+        ativaBotoes();
+    }
+    
+    //Ativa botoes de devolução e multa de acordo com o status do aluguel
+    public void ativaBotoes(){
+        if ( aluguel.getStatus().getId().equals(Aluguel.PEDIDO)){
+            botaoDevolucao.setVisible(false);
+        } else if ( ! aluguel.getStatus().getId().equals(Aluguel.ALUGADO)){
+            botaoDevolucao.setText("Ver Multas");
+        }
     }
     
     private void carregaImagem(String caminho, String nomeImagem){
@@ -44,19 +63,96 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     }
 
     private void setar(){        
-     /*   labelNome.setText(itemAluguel.getProduto().getNome());
-        labelAluguel.setText(itemAluguel.getProduto().getPrecoAluguel()+"");
-        labelAQtde.setText(itemAluguel.getQuantidade()+"");
-        labelGrupoProduto.setText(itemAluguel.getProduto().getGrupoProduto().getDescricao());
-        labelId.setText(itemAluguel.getProduto().getId()+"");
-        labelSaldo.setText(itemAluguel.getProduto().getSaldo()+"");
-        labelCliente.setText(itemAluguel.getAluguel().getCliente().getNome());
-        labelTempo.setText(itemAluguel.getTempo() + "");
+        labelNome.setText(aluguel.getProduto().getNome());
+        labelAluguel.setText(aluguel.getProduto().getPrecoAluguel()+"");
+        labelAQtde.setText(aluguel.getQuantidade()+"");
+        labelGrupoProduto.setText(aluguel.getProduto().getGrupoProduto().getDescricao());
+        labelId.setText(aluguel.getProduto().getId()+"");
+        labelSaldo.setText(aluguel.getProduto().getSaldo()+"");
+        labelCliente.setText(aluguel.getCliente().getNome());
+        labelTempo.setText(aluguel.getTempo() + "");
         
         File file = new File("");
-        String caminho = file.getAbsolutePath() + "/src/" + itemAluguel.getProduto().getImagem();
-        String nomeImagem = itemAluguel.getProduto().getImagem().replaceAll("img/", "");
-        carregaImagem(caminho, nomeImagem);*/
+        String caminho = file.getAbsolutePath() + "/src/" + aluguel.getProduto().getImagem();
+        String nomeImagem = aluguel.getProduto().getImagem().replaceAll("img/", "");
+        carregaImagem(caminho, nomeImagem);
+    }
+    
+    //abre a janela de multas quando o aluguel já foi parcialmente ou totalmente finalizado
+    private void verMultas() throws BDException{
+        TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel,this);
+        telaPesquisaMulta.setVisible(true);
+    }
+    
+    private int estaAtrasado(){
+        int horaInicio = aluguel.getDtAluguel().get(Calendar.HOUR_OF_DAY);
+        int minutoInicio = aluguel.getDtAluguel().get(Calendar.MINUTE);
+        int horaAtual = Calendar.getInstance().get((Calendar.HOUR_OF_DAY));
+        int minutoAtual = Calendar.getInstance().get((Calendar.MINUTE));
+        int tempoLocacao = aluguel.getTempo();
+        int horaLimite = horaInicio + tempoLocacao;
+        int minutoLimite = minutoInicio + 20;
+        
+        if(minutoLimite > 59){
+            horaLimite += 1;
+            minutoLimite = minutoLimite - 60;
+            //Calendar hora Calendar.getInstance().set(ERROR, WIDTH, WIDTH, horaAtual, WIDTH);
+        }
+        
+        System.out.println("hora ini " + horaInicio );
+        System.out.println("Minuto ini " + minutoInicio);
+        
+        if (horaAtual < horaLimite){
+            return 0;
+        }else if( horaAtual == horaLimite && minutoAtual <= minutoLimite){
+            return 0;
+        } else if (horaAtual == horaLimite){
+            return 1;
+        } else {
+            return horaAtual - horaLimite;
+        }
+    }
+    
+    private boolean temMulta() throws BDException{
+        MultaDAO multaDAO = new MultaDAO();
+        List<Multa> multas = multaDAO.pesquisar(aluguel);
+        
+        if (multas.size() > 0){
+            return true;
+        }
+        return false;
+    }
+    
+    //Verifica se alguma multa deve ser aplicada antes de finalizar
+    private void devolucao() throws BDException{
+        int tempoDeAtraso = estaAtrasado();
+        if(temMulta()){
+            TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel, this);
+            telaPesquisaMulta.setVisible(true);
+        }else if (tempoDeAtraso > 0){
+            TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel, this);
+            telaPesquisaMulta.setVisible(true);
+
+            new TelaFormularioMulta(aluguel, telaPesquisaMulta, tempoDeAtraso);
+        }else{
+            int escolha = JOptionPane.showConfirmDialog(null, "Houve extravio de produtos ou há avarias em algum produto?");
+        
+            if (escolha == 1){
+                Status statusAluguel = new Status();
+                statusAluguel.setId(Aluguel.FINALIZADO);
+                updateStatusAluguel(statusAluguel);
+                ativaBotoes();
+            } else if (escolha == 0){
+                TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel, this);
+                telaPesquisaMulta.setVisible(true);
+            }
+        }
+    }
+    
+    private void updateStatusAluguel(Status status){
+        AluguelDAO dao = new AluguelDAO();
+        aluguel.setStatus(status);
+        dao.alterar(aluguel);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -67,6 +163,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         botaoAlugar = new javax.swing.JButton();
         botaoCancelar3 = new javax.swing.JButton();
+        botaoDevolucao = new javax.swing.JButton();
         labelAluguel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         labelAQtde = new javax.swing.JLabel();
@@ -114,6 +211,13 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             }
         });
 
+        botaoDevolucao.setText("Devolução");
+        botaoDevolucao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoDevolucaoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -121,6 +225,8 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(botaoAlugar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(botaoDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(botaoCancelar3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -129,10 +235,14 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botaoAlugar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botaoCancelar3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(botaoAlugar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(botaoCancelar3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(botaoDevolucao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         labelAluguel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -310,36 +420,50 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoAlugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAlugarActionPerformed
-     
-     /*   Produto produto = itemAluguel.getProduto();
-        Double contaSaldo = produto.getSaldo() - itemAluguel.getQuantidade(); 
         
-        if (contaSaldo > 0){            
-            Status status = itemAluguel.getStatus();
+        Produto produto = aluguel.getProduto();
+        Double contaSaldo = produto.getSaldo() - aluguel.getQuantidade(); 
+        
+        if (contaSaldo > 0 ){            
+            Status status = aluguel.getStatus();
             status.setId(Long.parseLong("2"));
 
             produto.setSaldo(contaSaldo);
-           
-            itemAluguel.getStatus();
+            
+            aluguel.setStatus(status);
 
             PedidoDAO pedidoDAO = new PedidoDAO();
-            pedidoDAO.finalizaPedido(itemAluguel);
+            pedidoDAO.finalizaPedido(aluguel);
             
             ProdutoDAO produtoDAO = new ProdutoDAO();
             produtoDAO.alteraStatus(produto);
-            JOptionPane.showMessageDialog(this, "Produto Alugado!!"); 
+            JOptionPane.showMessageDialog(this, "Produto Alugado!!");
+        }else {
+           JOptionPane.showMessageDialog(null," Saldo <0");
         }
-        */
     }//GEN-LAST:event_botaoAlugarActionPerformed
 
     private void botaoCancelar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelar3ActionPerformed
         dispose();
     }//GEN-LAST:event_botaoCancelar3ActionPerformed
 
+    private void botaoDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoDevolucaoActionPerformed
+        try {
+            if (botaoDevolucao.getText().equals("Devolução")){
+                devolucao();
+            }else{
+                verMultas();
+            }
+        } catch (BDException ex) {
+            
+        }
+    }//GEN-LAST:event_botaoDevolucaoActionPerformed
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoAlugar;
     private javax.swing.JButton botaoCancelar3;
+    private javax.swing.JButton botaoDevolucao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

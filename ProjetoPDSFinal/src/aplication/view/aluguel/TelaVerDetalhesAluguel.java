@@ -1,10 +1,9 @@
 
 package aplication.view.aluguel;
 
-import aplication.view.produto.*;
 import aplication.modelo.Produto;
 import aplication.modelo.Status;
-import application.view.multa.TelaCadastroMulta;
+import aplication.view.multa.TelaFormularioMulta;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
@@ -63,7 +62,7 @@ public class TelaVerDetalhesAluguel extends javax.swing.JFrame {
             statusAluguel.setDescricao("Finalizado");
             updateStatusAluguel(statusAluguel);
         } else if (escolha == 0){
-            new TelaCadastroMulta().setVisible(true);
+            new TelaFormularioMulta().setVisible(true);
         }
     }
     

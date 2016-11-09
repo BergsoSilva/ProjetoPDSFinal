@@ -38,7 +38,14 @@ public class AluguelDAO {
         return object;
         
     }
-    
+    public void alterar(Aluguel aluguel){
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        
+        manager.getTransaction().begin();
+        manager.merge(aluguel);
+        manager.getTransaction().commit();
+        manager.close();
+    }
     
    
 }

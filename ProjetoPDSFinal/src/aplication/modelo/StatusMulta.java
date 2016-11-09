@@ -9,7 +9,6 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -19,12 +18,16 @@ import javax.persistence.Id;
 @Entity
 public class StatusMulta implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "stmid")
     private Long id;
     
     @Column(name = "stmdescricao")
     private String descricao;
+    
+    public static final Long PAGO = 1L;
+    public static final Long NAO_PAGO = 2L;
+    public static final Long PAGO_PARCIALMENTE = 3L;
 
     public Long getId() {
         return id;
