@@ -420,7 +420,10 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoAlugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAlugarActionPerformed
-        
+        alugar();
+    }//GEN-LAST:event_botaoAlugarActionPerformed
+
+    private void alugar(){
         Produto produto = aluguel.getProduto();
         Double contaSaldo = produto.getSaldo() - aluguel.getQuantidade(); 
         
@@ -441,8 +444,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         }else {
            JOptionPane.showMessageDialog(null," Saldo <0");
         }
-    }//GEN-LAST:event_botaoAlugarActionPerformed
-
+    }
     private void botaoCancelar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelar3ActionPerformed
         dispose();
     }//GEN-LAST:event_botaoCancelar3ActionPerformed
