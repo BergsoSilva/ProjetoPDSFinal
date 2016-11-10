@@ -8,9 +8,11 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -43,7 +45,7 @@ public class TabelaModeloCatalago extends AbstractTableModel{
            case 0:
                return Image.class;
            case 1:
-                return JLabel.class;
+                return List.class;
            case 2:
                 return Image.class;
            
@@ -52,21 +54,14 @@ public class TabelaModeloCatalago extends AbstractTableModel{
        }
     }
     
-    public List<JLabel> label (String d1, String d2 , String d3){
-        
-       List<JLabel> ls = new ArrayList<>();
-        JLabel myLabel0 = new JLabel(d1);
-        JLabel myLabel1 = new JLabel(d2);
-        JLabel myLabel2 = new JLabel(d3);
-        myLabel0.setVisible(true);
-        myLabel1.setVisible(true);
-        myLabel2.setVisible(true);
-        
-        ls.add(myLabel0);
-        ls.add(myLabel1); 
-        ls.add(myLabel2);
-      
-        return ls;        
+    public List<String> list (Produto produto){
+                 List<String> nomes=new ArrayList<>();
+                        nomes.add("Nome: "+produto.getNome());
+                        nomes.add("Saldo: "+produto.getSaldo());
+                        nomes.add("Preço: "+produto.getPrecoAluguel());
+                      
+                       
+        return nomes;        
     }
 
     @Override
@@ -78,11 +73,10 @@ public class TabelaModeloCatalago extends AbstractTableModel{
             case 0: 
                     return retornaIcone(200,200, produto.getImagem());
             case 1:
-                //return produto.getNome() +" \n Preço Alugel : "+ produto.getPrecoAluguel();
-                for (JLabel label : label( produto.getNome(),produto.getPrecoAluguel()+"",produto.getSaldo()+"")) {
-                    return label.toString();
-                }
-              
+            {
+                //return produto.getNome() +" \n Preço Alugel : "+ produto.getPrecoAluguel();        
+                  return list(produto) ;
+            }
             case 2:
             {
                String c="img/add.png";

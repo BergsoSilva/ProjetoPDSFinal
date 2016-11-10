@@ -76,9 +76,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
     
     private void carregarTabela(){
         pesquisar();
-        
         ImageRederer imagem= new ImageRederer();
         ImageRederer imagem2= new ImageRederer();
+        imagem.repaint();
+        imagem2.repaint();
         jPanelRederer panel = new jPanelRederer();
         tabelaCatalog.setModel(new TabelaModeloCatalago(produtos));
         tabelaCatalog.setAutoCreateRowSorter(true);
@@ -93,11 +94,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
         tabelaCatalog.getColumnModel().getColumn(0).setCellRenderer(imagem);
         tabelaCatalog.getColumnModel().getColumn(1).setCellRenderer(panel);
         tabelaCatalog.getColumnModel().getColumn(2).setCellRenderer(imagem2);
-        
-        //alinhaTableCentro(tabelaCatalog, tabelaCatalog.getSelectedColumns());
+        jScrollPane1.repaint();
         tabelaCatalog.repaint();
-        imagem.repaint();
-        imagem2.repaint();
+        //alinhaTableCentro(tabelaCatalog, tabelaCatalog.getSelectedColumns());
+        
     }
     
  
@@ -390,15 +390,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(45, 45, 45)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(28, 28, 28)
+                                .addGap(43, 43, 43)
                                 .addComponent(valorAPagar)
                                 .addGap(52, 52, 52)
                                 .addComponent(jInternalFrame1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(botaoInicarPedido)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(botaoCancelarPedido)
@@ -422,7 +423,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     .addComponent(botaFecharPedido)
                     .addComponent(botaoInicarPedido)
                     .addComponent(botaoCancelarPedido))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -567,8 +568,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     .addComponent(campoPesquisa))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();

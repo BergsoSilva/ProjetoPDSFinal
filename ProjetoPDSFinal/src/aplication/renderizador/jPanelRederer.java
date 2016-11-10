@@ -7,33 +7,36 @@ package aplication.renderizador;
 
 import java.awt.Component;
 import java.awt.FlowLayout;
-import javax.swing.ImageIcon;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 
 /**
  *
  * @author pc
  */
-public class jPanelRederer extends JPanel implements TableCellRenderer {
+public class jPanelRederer extends JList implements TableCellRenderer {
   
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-               setBounds(0, 0,10, 10);
-               setVisible(true);
-               setLayout(new FlowLayout());
-                if (value instanceof JLabel) {
-	            if (value != null) {
-                          JLabel d = (JLabel) value;
-                          add(d);
-	            } else {
-	               add(new JLabel("Default"));
-	            }
-	        }
+             
+                if (value instanceof List) {
+	                  DefaultListModel model = new DefaultListModel();
+                          List<String> d = (List) value;
+                           for (String s : d) {
+                                this.setModel(model);
+                                model.addElement(s);
+                           }
+                         
+                           this.setModel(model);
+                           
+	         }
           return this;
     }
     
