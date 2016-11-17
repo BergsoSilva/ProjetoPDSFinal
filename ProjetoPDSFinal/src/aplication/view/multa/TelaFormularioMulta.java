@@ -21,10 +21,6 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
     private TelaPesquisarMulta telaPesquisarMulta;
     private String acao;
 
-    public TelaFormularioMulta() throws HeadlessException {
-    }
-    
-    
     //Construtor para ação adicionar
     public TelaFormularioMulta(Aluguel aluguel, TelaPesquisarMulta telaPesquisarMulta) {
         this.aluguel = aluguel;
@@ -62,7 +58,8 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
         Double precoProduto = aluguel.getProduto().getPrecoAluguel();
         Multa multa = new Multa();
         
-        valor = (precoProduto * tempoDeAtraso) + (precoProduto * tempoDeAtraso) * 0.1 ;
+        valor = precoProduto * tempoDeAtraso;
+        valor = valor +  valor * 0.1 ;
         campoValor.setText(valor.toString());
         
         if ( preencheMulta() ){
@@ -78,7 +75,7 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
             System.out.println("id tpm: " + multa.getId());
             multaDAO.alterar(multa);
         }
-     //   telaPesquisarMulta.carregarTabela();
+        telaPesquisarMulta.carregarTabela();
         
         dispose();
     }
@@ -164,11 +161,11 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         campoDescricao = new javax.swing.JTextArea();
-        campoValor = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         botaoSalvar = new javax.swing.JButton();
         botaoCancelar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        campoValor = new javax.swing.JFormattedTextField();
 
         jLabel3.setText("jLabel3");
 
@@ -200,6 +197,8 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 0, 0));
         jLabel4.setText("(Mínimo 15 e máximo 200 caracteres)");
 
+        campoValor.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -211,7 +210,6 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(campoValor, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(botaoSalvar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -219,7 +217,8 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4)))
+                                .addComponent(jLabel4))
+                            .addComponent(campoValor, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -263,7 +262,7 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
     private javax.swing.JButton botaoCancelar;
     private javax.swing.JButton botaoSalvar;
     private javax.swing.JTextArea campoDescricao;
-    private javax.swing.JTextField campoValor;
+    private javax.swing.JFormattedTextField campoValor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -7,7 +7,6 @@ package aplication.dao;
 
 import aplication.Exceptions.BDException;
 import aplication.modelo.Aluguel;
-import aplication.modelo.ItemAluguel;
 import aplication.modelo.StatusMulta;
 import aplication.modelo.Multa;
 import aplication.util.ConnectioinFactory;
@@ -60,7 +59,7 @@ public class MultaDAO {
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         
         manager.getTransaction().begin();
-        Query query = manager.createQuery("select m from Multa m, Aluguel alu where alu.id = :mAluId");// and stm.id = m.statusMulta.id");
+        Query query = manager.createQuery("select m from Multa m, Aluguel alu where alu.id = :mAluId and m.aluguel.id = alu.id");
         query.setParameter("mAluId", aluguel.getId());
         manager.getTransaction();
         multas = query.getResultList();

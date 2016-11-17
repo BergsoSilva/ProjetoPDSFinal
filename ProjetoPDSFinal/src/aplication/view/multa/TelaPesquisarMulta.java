@@ -13,6 +13,7 @@ import aplication.modelo.Aluguel;
 import aplication.modelo.ItemAluguel;
 import aplication.modelo.Multa;
 import aplication.modelo.StatusMulta;
+import aplication.relatorio.Comprovante;
 import aplication.view.pedido.TelaPesquisaPedido;
 import aplication.view.pedido.TelaVerDetalhesPedido;
 import java.awt.HeadlessException;

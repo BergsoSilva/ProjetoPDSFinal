@@ -23,10 +23,10 @@ public class PedidoDAO {
                     + "INNER JOIN  a.status  "
                     + "INNER JOIN  a.produto  "
                     + "INNER JOIN  a.cliente  "
-                    + " WHERE a.status.id =?1 AND a.cliente.cpf =?2");
+                    + " WHERE a.status.id =?1 AND a.cliente.cpf like ?2");
             
            query.setParameter(1, aluguel.getStatus().getId());
-           query.setParameter(2, aluguel.getCliente().getCpf());
+           query.setParameter(2, "%" + aluguel.getCliente().getCpf() + "%");
             
         List<Aluguel> itemAluguels = query.getResultList();
         manager.getTransaction();
