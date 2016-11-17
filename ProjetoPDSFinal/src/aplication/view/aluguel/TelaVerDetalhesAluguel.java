@@ -62,7 +62,7 @@ public class TelaVerDetalhesAluguel extends javax.swing.JFrame {
             statusAluguel.setDescricao("Finalizado");
             updateStatusAluguel(statusAluguel);
         } else if (escolha == 0){
-            new TelaFormularioMulta().setVisible(true);
+            //new TelaFormularioMulta().setVisible(true);
         }
     }
     
