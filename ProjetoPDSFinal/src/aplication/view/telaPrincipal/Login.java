@@ -7,6 +7,7 @@ package aplication.view.telaPrincipal;
 
 import aplication.dao.FuncionarioDAO;
 import aplication.modelo.Funcao;
+import aplication.regraDeNegocio.SingletonBiblioteca;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
@@ -29,19 +30,21 @@ public class Login extends javax.swing.JFrame {
    
     
     private void estrarTelaPricipal (String login , String senha){
-        FuncionarioDAO dao = new FuncionarioDAO();
         
-        Funcao funcao = dao.descobreFuncao(login, senha).getFuncao();
-        
-        if (dao.validarUsuario(login, senha)!= null) {
+        if (SingletonBiblioteca.validarUsuario(login, senha)!= null) {
+            Funcao funcao = SingletonBiblioteca.getFuncao(login, senha);
             if (funcao.getId() == 2){                
                 telaPrincipal.liberRecursos(login, true);
+                
             }else{
                 telaPrincipal.liberRecursos(login, false);
             }
            this.dispose();
         } else {
             JOptionPane.showMessageDialog(null,"Usuario invalido.");
+            campoLogin.setText("");
+            campoSenha.setText("");
+
         }
         
     }
@@ -54,9 +57,9 @@ public class Login extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         campoSenha = new javax.swing.JPasswordField();
-        botaoEntrar = new javax.swing.JToggleButton();
         botaoCancelar = new javax.swing.JToggleButton();
         jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,13 +75,6 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        botaoEntrar.setText("Entrar");
-        botaoEntrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botaoEntrarActionPerformed(evt);
-            }
-        });
-
         botaoCancelar.setText("Cancelar");
         botaoCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,6 +84,13 @@ public class Login extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("Entre com seu Login e Senha de Usuário");
+
+        jButton1.setText("Entrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -103,8 +106,8 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(campoLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                             .addComponent(campoSenha)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(botaoEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(45, 45, 45)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(38, 38, 38)
                                 .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(79, 79, 79))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -126,17 +129,13 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(campoSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(botaoCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(botaoEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                    .addComponent(botaoCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(40, 40, 40))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void botaoEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEntrarActionPerformed
-          estrarTelaPricipal (campoLogin.getText() , campoSenha.getText());
-    }//GEN-LAST:event_botaoEntrarActionPerformed
 
     private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
         System.exit(0);
@@ -147,13 +146,17 @@ public class Login extends javax.swing.JFrame {
              estrarTelaPricipal (campoLogin.getText() , campoSenha.getText());
         }
     }//GEN-LAST:event_campoSenhaKeyPressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        estrarTelaPricipal (campoLogin.getText() , campoSenha.getText());
+    }//GEN-LAST:event_jButton1ActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton botaoCancelar;
-    private javax.swing.JToggleButton botaoEntrar;
     private javax.swing.JTextField campoLogin;
     private javax.swing.JPasswordField campoSenha;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

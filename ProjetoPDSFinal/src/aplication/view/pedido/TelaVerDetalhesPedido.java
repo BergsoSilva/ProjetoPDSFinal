@@ -10,6 +10,8 @@ import aplication.modelo.Aluguel;
 import aplication.modelo.Multa;
 import aplication.modelo.Produto;
 import aplication.modelo.Status;
+import aplication.regraDeNegocio.SingletonBiblioteca;
+import aplication.regraDeNegocio.ThretdTempoPedido;
 import aplication.view.multa.TelaFormularioMulta;
 import aplication.view.multa.TelaPesquisarMulta;
 import java.awt.Image;
@@ -28,10 +30,13 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
     private Aluguel aluguel;
     
-    public TelaVerDetalhesPedido(Aluguel alugel) {
+    private ThretdTempoPedido thered;
+    
+    public TelaVerDetalhesPedido(Aluguel alugel, ThretdTempoPedido thered) {
         initComponents();
         
         this.aluguel = alugel;
+        this.thered=thered;
         
         setar();
         
@@ -441,6 +446,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             ProdutoDAO produtoDAO = new ProdutoDAO();
             produtoDAO.alteraStatus(produto);
             JOptionPane.showMessageDialog(this, "Produto Alugado!!");
+            SingletonBiblioteca.paraThred(thered);
         }else {
            JOptionPane.showMessageDialog(null," Saldo <0");
         }

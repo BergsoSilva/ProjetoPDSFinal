@@ -304,6 +304,7 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_botaoCancelarActionPerformed
 
     private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
+      
         Telefone telefone = null;
         
         Cliente cliente = new Cliente();        

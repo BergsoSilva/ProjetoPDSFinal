@@ -4,15 +4,12 @@ package aplication.view.pedido;
 import aplication.dao.PedidoDAO;
 import aplication.modelo.Aluguel;
 import aplication.modelo.Cliente;
-import aplication.modelo.Funcionario;
-import aplication.modelo.ItemAluguel;
-import aplication.modelo.Produto;
 import aplication.modelo.Status;
+import aplication.regraDeNegocio.ThretdTempoPedido;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -23,13 +20,17 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
    private List<Aluguel> aluugueis = new ArrayList<>();
    private Aluguel aluguel = new Aluguel(); 
    
-    public TelaPesquisaPedido(){
+   private ThretdTempoPedido thered;
+   
+   
+    public TelaPesquisaPedido( ThretdTempoPedido thered){
         initComponents();      
         
         Status status = new Status();
         status.setId(Long.parseLong("1"));
         this.aluguel.setStatus(status);
         
+        this.thered=thered;
         carregarTabela();
         carregarMenuFlutuante();
     }
@@ -80,7 +81,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }
     
     private void verDetalhes(){
-        TelaVerDetalhesPedido telaVerDetalhesPedido = new TelaVerDetalhesPedido(aluguel);
+        TelaVerDetalhesPedido telaVerDetalhesPedido = new TelaVerDetalhesPedido(aluguel,thered);
         telaVerDetalhesPedido.setVisible(true);
     }
     
@@ -332,10 +333,10 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_campoCpfActionPerformed
 
-    public static void main(String[] args) {
+ /*   public static void main(String[] args) {
         TelaPesquisaPedido telaPesquisaCliente = new TelaPesquisaPedido();
         telaPesquisaCliente.setVisible(true);
-    }
+    }*/
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoPesquisar;

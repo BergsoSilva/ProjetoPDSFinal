@@ -7,17 +7,16 @@ package aplication.view.cliente;
 
 import aplication.dao.AluguelDAO;
 import aplication.dao.ClienteDAO;
-import aplication.dao.ItemAluguelDAO;
-import aplication.dao.PedidoDAO;
 import aplication.dao.ProdutoDAO;
 import aplication.modelo.Aluguel;
 import aplication.modelo.Carrinho;
 import aplication.modelo.Cliente;
 import aplication.modelo.FormPagamento;
 import aplication.modelo.Funcionario;
-import aplication.modelo.ItemAluguel;
-import aplication.modelo.Produto;
 import aplication.modelo.Status;
+import aplication.regraDeNegocio.SingletonBiblioteca;
+import aplication.regraDeNegocio.ThretdTempoPedido;
+import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,19 +32,26 @@ public class IndentificacaoUser extends javax.swing.JFrame {
     private List<Cliente> clientes = new ArrayList<>();
     private List<Carrinho> carrinhos;
     
-    public IndentificacaoUser(List<Carrinho> carrinhos) {
+    public  ThretdTempoPedido thered;
+    
+ 
+    
+    public IndentificacaoUser(List<Carrinho> carrinhos,ThretdTempoPedido thered ) {
          
         super ("Identificação Clinte");
         initComponents();
        
-        setResizable(false);
-        setLocationRelativeTo(this);
+        
         this.carrinhos=carrinhos;
+        this.thered=thered;
         labelCadCliente.setVisible(false);
         labelNome.setVisible(false);
         camoNome.setVisible(false);
+        setResizable(false);
+        setLocationRelativeTo(this);
         carregarCleinte();
     }
+
 
     private boolean getUsuario(String cpf){
          
@@ -131,6 +137,11 @@ public class IndentificacaoUser extends javax.swing.JFrame {
                 butaoAutorizarActionPerformed(evt);
             }
         });
+        butaoAutorizar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                butaoAutorizarKeyPressed(evt);
+            }
+        });
         getContentPane().add(butaoAutorizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 229, 108, 38));
 
         butaoCancelar.setText("Cancelar");
@@ -213,18 +224,22 @@ public class IndentificacaoUser extends javax.swing.JFrame {
 
                          aluguel.setProduto(produtoDao.produtoFind(c.getCodReferncia()));
 
-                        daoaluguel.inserir(aluguel);
+                         daoaluguel.inserir(aluguel);
+                         
+                          SingletonBiblioteca.erasePedido(aluguel.getQuantidade(), aluguel.getProduto(), aluguel);
                     }
 
                         JOptionPane.showMessageDialog(null,"<html>"
                                                          + "<h2><b><u>Pedido realizado com Sucesso.</u> </b></h2><br>"
                                                          + "<b> Cliente : </b>"+this.cliente.getNome()+"<br> "
                                                          + "<h3><b>CFP : "+this.cliente.getCpf()+"</b></h3>"
-                                                         + "<h3><b> Valor Pedido R$ -"+realizaCalculos()+"</b></h3>"
+                                                         + "<h3><b> Valor Pedido R$ "+realizaCalculos()+"</b></h3>"
                                                          + " <br><br>"
                                                          + "<b>Obrigado e volte sempre!!<b><br>"
                                                          + "<b><u> Digira-se ao balcão para finalizar a locação</u><b></html>");
                          cacelar();
+                         
+                        
            } catch (Exception ex){
                Logger.getLogger(IndentificacaoUser.class.getName()).log(Level.SEVERE, null, ex);
            }
@@ -257,6 +272,9 @@ public class IndentificacaoUser extends javax.swing.JFrame {
               camoNome.setEnabled(true);
               
               butaoAutorizar.setEnabled(true);
+              if (campoCPF.isFocusable()==true){
+                  butaoAutorizar.requestFocus();
+              }
           }else{
              JOptionPane.showMessageDialog(null, " Ciente não existe.");
              labelCadCliente.setVisible(true); 
@@ -271,6 +289,12 @@ public class IndentificacaoUser extends javax.swing.JFrame {
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
         carregarCleinte();
     }//GEN-LAST:event_formWindowGainedFocus
+
+    private void butaoAutorizarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_butaoAutorizarKeyPressed
+        if (evt.getKeyCode()== KeyEvent.VK_ENTER){
+            butaoAutorizar.doClick();
+        }
+    }//GEN-LAST:event_butaoAutorizarKeyPressed
     
     private void cacelar(){
         campoCPF.setText("");

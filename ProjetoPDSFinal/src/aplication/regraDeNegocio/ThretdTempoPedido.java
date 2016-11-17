@@ -5,51 +5,42 @@
  */
 package aplication.regraDeNegocio;
 
+import aplication.modelo.Produto;
+import static aplication.view.telaPrincipal.TelaPrincipal.qtde;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author pc
  */
 public class ThretdTempoPedido extends Thread{
-    private final int contador=20;
-    private int valor=0;
+    private int d;
+    private Produto produto;
 
-    static{
-   
+    public ThretdTempoPedido(int d, Produto produto) {
+        this.d = d;
+        this.produto = produto;
     }
     
-    @Override
-    public void run() {
-        
-        for (int i = contador; i>=0; i--) {
-            try {
-                Thread.sleep(1000);
-                valor++;
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ThretdTempoPedido.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                 System.out.println(" Time"+i +"Nome"+Thread.currentThread().getName());
-                
-                                      
-                  
-           
+      @Override
+        public void run() {
+            for (int i=10; i>=0; i--) {
+                try {
+                    Thread.sleep(4000);
+                    if (i==0){
+                        
+                        JOptionPane.showMessageDialog(null, "adasdaaa");
+                        SingletonBiblioteca.retornarValorParaStoque(qtde, produto);
+                        
+                    }
+                } catch (InterruptedException ex) {
+                        Logger.getLogger(ThretdTempoPedido.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                         System.out.println(" Time"+i +"Nome"+Thread.currentThread().getName());
+           }
         }
-        
-        
-    }
-    
-    public boolean resetarCarrinho( int val){
-        boolean validar=true;
-        
-        if (val<contador){
-            validar=false;
-        }
-        
-        return   validar;
-    }
-    
-    
+
     
 }
