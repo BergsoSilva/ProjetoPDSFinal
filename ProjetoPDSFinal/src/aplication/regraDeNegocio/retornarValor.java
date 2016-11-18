@@ -21,9 +21,9 @@ public class retornarValor {
         
     }
     
-    public static Double subtotalItens(int  qtdeItem, Double valorItem ){
+    public static Double subtotalItens(int  qtdeItem, Double valorItem , int valorhora){
       
-        return qtdeItem*valorItem;
+        return (valorItem*valorhora)*qtdeItem;
     }
     
     

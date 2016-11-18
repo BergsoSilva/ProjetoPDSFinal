@@ -166,18 +166,23 @@ public class FuncionarioDAO {
         Usuario usuario ;
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         manager.getTransaction().begin();
-               
-        String qry = "SELECT NEW aplication.modelo.Usuario(u.login , u.senha )FROM Funcionario u "
-                    + " where u.login=:plogin and u.senha=:psenha";
-            
-        Query query = manager.createQuery(qry);
-        query.setParameter("plogin",login);
-        query.setParameter("psenha",senha);
-        usuario=(Usuario) query.getSingleResult();
-        manager.getTransaction();
-        manager.close();
+       try{        
+            String qry = "SELECT NEW aplication.modelo.Usuario(u.login , u.senha )FROM Funcionario u "
+                        + " where u.login=:plogin and u.senha=:psenha";
+
+            Query query = manager.createQuery(qry);
+            query.setParameter("plogin",login);
+            query.setParameter("psenha",senha);
+            usuario=(Usuario) query.getSingleResult();
+            manager.getTransaction();
+            manager.close();
         
-        return  usuario;
+             return  usuario;
+       }catch(Exception ex){
+           JOptionPane.showMessageDialog(null,"Usuario não existe"+ex.getLocalizedMessage());
+       }
+       
+       return  null;
     }
     
     public Funcionario descobreFuncao(String login, String senha){

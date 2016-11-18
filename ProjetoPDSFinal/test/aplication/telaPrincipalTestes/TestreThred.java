@@ -9,9 +9,9 @@ import aplication.regraDeNegocio.ThretdTempoPedido;
  */
 public class TestreThred {
     public static void main(String[] args) {
-        ThretdTempoPedido t= new ThretdTempoPedido();
-        t.setName("uma");
-        t.start();
+   //     ThretdTempoPedido t= new ThretdTempoPedido();
+       // t.setName("uma");
+       // t.start();
         
     }
 }

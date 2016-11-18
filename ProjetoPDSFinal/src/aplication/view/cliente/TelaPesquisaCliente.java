@@ -271,10 +271,10 @@ public class TelaPesquisaCliente extends javax.swing.JFrame {
         carregarTabela();
     }//GEN-LAST:event_botaoPesquisarActionPerformed
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         TelaPesquisaCliente telaPesquisaCliente = new TelaPesquisaCliente();
         telaPesquisaCliente.setVisible(true);
-    }
+    }*/
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoPesquisar;

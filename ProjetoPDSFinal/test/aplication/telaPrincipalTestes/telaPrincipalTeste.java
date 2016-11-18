@@ -23,8 +23,8 @@ public class telaPrincipalTeste {
     //
      @Test
      public void TesteThredPedido() {
-       ThretdTempoPedido t= new ThretdTempoPedido();
-       t.run();
+      // ThretdTempoPedido t= new ThretdTempoPedido(1, produto);
+     //  t.run();
       
      }
 }
