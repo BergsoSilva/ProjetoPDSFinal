@@ -8,7 +8,6 @@ package aplication.regraDeNegocio;
 import aplication.dao.FuncionarioDAO;
 import aplication.dao.ProdutoDAO;
 import aplication.modelo.Aluguel;
-import static aplication.modelo.Aluguel_.produto;
 import aplication.modelo.Carrinho;
 import aplication.modelo.Funcao;
 import aplication.modelo.Funcionario;
@@ -16,10 +15,9 @@ import aplication.modelo.Produto;
 import aplication.modelo.Usuario;
 import static aplication.view.telaPrincipal.TelaPrincipal.qtde;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 /**
- *
+ * 
  * @author unkwow
  */
 public class SingletonBiblioteca {

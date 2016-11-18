@@ -27,7 +27,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         initComponents();      
         
         Status status = new Status();
-        status.setId(Long.parseLong("1"));
+        status.setId(Aluguel.PEDIDO);
         this.aluguel.setStatus(status);
         
         this.thered=thered;
@@ -53,7 +53,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }
     
     private void carregarMenuFlutuante(){
-        JMenuItem menuItem[] = {new JMenuItem("Ver detalhes"), new JMenuItem("Devolução")};
+        JMenuItem menuItem[] = {new JMenuItem("Ver detalhes"), new JMenuItem("Devolucao")};
         
         menuItem[0].addActionListener(new ActionListener() {
 
@@ -95,8 +95,14 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }
     
     private void preencherCliente(){
+        String cpf = campoCpf.getText();
+        
+        if (cpf.equals("   .   .   -  ")){
+            cpf = "";
+        }
+        
         Cliente cliente = new Cliente();
-        cliente.setCpf(campoCpf.getText());
+        cliente.setCpf(cpf);
         this.aluguel.setCliente(cliente);
     }
     
@@ -124,6 +130,18 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         }
     }
    
+    private void aplicaRadioStatus(){
+        if (radioPedido.isSelected()){
+            this.aluguel.getStatus().setId((Aluguel.PEDIDO));
+        }else if (radioAlugado.isSelected()){
+            this.aluguel.getStatus().setId((Aluguel.ALUGADO));
+        }else if (radioFinalizado.isSelected()){
+            this.aluguel.getStatus().setId((Aluguel.FINALIZADO));
+        } else if (radioFinalComPendencia.isSelected()){
+            this.aluguel.getStatus().setId((Aluguel.FINALIZADO_COM_PENDENCIA));
+        }
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -138,6 +156,8 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         radioAlugado = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
         campoCpf = new javax.swing.JFormattedTextField();
+        radioFinalizado = new javax.swing.JRadioButton();
+        radioFinalComPendencia = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisar Pedido");
@@ -165,7 +185,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Resultados Encontrados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, null, new java.awt.Color(51, 51, 51)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Resultados Encontrados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 51, 51))); // NOI18N
         jPanel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         tabelaPedido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -205,6 +225,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
 
         grupoRadio.add(radioPedido);
         radioPedido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        radioPedido.setSelected(true);
         radioPedido.setText("Pedido(s)");
         radioPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -235,6 +256,22 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
             }
         });
 
+        grupoRadio.add(radioFinalizado);
+        radioFinalizado.setText("Finalizado");
+        radioFinalizado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioFinalizadoActionPerformed(evt);
+            }
+        });
+
+        grupoRadio.add(radioFinalComPendencia);
+        radioFinalComPendencia.setText("Finalizado com Pendencia");
+        radioFinalComPendencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioFinalComPendenciaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -248,6 +285,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(radioPedido)
@@ -255,7 +293,11 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
                                     .addComponent(radioAlugado))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(campoCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(campoCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addComponent(radioFinalizado)
+                                .addGap(18, 18, 18)
+                                .addComponent(radioFinalComPendencia))))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(botaoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -271,10 +313,14 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
                     .addComponent(botaoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(campoCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(radioFinalizado)
+                        .addComponent(radioFinalComPendencia))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioPedido)
-                    .addComponent(radioAlugado))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                        .addComponent(radioAlugado)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(campoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -286,12 +332,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
-        
-        if (radioPedido.isSelected()){
-            this.aluguel.getStatus().setId(Long.parseLong("1"));
-        }else{
-            this.aluguel.getStatus().setId(Long.parseLong("2"));
-        }
+       aplicaRadioStatus();
        carregarTabela(); 
     }//GEN-LAST:event_formWindowGainedFocus
 
@@ -309,23 +350,17 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaPedidoMouseReleased
 
     private void botaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPesquisarActionPerformed
-        if (radioPedido.isSelected()){
-            this.aluguel.getStatus().setId(Long.parseLong("1"));
-        }else{
-            this.aluguel.getStatus().setId(Long.parseLong("2"));
-        }
-        
-      //  pesquisar();
+        aplicaRadioStatus();
         carregarTabela();
     }//GEN-LAST:event_botaoPesquisarActionPerformed
 
     private void radioPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioPedidoActionPerformed
-       // this.itemAluguel.getStatus().setId(Long.parseLong("1"));        
+        this.aluguel.getStatus().setId(Aluguel.PEDIDO);
         carregarTabela();
     }//GEN-LAST:event_radioPedidoActionPerformed
 
     private void radioAlugadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioAlugadoActionPerformed
-     //   this.itemAluguel.getStatus().setId(Long.parseLong("2"));
+        this.aluguel.getStatus().setId(Aluguel.ALUGADO);
         carregarTabela();
     }//GEN-LAST:event_radioAlugadoActionPerformed
 
@@ -333,7 +368,17 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_campoCpfActionPerformed
 
- /*   public static void main(String[] args) {
+    private void radioFinalizadoActionPerformed(java.awt.event.ActionEvent evt) {                                                
+        this.aluguel.getStatus().setId(Aluguel.FINALIZADO);
+        carregarTabela();
+    }                                               
+
+    private void radioFinalComPendenciaActionPerformed(java.awt.event.ActionEvent evt) {                                                       
+        this.aluguel.getStatus().setId(Aluguel.FINALIZADO_COM_PENDENCIA);
+        carregarTabela();
+    }                                                      
+
+   /* public static void main(String[] args) {
         TelaPesquisaPedido telaPesquisaCliente = new TelaPesquisaPedido();
         telaPesquisaCliente.setVisible(true);
     }*/
@@ -348,6 +393,8 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton radioAlugado;
+    private javax.swing.JRadioButton radioFinalComPendencia;
+    private javax.swing.JRadioButton radioFinalizado;
     private javax.swing.JRadioButton radioPedido;
     private javax.swing.JTable tabelaPedido;
     // End of variables declaration//GEN-END:variables

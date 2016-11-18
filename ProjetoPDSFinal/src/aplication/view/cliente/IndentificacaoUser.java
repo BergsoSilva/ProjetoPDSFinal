@@ -16,7 +16,6 @@ import aplication.modelo.Funcionario;
 import aplication.modelo.Status;
 import aplication.regraDeNegocio.SingletonBiblioteca;
 import aplication.regraDeNegocio.ThretdTempoPedido;
-import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -180,14 +179,12 @@ public class IndentificacaoUser extends javax.swing.JFrame {
     private void butaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butaoCancelarActionPerformed
        dispose();
     }//GEN-LAST:event_butaoCancelarActionPerformed
+   
     private String dataHora(Calendar cal){
         Date data = new Date(System.currentTimeMillis());  
         SimpleDateFormat formatarDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
         return formatarDate.format(data);
     }
-    
-    
-        
         
     private void butaoAutorizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butaoAutorizarActionPerformed
            Calendar data= Calendar.getInstance();
@@ -237,7 +234,7 @@ public class IndentificacaoUser extends javax.swing.JFrame {
                                                          + " <br><br>"
                                                          + "<b>Obrigado e volte sempre!!<b><br>"
                                                          + "<b><u> Digira-se ao balcão para finalizar a locação</u><b></html>");
-                         cacelar();
+                         cancelar();
                          
                         
            } catch (Exception ex){
@@ -296,7 +293,7 @@ public class IndentificacaoUser extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_butaoAutorizarKeyPressed
     
-    private void cacelar(){
+    private void cancelar(){
         campoCPF.setText("");
         camoNome.setText("");
     }

@@ -12,15 +12,18 @@ import aplication.modelo.Produto;
 import aplication.modelo.Status;
 import aplication.regraDeNegocio.SingletonBiblioteca;
 import aplication.regraDeNegocio.ThretdTempoPedido;
+import aplication.relatorio.Comprovante;
 import aplication.view.multa.TelaFormularioMulta;
 import aplication.view.multa.TelaPesquisarMulta;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
@@ -39,21 +42,20 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         this.thered=thered;
         
         setar();
-        
-        Status status = this.aluguel.getStatus();
-        
-        botaoAlugar.setEnabled(status.getId() == Aluguel.PEDIDO ? true : false);
-        
         ativaBotoes();
     }
     
-    //Ativa botoes de devolução e multa de acordo com o status do aluguel
+    //Ativa botoes de devolu��o e multa de acordo com o status do aluguel
     public void ativaBotoes(){
         if ( aluguel.getStatus().getId().equals(Aluguel.PEDIDO)){
-            botaoDevolucao.setVisible(false);
-        } else if ( ! aluguel.getStatus().getId().equals(Aluguel.ALUGADO)){
+            botaoDevolucao.setEnabled(false);
+        } else {
+            botaoAlugar.setEnabled(false);
+            
+            if ( ! aluguel.getStatus().getId().equals(Aluguel.ALUGADO)){
             botaoDevolucao.setText("Ver Multas");
         }
+     }
     }
     
     private void carregaImagem(String caminho, String nomeImagem){
@@ -83,41 +85,46 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         carregaImagem(caminho, nomeImagem);
     }
     
-    //abre a janela de multas quando o aluguel já foi parcialmente ou totalmente finalizado
+    //abre a janela de multas quando o aluguel j� foi parcialmente ou totalmente finalizado
     private void verMultas() throws BDException{
         TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel,this);
         telaPesquisaMulta.setVisible(true);
     }
     
+    //Verifica se o cliente est� realizando a devolu��o atrasado
+    //Concede um tempo extra de 20 min
     private int estaAtrasado(){
+        int diaInicio = aluguel.getDtAluguel().get(Calendar.DAY_OF_MONTH);
         int horaInicio = aluguel.getDtAluguel().get(Calendar.HOUR_OF_DAY);
         int minutoInicio = aluguel.getDtAluguel().get(Calendar.MINUTE);
-        int horaAtual = Calendar.getInstance().get((Calendar.HOUR_OF_DAY));
-        int minutoAtual = Calendar.getInstance().get((Calendar.MINUTE));
+        int diaDevolucao = aluguel.getDtDevolucao().get(Calendar.DAY_OF_MONTH);
+        int horaDevolucao = aluguel.getDtDevolucao().get((Calendar.HOUR_OF_DAY));
+        int minutoDevolucao = aluguel.getDtDevolucao().get((Calendar.MINUTE));
         int tempoLocacao = aluguel.getTempo();
         int horaLimite = horaInicio + tempoLocacao;
         int minutoLimite = minutoInicio + 20;
         
+        if ( diaInicio != diaDevolucao ){
+            return 24;
+        }
+        
         if(minutoLimite > 59){
             horaLimite += 1;
             minutoLimite = minutoLimite - 60;
-            //Calendar hora Calendar.getInstance().set(ERROR, WIDTH, WIDTH, horaAtual, WIDTH);
         }
         
-        System.out.println("hora ini " + horaInicio );
-        System.out.println("Minuto ini " + minutoInicio);
-        
-        if (horaAtual < horaLimite){
+        if (horaDevolucao < horaLimite){
             return 0;
-        }else if( horaAtual == horaLimite && minutoAtual <= minutoLimite){
+        }else if( horaDevolucao == horaLimite && minutoDevolucao <= minutoLimite){
             return 0;
-        } else if (horaAtual == horaLimite){
+        } else if (horaDevolucao == horaLimite){
             return 1;
         } else {
-            return horaAtual - horaLimite;
+            return horaDevolucao - horaLimite;
         }
     }
     
+    // verifica se j� foi cadastrada alguma multa para o aluguel
     private boolean temMulta() throws BDException{
         MultaDAO multaDAO = new MultaDAO();
         List<Multa> multas = multaDAO.pesquisar(aluguel);
@@ -128,36 +135,58 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         return false;
     }
     
-    //Verifica se alguma multa deve ser aplicada antes de finalizar
-    private void devolucao() throws BDException{
+    //Finaliza o aluguel ou vai para a tela de multas
+    private void devolucao() throws BDException, JRException, SQLException{
+        Calendar dtDevolucao = Calendar.getInstance();
+        aluguel.setDtDevolucao(dtDevolucao);
+        
+        
         int tempoDeAtraso = estaAtrasado();
+        
         if(temMulta()){
             TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel, this);
             telaPesquisaMulta.setVisible(true);
         }else if (tempoDeAtraso > 0){
+            updateAluguel();
             TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel, this);
             telaPesquisaMulta.setVisible(true);
 
             new TelaFormularioMulta(aluguel, telaPesquisaMulta, tempoDeAtraso);
         }else{
-            int escolha = JOptionPane.showConfirmDialog(null, "Houve extravio de produtos ou há avarias em algum produto?");
+            int escolha = JOptionPane.showConfirmDialog(null, "Houve extravio de produtos ou h� avarias em algum produto?");
         
             if (escolha == 1){
                 Status statusAluguel = new Status();
                 statusAluguel.setId(Aluguel.FINALIZADO);
-                updateStatusAluguel(statusAluguel);
+                aluguel.setStatus(statusAluguel);
+                updateAluguel();
+                //updateProduto();
                 ativaBotoes();
+                Comprovante comprovante = new Comprovante();
+                comprovante.comprovanteDevolucaoFinalizado(aluguel);
             } else if (escolha == 0){
+                updateAluguel();
                 TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel, this);
                 telaPesquisaMulta.setVisible(true);
             }
         }
     }
     
-    private void updateStatusAluguel(Status status){
-        AluguelDAO dao = new AluguelDAO();
-        aluguel.setStatus(status);
-        dao.alterar(aluguel);
+    private void updateProduto(){
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        Produto produto = aluguel.getProduto();
+        Produto produtoBanco;
+        int saldo = aluguel.getQuantidade();
+        
+        produtoBanco = produtoDAO.produtoFind(produto.getId());
+        double saldoBanco = produtoBanco.getSaldo();
+        produtoBanco.setSaldo(saldoBanco + saldo);
+        produtoDAO.alterar(produtoBanco);
+    }
+    
+    private void updateAluguel(){
+        AluguelDAO aluguelDAO = new AluguelDAO();
+        aluguelDAO.alterar(aluguel);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -197,7 +226,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
         labelNome.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Menus de Opções", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Arial", 1, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Menus de Op��es", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Arial", 1, 12), new java.awt.Color(51, 51, 51))); // NOI18N
         jPanel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         botaoAlugar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -216,7 +245,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             }
         });
 
-        botaoDevolucao.setText("Devolução");
+        botaoDevolucao.setText("Devolu��o");
         botaoDevolucao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoDevolucaoActionPerformed(evt);
@@ -253,7 +282,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         labelAluguel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Preço Aluguel:");
+        jLabel2.setText("Pre�o Aluguel:");
 
         labelAQtde.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
@@ -457,14 +486,13 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
     private void botaoDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoDevolucaoActionPerformed
         try {
-            if (botaoDevolucao.getText().equals("Devolução")){
+            if (botaoDevolucao.getText().equals("Devolu��o")){
                 devolucao();
             }else{
                 verMultas();
             }
-        } catch (BDException ex) {
-            
-        }
+        } catch (BDException | JRException | SQLException ex) {}
+        
     }//GEN-LAST:event_botaoDevolucaoActionPerformed
 
     
