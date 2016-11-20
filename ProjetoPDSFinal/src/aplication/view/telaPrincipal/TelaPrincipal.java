@@ -24,6 +24,7 @@ import aplication.view.multa.TelaPesquisarMulta;
 import aplication.view.pedido.TelaDevolucao;
 import aplication.view.pedido.TelaPesquisaPedido;
 import aplication.view.produto.TelaPesquisaProduto;
+import aplication.view.relatorio.TempoMedioAluguelProdutoTela;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -288,6 +289,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         miGrupoProduto = new javax.swing.JMenuItem();
         miMulta = new javax.swing.JMenuItem();
         menuRalatorios = new javax.swing.JMenu();
+        tempoMedioAluguelProduto = new javax.swing.JMenuItem();
         menuAluguel = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         miDevolucao = new javax.swing.JMenuItem();
@@ -526,6 +528,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
         barraDeMenu.add(menuCadastro);
 
         menuRalatorios.setText("Relatórios");
+
+        tempoMedioAluguelProduto.setText("Tempo médio de aluguel por produto");
+        tempoMedioAluguelProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tempoMedioAluguelProdutoActionPerformed(evt);
+            }
+        });
+        menuRalatorios.add(tempoMedioAluguelProduto);
+
         barraDeMenu.add(menuRalatorios);
 
         menuAluguel.setText("Aluguel");
@@ -821,6 +832,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tabelaCatalogMouseEntered
 
+    private void tempoMedioAluguelProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tempoMedioAluguelProdutoActionPerformed
+        new TempoMedioAluguelProdutoTela().setVisible(true);
+    }//GEN-LAST:event_tempoMedioAluguelProdutoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraDeMenu;
     private javax.swing.JButton botaFecharPedido;
@@ -860,6 +875,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPopupMenu popupMenuProduto;
     private javax.swing.JTable tabelaCatalog;
     private javax.swing.JTable tableCarrinhoPedido;
+    private javax.swing.JMenuItem tempoMedioAluguelProduto;
     private javax.swing.JLabel valorAPagar;
     // End of variables declaration//GEN-END:variables
 
