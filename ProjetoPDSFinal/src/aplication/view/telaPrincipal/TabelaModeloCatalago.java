@@ -103,21 +103,22 @@ public class TabelaModeloCatalago extends AbstractTableModel{
         label.setBounds(0, 0, x, y);
        
         Rectangle rectangle =label.getBounds();
-        String pathImagem = caminho(caminho);
-        ImageIcon icon = new ImageIcon(getClass().getResource(pathImagem)); 
+        String pathImagem = caminho(caminho);      
+        ImageIcon icon = new ImageIcon(pathImagem);
+        
         Image image = icon.getImage().getScaledInstance(rectangle.width, rectangle.height, Image.SCALE_SMOOTH);
+        
         icon = new ImageIcon(image);
-
+        
         return  icon;
                 
         
     }
     
-    private String caminho(String path){
-        
+    private String caminho(String path){        
         try{
              File file = new File("");
-             String caminho = file.getPath() + "/" + path;
+             String caminho = file.getAbsolutePath() + "/src/" + path;
              return caminho; 
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
