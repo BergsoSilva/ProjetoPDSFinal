@@ -31,7 +31,6 @@ public class ThretdTempoPedido extends Thread{
                     Thread.sleep(4000);
                     if (i==0){
                         
-                        JOptionPane.showMessageDialog(null, "adasdaaa");
                         SingletonBiblioteca.retornarValorParaStoque(qtde, produto);
                         
                     }

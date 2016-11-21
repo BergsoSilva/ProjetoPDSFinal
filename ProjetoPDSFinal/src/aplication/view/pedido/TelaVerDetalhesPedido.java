@@ -493,9 +493,9 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
     private void alugar(){
         Produto produto = aluguel.getProduto();
-        Double contaSaldo = produto.getSaldo() - aluguel.getQuantidade(); 
-        
-        if (contaSaldo > 0 ){            
+        Double contaSaldo = produto.getSaldo(); //- aluguel.getQuantidade(); não é necessario diminuir o stoque, pois ja  diminuido 
+         
+      //  if (contaSaldo > 0 ){            
             Status status = aluguel.getStatus();
             status.setId(Long.parseLong("2"));
 
@@ -503,17 +503,22 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             
             aluguel.setStatus(status);
             aluguel.setFormPagamento((FormPagamento)comboFormaPagamento.getSelectedItem());
+            aluguel.setFuncionario(SingletonBiblioteca.getFucninario());
 
             PedidoDAO pedidoDAO = new PedidoDAO();
             pedidoDAO.finalizaPedido(aluguel);
             
             ProdutoDAO produtoDAO = new ProdutoDAO();
             produtoDAO.alteraStatus(produto);
+            
             JOptionPane.showMessageDialog(this, "Produto Alugado!!");
-            SingletonBiblioteca.paraThred(thered);
-        }else {
-           JOptionPane.showMessageDialog(null," Saldo meno que 0");
-        }
+            
+            // Thred tempo produto parada
+            SingletonBiblioteca.stopt();
+            
+      //  }else {
+        //   JOptionPane.showMessageDialog(null," Saldo meno que 0");
+      //  }
     }
     private void botaoCancelar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelar3ActionPerformed
         dispose();

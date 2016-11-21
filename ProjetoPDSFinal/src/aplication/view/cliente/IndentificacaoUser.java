@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aplication.view.cliente;
 
 import aplication.dao.AluguelDAO;
@@ -16,6 +11,7 @@ import aplication.modelo.Funcionario;
 import aplication.modelo.Status;
 import aplication.regraDeNegocio.SingletonBiblioteca;
 import aplication.regraDeNegocio.ThretdTempoPedido;
+import aplication.view.telaPrincipal.TelaPrincipal;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -223,8 +219,15 @@ public class IndentificacaoUser extends javax.swing.JFrame {
 
                          daoaluguel.inserir(aluguel);
                          
-                          SingletonBiblioteca.erasePedido(aluguel.getQuantidade(), aluguel.getProduto(), aluguel);
-                    }
+                          this.thered =SingletonBiblioteca.erasePedido(aluguel.getQuantidade(), aluguel.getProduto(), aluguel);
+                          JOptionPane.showMessageDialog(null,"Tempor vida Aluguel " + aluguel.getId()+" Thred nome ="+ this.thered.getName());
+                          TelaPrincipal telaPricipal= new TelaPrincipal();
+                          this.thered.start();
+                          telaPricipal.thered=this.thered;
+                          
+                          
+                          
+                   }
 
                         JOptionPane.showMessageDialog(null,"<html>"
                                                          + "<h2><b><u>Pedido realizado com Sucesso.</u> </b></h2><br>"

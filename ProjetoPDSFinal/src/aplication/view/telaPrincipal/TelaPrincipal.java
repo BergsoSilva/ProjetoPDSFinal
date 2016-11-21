@@ -54,7 +54,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     public static Integer qtde=1;
     public static Integer tempo=0;
     
-    private  ThretdTempoPedido thered;
+    public  ThretdTempoPedido thered;
     
     
     
@@ -84,6 +84,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabelQtde.setVisible(false);
         jLabelTempo1.setVisible(false);
         campoQuatidade.setVisible(false);
+        
     }
     
     private void carregarTabela(){
@@ -647,7 +648,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_miLogautActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        TelaPesquisaPedido telaPesquisaPedido = new TelaPesquisaPedido();
+
+        TelaPesquisaPedido telaPesquisaPedido = new TelaPesquisaPedido(this.thered);
         telaPesquisaPedido.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
     
@@ -725,6 +727,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             removerCarrinho(evt);
             botaFecharPedido.setEnabled(false);
             botaoCancelarPedido.setEnabled(false);
+            valorAPagar.setText("");
            
     }//GEN-LAST:event_tableCarrinhoPedidoMouseReleased
 

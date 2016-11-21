@@ -22,6 +22,9 @@ import java.util.List;
  */
 public class SingletonBiblioteca {
     
+    public static ThretdTempoPedido ttt ;
+    private static Funcionario funcionario;
+    
     static{
         
     }
@@ -69,6 +72,7 @@ public class SingletonBiblioteca {
       
        for (Funcionario fun : funcionarios) {
            if (fun.getLogin().equals(login)&& fun.getSenha().equals(senha)){
+               funcionario=fun;
                user= dao.validarUsuario(login, senha);
            }else{
                user =null;
@@ -88,17 +92,28 @@ public class SingletonBiblioteca {
        return f;
    }
    
-   public static void erasePedido(int qtde, Produto produto , Aluguel al){
-      if (al.getStatus().getId()==1){
-          ThretdTempoPedido t = new ThretdTempoPedido(qtde, produto);
-          t.start();
+   public static ThretdTempoPedido erasePedido(int qtde, Produto produto , Aluguel al){
+       ThretdTempoPedido t = new ThretdTempoPedido(qtde, produto);
+       if (al.getStatus().getId()==1){
+          ttt=t;
+          t.setName("Excluir pedido");
       }
       
+      return t; 
+   }
+   
+   public static void stopt(){
+       ttt.stop();
        
    }
    
-   public static void paraThred( ThretdTempoPedido t ){
-       t.stop();
+   public static Funcionario getFucninario(){
+         Funcionario f= null;
+       
+         f=funcionario;
+               
+    return f;
+               
    }
    
    

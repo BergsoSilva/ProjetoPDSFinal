@@ -42,4 +42,11 @@ public class FormPagamento implements Serializable{
     public void setQtdeParcelas(int qtdeParcelas) {
         this.qtdeParcelas = qtdeParcelas;
     }
+
+    @Override
+    public String toString() {
+        return descricao;
+    }
+    
+    
 }
