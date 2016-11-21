@@ -38,7 +38,7 @@ public class TabelaModeloCatalago extends AbstractTableModel{
         return colunas.length;
     }
     
-     @Override
+    @Override
     public Class<?> getColumnClass(int columnIndex) {
        
         switch(columnIndex){

@@ -3,10 +3,12 @@ package aplication.view.pedido;
 
 import aplication.Exceptions.BDException;
 import aplication.dao.AluguelDAO;
+import aplication.dao.FormaPagamentoDAO;
 import aplication.dao.MultaDAO;
 import aplication.dao.PedidoDAO;
 import aplication.dao.ProdutoDAO;
 import aplication.modelo.Aluguel;
+import aplication.modelo.FormPagamento;
 import aplication.modelo.Multa;
 import aplication.modelo.Produto;
 import aplication.modelo.Status;
@@ -43,6 +45,24 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         
         setar();
         ativaBotoes();
+        
+        preencherComboFormaPagamento();
+    }
+    
+    private void preencherComboFormaPagamento(){
+        
+        comboFormaPagamento.removeAllItems();
+        comboFormaPagamento.addItem("");
+        
+        FormaPagamentoDAO dao = new FormaPagamentoDAO();
+        
+        FormPagamento formPagamento = new FormPagamento();
+        formPagamento.setId(Long.parseLong("0"));
+        formPagamento.setDescricao("");
+        
+        for (FormPagamento f : dao.pesquisar(formPagamento)) {
+            comboFormaPagamento.addItem(f);
+        }
     }
     
     //Ativa botoes de devolu��o e multa de acordo com o status do aluguel
@@ -218,6 +238,8 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         labelCliente = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         labelTempo = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        comboFormaPagamento = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -226,7 +248,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
         labelNome.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Menus de Op��es", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Arial", 1, 12), new java.awt.Color(51, 51, 51))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Menus de Opções", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Arial", 1, 12), new java.awt.Color(51, 51, 51))); // NOI18N
         jPanel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         botaoAlugar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -245,7 +267,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             }
         });
 
-        botaoDevolucao.setText("Devolu��o");
+        botaoDevolucao.setText("Devolução");
         botaoDevolucao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoDevolucaoActionPerformed(evt);
@@ -282,7 +304,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         labelAluguel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText("Pre�o Aluguel:");
+        jLabel2.setText("Preço Aluguel:");
 
         labelAQtde.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
@@ -364,6 +386,12 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
         labelTempo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel10.setText("Forma de Pagamento:");
+
+        comboFormaPagamento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        comboFormaPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new Object[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -399,7 +427,9 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboFormaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -442,7 +472,11 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelTempo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel10)
+                .addGap(18, 18, 18)
+                .addComponent(comboFormaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -468,6 +502,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             produto.setSaldo(contaSaldo);
             
             aluguel.setStatus(status);
+            aluguel.setFormPagamento((FormPagamento)comboFormaPagamento.getSelectedItem());
 
             PedidoDAO pedidoDAO = new PedidoDAO();
             pedidoDAO.finalizaPedido(aluguel);
@@ -477,7 +512,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Produto Alugado!!");
             SingletonBiblioteca.paraThred(thered);
         }else {
-           JOptionPane.showMessageDialog(null," Saldo <0");
+           JOptionPane.showMessageDialog(null," Saldo meno que 0");
         }
     }
     private void botaoCancelar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelar3ActionPerformed
@@ -500,7 +535,9 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     private javax.swing.JButton botaoAlugar;
     private javax.swing.JButton botaoCancelar3;
     private javax.swing.JButton botaoDevolucao;
+    private javax.swing.JComboBox<Object> comboFormaPagamento;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
