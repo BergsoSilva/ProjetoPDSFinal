@@ -396,7 +396,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
         jPanel1.add(botaFecharPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 250, -1, -1));
 
-        botaoCancelarPedido.setText("Cacelar Pedido");
+        botaoCancelarPedido.setText("Cancelar Pedido");
         botaoCancelarPedido.setEnabled(false);
         botaoCancelarPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

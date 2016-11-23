@@ -331,7 +331,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="botaoCancelarPedido">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Cacelar Pedido"/>
+            <Property name="text" type="java.lang.String" value="Cancelar Pedido"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>

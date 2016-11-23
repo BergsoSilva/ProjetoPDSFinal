@@ -6,6 +6,7 @@
 package aplication.relatorio;
 
 import aplication.Exceptions.BDException;
+import aplication.util.ControlaConnexao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -26,7 +27,8 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class TempoMedioAluguelProdutoRelatorio {
     public void gerarRelatorio( Calendar dataInicial, Calendar dataFinal ) throws BDException, JRException, SQLException{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetopds","root","123");
+        Connection con = ControlaConnexao.getConexao();
+        
         Map parametros = new HashMap();
         
         Date dataExibicao = dataFinal.getTime();

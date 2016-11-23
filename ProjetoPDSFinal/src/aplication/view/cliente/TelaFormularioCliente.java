@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import aplication.modelo.Cliente;
 import aplication.modelo.Telefone;
+import java.awt.HeadlessException;
 import java.util.ArrayList;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
@@ -55,8 +56,14 @@ public class TelaFormularioCliente extends javax.swing.JFrame {
         
         setarValores(cliente);
     }    
+
+    public TelaFormularioCliente() {
+        this.opcao = "Alterar";
+        preparaNomes();
+    }
     
     private void construiTextFieldDinamico(){
+        
         if (cont < 3){
             somaDesce = somaDesce + 50;
             JTextField jTextField = null;
