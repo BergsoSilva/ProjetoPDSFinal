@@ -1,6 +1,8 @@
 package aplication.dao;
 
 import aplication.modelo.Aluguel;
+import aplication.modelo.Cliente;
+import aplication.modelo.ItemAluguel;
 import aplication.util.ConnectioinFactory;
 import java.util.List;
 import javax.persistence.EntityManager;

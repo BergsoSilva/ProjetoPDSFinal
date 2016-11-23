@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -45,7 +46,18 @@ public class Aluguel implements Serializable{
     private Integer tempo;
     @ManyToOne
     private Produto produto;
+    
+    @Transient
+    private Boolean campoCheck;
 
+    public Boolean getCampoCheck() {
+        return campoCheck;
+    }
+
+    public void setCampoCheck(Boolean campoCheck) {
+        this.campoCheck = campoCheck;
+    }
+    
     public Aluguel() {
     }
 
