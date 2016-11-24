@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="ProjetoPDSFinalPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>aplication.modelo.Cidade</class>
+    <class>aplication.modelo.Estado</class>
+    <class>aplication.modelo.Funcao</class>
+    <class>aplication.modelo.EstadoCivil</class>
+    <class>aplication.modelo.Funcionario</class>
+    <class>aplication.modelo.Telefone</class>
+    <class>aplication.modelo.Aluguel</class>
+    <class>aplication.modelo.Cliente</class>
+    <class>aplication.modelo.FormPagamento</class>
+    <class>aplication.modelo.GrupoProduto</class>
+    <class>aplication.modelo.ItemAluguel</class>
+    <class>aplication.modelo.Multa</class>
+    <class>aplication.modelo.Produto</class>
+    <class>aplication.modelo.Status</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/projetopds?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.password" value="123456"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+    </properties>
+  </persistence-unit>
+</persistence>

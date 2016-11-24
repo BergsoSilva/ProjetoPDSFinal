@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aluguelProcliente" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="761c2bbd-f04b-4bee-bc82-50e9880f51ad">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="alId" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+ cl.nome,
+ aludtaaluguel
+ aludtadevolucao,
+ cl.cpf,
+ st.descricao,
+ al.id
+ from aluguel al
+inner join cliente cl on al.cliente_id=cliente_id
+inner join status st on al.status_id=st.id
+where al.id= $P{alId}]]>
+	</queryString>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="aludtadevolucao" class="java.sql.Date"/>
+	<field name="cpf" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descricao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="168" y="26" width="174" height="20" uuid="be3e13f7-14ad-4d2c-a0da-72e8a0d25bf0"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Aluguel Por Cliente]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="2" width="52" height="20" uuid="a51cbd4d-988e-4626-8144-cb834ec358f3"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="2" width="100" height="20" uuid="67291621-dd15-44ce-b1dc-a7a4352602be"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data devolucão]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="182" y="2" width="80" height="20" uuid="1661bf7e-1f01-40b3-8e08-347090042bd9"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cpf]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="2" width="82" height="20" uuid="0b0312e1-3ed0-48a9-9247-68dda3a9212a"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-1" y="24" width="553" height="1" uuid="f62e94aa-eb80-4807-beca-deb60e4f914b"/>
+			</line>
+			<staticText>
+				<reportElement x="262" y="2" width="60" height="20" uuid="528e01be-b35e-47f8-ad7b-907d3ebc8e24"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Num-Alug]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="2" y="0" width="168" height="20" uuid="3755044b-2c10-4c2b-83f5-f6ca754abae0"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20" uuid="d7df7780-2e25-4b38-acf3-4a77107478d9"/>
+				<textFieldExpression><![CDATA[$F{aludtadevolucao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="182" y="0" width="80" height="20" uuid="5a782608-2591-4637-b3a2-b92bff0da398"/>
+				<textFieldExpression><![CDATA[$F{cpf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="272" y="0" width="60" height="20" uuid="9a025dd4-e1ea-4104-91e2-f3386728c878"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="342" y="2" width="82" height="20" uuid="fb9ebfe6-d871-4729-a1b5-c88c31b0aa8e"/>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
