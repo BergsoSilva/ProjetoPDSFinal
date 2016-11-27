@@ -49,25 +49,23 @@ public class TelaFormPagmento extends javax.swing.JFrame {
     }
     private void alugar(Aluguel aluguel){
         Produto produto = aluguel.getProduto();
-        Double contaSaldo = produto.getSaldo() - aluguel.getQuantidade(); 
+
+        Status status = aluguel.getStatus();
+        status.setId(Long.parseLong("2"));
+
+        produto.setSaldo(produto.getSaldo());
+
+        aluguel.setStatus(status);
+        aluguel.setFormPagamento((FormPagamento)comboFormaPagamento.getSelectedItem());
+
+        PedidoDAO pedidoDAO = new PedidoDAO();
+        pedidoDAO.finalizaPedido(aluguel);
+
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        produtoDAO.alteraStatus(produto);
+        verificaErro = 1;
+        //SingletonBiblioteca.paraThred(thered);
         
-        if (contaSaldo > 0){            
-            Status status = aluguel.getStatus();
-            status.setId(Long.parseLong("2"));
-
-            produto.setSaldo(contaSaldo);
-            
-            aluguel.setStatus(status);
-            aluguel.setFormPagamento((FormPagamento)comboFormaPagamento.getSelectedItem());
-
-            PedidoDAO pedidoDAO = new PedidoDAO();
-            pedidoDAO.finalizaPedido(aluguel);
-            
-            ProdutoDAO produtoDAO = new ProdutoDAO();
-            produtoDAO.alteraStatus(produto);
-            verificaErro = 1;
-            //SingletonBiblioteca.paraThred(thered);
-        }
     }
     /**
      * This method is called from within the constructor to initialize the form.

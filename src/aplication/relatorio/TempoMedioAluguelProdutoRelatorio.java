@@ -7,6 +7,7 @@ package aplication.relatorio;
 
 import aplication.Exceptions.BDException;
 import aplication.util.ControlaConnexao;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -46,8 +47,11 @@ public class TempoMedioAluguelProdutoRelatorio {
         parametros.put("datafinal", dataFinalDB);
         parametros.put("dataexibicao", dataExibicao);
         
-        JasperPrint jp = JasperFillManager.fillReport( "C:\\Users\\flavio\\Documents\\Didático\\TDS\\4º\\PDS\\projeto\\ProjetoPDSFinal\\relatorios\\mediaHorasAluguel.jasper", parametros, con);
-        JasperExportManager.exportReportToPdfFile (jp, "C:\\Users\\flavio\\Documents\\Didático\\TDS\\4º\\PDS\\projeto\\ProjetoPDSFinal\\relatorios\\mediaHorasAluguel.pdf");
+        File file = new File("src/aplication/relatorio/mediaHorasAluguel.jasper");
+        
+        JasperPrint jp = JasperFillManager.fillReport(file.getAbsolutePath(), parametros, con);
+        //JasperExportManager.exportReportToPdfFile (jp,file.getAbsolutePath().replaceAll("/mediaHorasAluguel.jasper", "/mediaHorasAluguel.pdf"));
+        System.out.println(file.getAbsolutePath());
         JasperViewer jv = new JasperViewer(jp, false);
         jv.setVisible(true);
     }

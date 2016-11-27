@@ -3,26 +3,23 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="alId" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
 	<queryString>
 		<![CDATA[select
  cl.nome,
- aludtaaluguel
- aludtadevolucao,
+ aludtaaluguel,
  cl.cpf,
  st.descricao,
  al.id
  from aluguel al
 inner join cliente cl on al.cliente_id=cliente_id
-inner join status st on al.status_id=st.id
-where al.id= $P{alId}]]>
+inner join status st on al.status_id=st.id]]>
 	</queryString>
 	<field name="nome" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="aludtadevolucao" class="java.sql.Date"/>
+	<field name="aludtaaluguel" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="cpf" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -36,18 +33,39 @@ where al.id= $P{alId}]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
-			<staticText>
-				<reportElement x="168" y="26" width="174" height="20" uuid="be3e13f7-14ad-4d2c-a0da-72e8a0d25bf0"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Aluguel Por Cliente]]></text>
-			</staticText>
+		<band height="98" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="2" y="2" width="553" height="95" forecolor="#000000" backcolor="#00CCCC" uuid="b7053384-ea18-4742-9d5f-ad4c84386fdd"/>
+				<staticText>
+					<reportElement x="143" y="29" width="250" height="32" uuid="2c94b392-c5d9-4534-b20c-885e2bc4c9e9"/>
+					<textElement>
+						<font fontName="Times New Roman" size="18" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Relatório: Alugueis por Cliente]]></text>
+				</staticText>
+			</frame>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="35" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="3" y="4" width="550" height="27" forecolor="#000000" backcolor="#CCCCCC" uuid="dfcb27f8-2f47-4f1b-8c37-620e3b8dec55"/>
+				<textField pattern="EEEEE, dd MMMMM yyyy HH:mm">
+					<reportElement x="209" y="5" width="222" height="20" forecolor="#000000" uuid="2b0c30f9-df61-48cb-9404-3d95fae646b5"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="128" y="5" width="71" height="20" uuid="bf7abacb-dfec-4719-9137-a14a6449df7f"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Gerado em:]]></text>
+				</staticText>
+			</frame>
+		</band>
 	</pageHeader>
 	<columnHeader>
 		<band height="25" splitType="Stretch">
@@ -63,7 +81,7 @@ where al.id= $P{alId}]]>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Data devolucão]]></text>
+				<text><![CDATA[Data aluguel]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="182" y="2" width="80" height="20" uuid="1661bf7e-1f01-40b3-8e08-347090042bd9"/>
@@ -87,7 +105,7 @@ where al.id= $P{alId}]]>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Num-Alug]]></text>
+				<text><![CDATA[Id Aluguel]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -99,14 +117,14 @@ where al.id= $P{alId}]]>
 			</textField>
 			<textField>
 				<reportElement x="455" y="0" width="100" height="20" uuid="d7df7780-2e25-4b38-acf3-4a77107478d9"/>
-				<textFieldExpression><![CDATA[$F{aludtadevolucao}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{aludtaaluguel}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="182" y="0" width="80" height="20" uuid="5a782608-2591-4637-b3a2-b92bff0da398"/>
 				<textFieldExpression><![CDATA[$F{cpf}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="272" y="0" width="60" height="20" uuid="9a025dd4-e1ea-4104-91e2-f3386728c878"/>
+				<reportElement x="279" y="0" width="38" height="20" uuid="9a025dd4-e1ea-4104-91e2-f3386728c878"/>
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 			</textField>
 			<textField>

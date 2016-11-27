@@ -8,12 +8,8 @@ package aplication.dao;
 import aplication.modelo.Aluguel;
 import aplication.modelo.Cliente;
 import aplication.modelo.GrupoProduto;
-import aplication.modelo.Usuario;
-import aplication.relatorio.RelatorioAluguelCliente;
 import aplication.util.ConnectioinFactory;
-import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
 /**
@@ -67,29 +63,5 @@ public class AluguelDAO {
         manager.close();
     }
     
-     public List<RelatorioAluguelCliente> consultaRelatorio(Aluguel aluguel){
-        
-       List<RelatorioAluguelCliente> usuario;
-        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
-        manager.getTransaction().begin();
-       try{        
-            String qry = "SELECT NEW aplication.relatorio.RelatorioAluguelCliente( u.c.nome, u.c.cpf, u.id ,u.s.descricao ) FROM Aluguel a "
-                    + " inner join fetch  cliente c "
-                    + " inner join fetch  status s "
-                    + " where u.id=:1";
-
-            Query query = manager.createQuery(qry);
-            query.setParameter(1, aluguel.getId());
-            usuario=query.getResultList();
-            manager.getTransaction();
-            manager.close();
-        
-             return  usuario;
-       }catch(Exception ex){
-           JOptionPane.showMessageDialog(null,"Usuario não existe"+ex.getCause());
-       }
-       
-       return  null;
-    }
    
 }

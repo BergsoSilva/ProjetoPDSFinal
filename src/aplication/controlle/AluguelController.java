@@ -6,6 +6,7 @@
 package aplication.controlle;
 
 import aplication.util.ControlaConnexao;
+import java.io.File;
 import java.sql.Connection;
 import java.util.HashMap;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -20,17 +21,16 @@ public class AluguelController {
     
  private Connection con =null;
   
-public void gerarPorCodigo(Integer codigo){   
+public void gerarPorCodigo(){   
         try{
             con=ControlaConnexao.getConexao();
             
-            String arquivo = "src\\aplication\\relatorio\\aluguelProcliente.jasper";
+            //String arquivo = "src\\aplication\\relatorio\\aluguelProcliente.jasper";
 
-            HashMap filtro = new HashMap();
-
-                filtro.put("alId",1);
-
-                JasperPrint print = JasperFillManager.fillReport(arquivo, filtro, con);
+            File file = new File("src/aplication/relatorio/aluguelProcliente.jasper");
+            
+                System.out.println(file.getAbsolutePath());
+                JasperPrint print = JasperFillManager.fillReport(file.getAbsolutePath(), null, con);
 
                 JasperViewer view = new JasperViewer(print,true);
                 view.setVisible(true);

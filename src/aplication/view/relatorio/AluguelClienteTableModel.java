@@ -7,7 +7,6 @@ package aplication.view.relatorio;
 
 import aplication.modelo.Aluguel;
 import aplication.modelo.Cliente;
-import aplication.relatorio.RelatorioAluguelCliente;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -44,7 +43,7 @@ public class AluguelClienteTableModel extends AbstractTableModel{
             case 1:
                 return aluguel.getCliente().getCpf();
             case 3:
-                return aluguel.getId();
+                return aluguel.getStatus().getDescricao();
         }
         return null;
     }

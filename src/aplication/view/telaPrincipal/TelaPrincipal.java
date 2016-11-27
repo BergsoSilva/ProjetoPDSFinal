@@ -15,7 +15,7 @@ import aplication.regraDeNegocio.SingletonBiblioteca;
 import aplication.regraDeNegocio.retornarValor;
 import aplication.renderizador.ImageRederer;
 import aplication.renderizador.jPanelRederer;
-import aplication.view.aluguel.TelaVerDetalhesAluguel;
+import aplication.util.ControlaConnexao;
 import aplication.view.cliente.IndentificacaoUser;
 import aplication.view.cliente.TelaPesquisaCliente;
 import aplication.view.funcionario.TelaPesquisaFuncionario;
@@ -25,10 +25,15 @@ import aplication.view.pedido.TelaDevolucao;
 import aplication.view.pedido.TelaPesquisaPedido;
 import aplication.view.produto.TelaPesquisaProduto;
 import aplication.view.relatorio.AluguelCliente;
+import aplication.view.relatorio.TempoMedioAluguelProdutoTela;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,6 +42,10 @@ import javax.swing.ImageIcon;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 /**
@@ -85,6 +94,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabelQtde.setVisible(false);
         jLabelTempo1.setVisible(false);
         campoQuatidade.setVisible(false);
+        
+        //Inicializar o taamnho da tela do pc
+        Dimension scrensize = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(scrensize.width, scrensize.height);
         
     }
     
@@ -206,8 +219,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
    
     private void verDetalhes(){
-        TelaVerDetalhesAluguel verdtalhesProdutoAuguel = new TelaVerDetalhesAluguel(produto);
-        verdtalhesProdutoAuguel.setVisible(true);
+        ///TelaVerDetalhesAluguel verdtalhesProdutoAuguel = new TelaVerDetalhesAluguel(produto);
+       /// verdtalhesProdutoAuguel.setVisible(true);
     }
     
     private void prencherComboCategoria(){
@@ -290,7 +303,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         miGrupoProduto = new javax.swing.JMenuItem();
         miMulta = new javax.swing.JMenuItem();
         menuRalatorios = new javax.swing.JMenu();
-        miAluCliente = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         menuAluguel = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         miDevolucao = new javax.swing.JMenuItem();
@@ -312,7 +327,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
             public void windowLostFocus(java.awt.event.WindowEvent evt) {
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tabelaCatalog.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 51, 51)));
         tabelaCatalog.setModel(new javax.swing.table.DefaultTableModel(
@@ -340,8 +354,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tabelaCatalog);
-
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 426, 420));
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -422,8 +434,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jPanel1.add(jInternalFrame1, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 220, 0, 0));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 80, -1, -1));
-
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -447,8 +457,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
         jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, -1, 30));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 880, 60));
-
         campoHoras.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 campoHorasKeyPressed(evt);
@@ -457,20 +465,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 campoHorasKeyTyped(evt);
             }
         });
-        getContentPane().add(campoHoras, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 120, 60, 30));
 
         jLabelQtde.setText("Qtde");
-        getContentPane().add(jLabelQtde, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 150, 50, -1));
 
         campoQuatidade.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 campoQuatidadeKeyPressed(evt);
             }
         });
-        getContentPane().add(campoQuatidade, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 170, 60, 30));
 
         jLabelTempo1.setText("Tempo/ Hr");
-        getContentPane().add(jLabelTempo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 100, 70, -1));
 
         menuFile.setText("File");
 
@@ -529,19 +533,30 @@ public class TelaPrincipal extends javax.swing.JFrame {
         barraDeMenu.add(menuCadastro);
 
         menuRalatorios.setText("Relatórios");
-        menuRalatorios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuRalatoriosActionPerformed(evt);
-            }
-        });
 
-        miAluCliente.setText("Alugueis Por Cliente");
-        miAluCliente.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem3.setText("Produtos mais Alugados");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miAluClienteActionPerformed(evt);
+                jMenuItem3ActionPerformed(evt);
             }
         });
-        menuRalatorios.add(miAluCliente);
+        menuRalatorios.add(jMenuItem3);
+
+        jMenuItem5.setText("Tempo Médio de Aluguel por Produto");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        menuRalatorios.add(jMenuItem5);
+
+        jMenuItem6.setText("Alugueis por Cliente");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        menuRalatorios.add(jMenuItem6);
 
         barraDeMenu.add(menuRalatorios);
 
@@ -587,6 +602,45 @@ public class TelaPrincipal extends javax.swing.JFrame {
         barraDeMenu.add(menuAutenticação);
 
         setJMenuBar(barraDeMenu);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelTempo1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(campoHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabelQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(campoQuatidade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabelTempo1)
+                        .addGap(6, 6, 6)
+                        .addComponent(campoHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jLabelQtde)
+                        .addGap(6, 6, 6)
+                        .addComponent(campoQuatidade, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -674,15 +728,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
             pegarCarrinho(evt);
             reserva(this.produto,"");
-            
             boolean valid=SingletonBiblioteca.produtoExistCarrinho(this.procarrinhoMemo, this.carrinho);
             
             if(valid==true){
                 jLabelTempo1.setVisible(true);
                 campoHoras.setVisible(true);
                 campoHoras.requestFocus();
-                //botaFecharPedido.setEnabled(true);
-               // botaoCancelarPedido.setEnabled(true);
+                botaFecharPedido.setEnabled(true);
+                botaoCancelarPedido.setEnabled(true);
             }else{
                 JOptionPane.showMessageDialog(null, "Produto ja existe");
                 return ;
@@ -691,10 +744,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_tabelaCatalogMouseClicked
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
-        
         carregarTabela();
         perrencherTabelaCarrinho();
-        
     }//GEN-LAST:event_formWindowGainedFocus
 
     private void botaFecharPedidoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botaFecharPedidoMouseReleased
@@ -703,6 +754,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
             user.setVisible(true);
             carrinhoAtivo=false;
             botaFecharPedido.setEnabled(false);
+            procarrinhoMemo.clear();
+            perrencherTabelaCarrinho();
        }else{
            JOptionPane.showMessageDialog(null, "Lista de carrinho está vázia.");
  
@@ -744,7 +797,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void tableCarrinhoPedidoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCarrinhoPedidoMouseReleased
             removerCarrinho(evt);
-          
+            //botaFecharPedido.setEnabled(false);
+            //botaoCancelarPedido.setEnabled(false);
+            //valorAPagar.setText("");
            
     }//GEN-LAST:event_tableCarrinhoPedidoMouseReleased
 
@@ -752,6 +807,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
        
             this.procarrinhoMemo.clear();
             botaFecharPedido.setEnabled(false);
+            valorAPagar.setText("");
+            perrencherTabelaCarrinho();
             botaoCancelarPedido.setEnabled(false);
             carrinhoAtivo=true;
             jLabelTempo1.setVisible(false);
@@ -759,9 +816,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
             campoHoras.setVisible(false);
             campoQuatidade.setVisible(false);
             SingletonBiblioteca.retornarValorParaStoque(qtde, produto);
-            valorAPagar.setText("");
-            perrencherTabelaCarrinho();
-            carregarTabela();
       
        
     }//GEN-LAST:event_botaoCancelarPedidoActionPerformed
@@ -816,7 +870,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
             
             }else if (Integer.parseInt(q)> produto.getSaldo()){
                     JOptionPane.showMessageDialog(null, "Valor solicitado maior que o Saldo.");
-                    
+                    jLabelQtde.setVisible(false);
+                    campoHoras.setVisible(false);
+                    jLabelTempo1.setVisible(false);
+                    campoQuatidade.setVisible(false);
                 }else{
                                 
                     qtde=Integer.parseInt(q);
@@ -830,10 +887,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     campoHoras.setVisible(false);
                     jLabelTempo1.setVisible(false);
                     campoQuatidade.setVisible(false);
-                    carrinhoAtivo=true;
-                    carregarTabela();
-                    botaFecharPedido.setEnabled(true);
-                    botaoCancelarPedido.setEnabled(true);
+                    carrinhoAtivo=true; 
                    // qtde=carrinho.getQntde();
                    // tempoPedido tt= new tempoPedido();
                   //  tt.start();
@@ -845,14 +899,31 @@ public class TelaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tabelaCatalogMouseEntered
 
-    private void menuRalatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRalatoriosActionPerformed
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        File file = new File("src/aplication/relatorio/teste.jasper");
+        System.out.println(file.getAbsolutePath());
+        JasperPrint jp = null;
+        try {
+            jp = JasperFillManager.fillReport(file.getAbsolutePath(), null, ControlaConnexao.getConexao());
+        } catch (JRException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-    }//GEN-LAST:event_menuRalatoriosActionPerformed
+        JasperViewer jv = new JasperViewer(jp, false);
+        jv.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void miAluClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAluClienteActionPerformed
-        AluguelCliente alucli= new AluguelCliente();
-        alucli.setVisible(true);
-    }//GEN-LAST:event_miAluClienteActionPerformed
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        TempoMedioAluguelProdutoTela tempoMedioAluguelProdutoTela = new TempoMedioAluguelProdutoTela();
+        tempoMedioAluguelProdutoTela.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        AluguelCliente aluguelCliente = new AluguelCliente();
+        aluguelCliente.setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraDeMenu;
@@ -873,7 +944,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -883,7 +957,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuCadastro;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuRalatorios;
-    private javax.swing.JMenuItem miAluCliente;
     private javax.swing.JMenuItem miCliente;
     private javax.swing.JMenuItem miDevolucao;
     private javax.swing.JMenuItem miGrupoProduto;
@@ -924,7 +997,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
                carrinho.setSubtotal(sutotal);
                qtde=1;
                return this.carrinho;
-               
          }else if  (acao.endsWith("")){
            
                 Carrinho c = new Carrinho();
@@ -965,23 +1037,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
     
     private Carrinho removerCarrinho(MouseEvent evt) {
-       
+      
         int coluna = tableCarrinhoPedido.columnAtPoint(evt.getPoint());
         int l= tableCarrinhoPedido.rowAtPoint(evt.getPoint());
         
-       
-        
         if (coluna== 5){
-            
             ProdutoDAO dao = new ProdutoDAO();
             int linha = tableCarrinhoPedido.rowAtPoint(evt.getPoint());
             if(linha >= 0){
                  tableCarrinhoPedido.setRowSelectionInterval(linha, linha);
                  linha = tableCarrinhoPedido.getSelectedRow();
                  
-                 int i = JOptionPane.showConfirmDialog(null, "Excluir?"+procarrinhoMemo.get(linha).getNomeProduto(),"Atenção",JOptionPane.YES_NO_OPTION);
-                   Carrinho car = procarrinhoMemo.get(linha);
-                if (i==JOptionPane.YES_OPTION){
+                 int i = JOptionPane.showConfirmDialog(null, "Excluir?"+procarrinhoMemo.get(linha).getNomeProduto(),"AtenÃ§Ã£o",JOptionPane.YES_NO_OPTION);
+                 Carrinho car = procarrinhoMemo.get(linha);
+                 if (i==JOptionPane.YES_OPTION){
                      
                     procarrinhoMemo.remove( car);
                     
@@ -995,15 +1064,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
                     this.carrinho=procarrinhoMemo.get(linha);
              }else{
-                JOptionPane.showMessageDialog(null, "Operação cancelada..");
+                JOptionPane.showMessageDialog(null, "OperaÃ§Ã£o cancelada..");
                
             }
         }
             
           
         }
-     Carrinho c=procarrinhoMemo.get(l);
-     return this.carrinho=c;
+        Carrinho c=procarrinhoMemo.get(l);
+        return this.carrinho=c;
     }
     
     private void adicionarCarrinho(Carrinho carrinho){

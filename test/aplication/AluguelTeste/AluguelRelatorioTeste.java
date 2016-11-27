@@ -16,7 +16,7 @@ public class AluguelRelatorioTeste {
     public static void main(String[] args) {
          AluguelController con = new AluguelController();
      //   con.imprimir();
-        con.gerarPorCodigo(1);
+        //con.gerarPorCodigo(1);
     }
    
     

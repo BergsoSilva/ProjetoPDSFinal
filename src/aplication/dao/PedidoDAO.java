@@ -1,7 +1,8 @@
 package aplication.dao;
 
 import aplication.modelo.Aluguel;
-
+import aplication.modelo.Cliente;
+import aplication.modelo.ItemAluguel;
 import aplication.util.ConnectioinFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -26,26 +27,6 @@ public class PedidoDAO {
             
            query.setParameter(1, aluguel.getStatus().getId());
            query.setParameter(2, "%" + aluguel.getCliente().getCpf() + "%");
-            
-        List<Aluguel> itemAluguels = query.getResultList();
-        manager.getTransaction();
-        manager.close();
-        return itemAluguels;    
-    }
-    
-    
-     public List<Aluguel> pesquisarRelatorio(Aluguel aluguel){
-        
-        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
-        manager.getTransaction().begin();
-            Query query = manager.createQuery(" select a from Aluguel a "
-                    + " INNER JOIN fetch a.status  "
-                    + " INNER JOIN fetch a.produto  "
-                    + " INNER JOIN fetch a.cliente  "
-                    + " WHERE a.id=?1");
-            
-           query.setParameter(1, aluguel.getId());
-         
             
         List<Aluguel> itemAluguels = query.getResultList();
         manager.getTransaction();
@@ -78,4 +59,19 @@ public class PedidoDAO {
             
             return aluguel;
     } 
+    
+    public List<Aluguel> pesquisarRelatorio(Aluguel aluguel){
+        
+        EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
+        manager.getTransaction().begin();
+            Query query = manager.createQuery(" select a from Aluguel a "
+                    + " INNER JOIN fetch a.status  "
+                    + " INNER JOIN fetch a.produto  "
+                    + " INNER JOIN fetch a.cliente  ");
+            
+        List<Aluguel> itemAluguels = query.getResultList();
+        manager.getTransaction();
+        manager.close();
+        return itemAluguels;    
+    }
 }

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprovanteDevComPendencia" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9b96ba61-9b10-4ba5-aaf3-20138aaec078">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="320"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="datasetMulta" uuid="f5d98859-3c29-4bee-87c5-2c7a54977463">
+		<queryString>
+			<![CDATA[select muldescricao, mulvalor, mulvalorpago, stmdescricao
+
+from multa, statusmulta, Aluguel
+
+where 	mulstmid = stmid
+	and mulaluid = aluguel.id]]>
+		</queryString>
+		<field name="mulvalor" class="java.lang.Double">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="mulvalorpago" class="java.lang.Double">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="stmdescricao" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="muldescricao" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="idaluguel" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[select 	c.cpf, c.nome, f.funome, a.id as idaluguel, a.dtaluguel,
+		a.dtdevolucao, i.tempo, i.quantidade, p.nome as pronome, s.descricao, count(m.mulid) as qtdemultas
+
+from Cliente as c, Funcionario as f, Aluguel as a, itemaluguel as i, Produto as p, Status as s, Multa as m
+
+where 	a.cliente_id = c.id
+		and a.funcionario_funid = f.funid
+        and i.status_id = s.id
+        and i.aluguel_id = a.id
+        and i.produto_id = p.id
+        and m.mulaluid = a.id
+        and i.id = $P{idaluguel}]]>
+	</queryString>
+	<field name="cpf" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="funome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idaluguel" class="java.lang.Long"/>
+	<field name="dtaluguel" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dtdevolucao" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tempo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="quantidade" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pronome" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="qtdemultas" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="131" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="553" height="95" forecolor="#000000" backcolor="#00CCCC" uuid="da911f9b-692a-4f8d-93fb-4e20d13fef87"/>
+				<staticText>
+					<reportElement style="Title" x="0" y="12" width="553" height="66" forecolor="#000000" uuid="74b78b48-9b0f-40a1-91d3-e55e3ca0e154"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="22" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Comprovante de Devolução]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="99" width="553" height="32" forecolor="#000000" backcolor="#CCCCCC" uuid="1ca08527-afe1-4c47-8705-8bc5f418f84a"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="397" y="12" width="144" height="20" forecolor="#000000" uuid="01aadbd9-3a59-4831-93f2-34ab282ff476"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="206" splitType="Stretch">
+			<textField>
+				<reportElement x="83" y="84" width="27" height="20" uuid="0149df5f-4ed9-4387-a387-0a92ecca7bf0"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idaluguel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="84" width="66" height="20" uuid="60ed7b5c-adbb-4551-a882-ada33212c4d2"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Id Aluguel:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="72" y="17" width="275" height="20" uuid="ae3e7866-6e80-4d1b-8054-208d61eb9af5"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="17" width="55" height="20" uuid="82b7fb1b-5404-49df-bcd5-4ac7f10b1a90"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="413" y="17" width="100" height="20" uuid="34d4249d-df9a-416d-a58c-2f9b7500a054"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cpf}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="373" y="17" width="35" height="20" uuid="8799dc82-7753-4f55-b1fd-d405fbc6807c"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPF:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="257" y="84" width="90" height="20" uuid="95c431b6-b4bb-4de1-8ccf-0039d78ce584"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtaluguel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="143" y="84" width="110" height="20" uuid="df32b467-2162-407f-9182-6ec73638579b"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Início do Aluguel:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="72" y="51" width="275" height="20" uuid="1b513290-4d7f-46b9-8ea1-ad8a6f9d8c3a"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pronome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="51" width="55" height="20" uuid="cb08bb54-bfe2-40bc-8285-304fa6b733c3"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Produto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="453" y="51" width="74" height="20" uuid="8dbdee1d-3a1d-42d8-962e-4f23c36c26e3"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="373" y="51" width="76" height="20" uuid="adf8d9e4-fa3d-469e-b094-6227e8e8f155"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantidade:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="373" y="117" width="56" height="20" uuid="c424976b-23d2-42b3-89dc-657613d314f2"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Situação:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="434" y="117" width="100" height="20" uuid="b874b1fc-5544-46d1-9362-cbad2474ee9f"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="372" y="84" width="103" height="20" uuid="c3c8f77e-a63f-48c0-888a-d70d527a59de"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Horas Alugadas:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="479" y="84" width="54" height="20" uuid="bb91cd1b-5c09-4c28-8aec-31dfc71a10c1"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tempo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="118" y="117" width="95" height="20" uuid="9f33adc8-796c-4071-ae6b-d4312f7aa311"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtdevolucao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="117" width="100" height="20" uuid="de1452c2-ed37-422e-a67f-d33f93134f98"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Devolução:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="151" width="76" height="20" uuid="bfe3373c-bca5-49f3-b7a2-27db8c40ad49"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Funcionário:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="93" y="151" width="100" height="20" uuid="159deda4-1bbe-421e-acb4-6e9372822aca"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{funome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="231" y="117" width="47" height="20" uuid="3204a8bc-f370-4408-b031-53be1f24caeb"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Multas:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="282" y="117" width="83" height="20" uuid="220e7eeb-1e76-4bd4-95f4-5b67ddcf98f7"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdemultas}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="112">
+			<staticText>
+				<reportElement x="13" y="13" width="100" height="20" uuid="da941242-910f-4a97-8494-0386c2ce567b"/>
+				<text><![CDATA[muldescricao]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="13" y="45" width="200" height="58" uuid="96ba8ac0-8c59-425f-b032-13ff30c4c534"/>
+				<textFieldExpression><![CDATA[$F{muldescricao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="227" y="45" width="100" height="20" uuid="990956f1-c03f-4a6a-9775-2bee7eb60ae6"/>
+				<textFieldExpression><![CDATA[$F{mulvalor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="338" y="13" width="100" height="20" uuid="af8ee2a7-87fd-4065-b5e1-3b6133875b30"/>
+				<text><![CDATA[mulvalorpago]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="338" y="45" width="100" height="20" uuid="1091c287-bd7d-4c51-9c2e-251112856089"/>
+				<textFieldExpression><![CDATA[$F{mulvalorpago}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="450" y="13" width="100" height="20" uuid="1b031557-3ece-48c6-b896-ec77d06b03d2"/>
+				<text><![CDATA[stmdescricao]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="450" y="45" width="100" height="20" uuid="07d8eb45-1eeb-4397-bc9d-a0fe51200d00"/>
+				<textFieldExpression><![CDATA[$F{stmdescricao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="150" y="18" width="100" height="20" uuid="5dbc864a-b6d7-4e88-b521-cc375c8d67fc"/>
+				<text><![CDATA[mulvalor]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="53" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="f5c19af0-91e0-4e09-9d42-9db32c9eb86a"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="71" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="47" width="555" height="24" forecolor="#D0B48E" backcolor="#CCCCCC" uuid="02624d72-38e0-43a5-93a1-206208e7088c"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="1" width="197" height="20" forecolor="#000000" uuid="2b4f2739-9f20-47a3-ac3a-f8b243d65592"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

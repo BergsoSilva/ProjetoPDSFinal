@@ -26,7 +26,7 @@ public class ControlaConnexao {
             System.err.println("Erro Driver Manager "+ex.getLocalizedMessage());
         }
       
-        return DriverManager.getConnection("jdbc:mysql://localhost/projetopds","root","123456");
+        return DriverManager.getConnection("jdbc:mysql://localhost/projetopds","root","s3rp3nt3");
     }
    
 }
