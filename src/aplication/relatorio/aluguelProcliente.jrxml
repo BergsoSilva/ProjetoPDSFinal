@@ -2,7 +2,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aluguelProcliente" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="761c2bbd-f04b-4bee-bc82-50e9880f51ad">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="189"/>
+	<parameter name="cID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select
  cl.nome,
@@ -11,8 +14,9 @@
  st.descricao,
  al.id
  from aluguel al
-inner join cliente cl on al.cliente_id=cliente_id
-inner join status st on al.status_id=st.id]]>
+ join cliente cl on al.cliente_id=cl.id
+ join status st on al.status_id=st.id
+where cl.id=$P{cID}]]>
 	</queryString>
 	<field name="nome" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

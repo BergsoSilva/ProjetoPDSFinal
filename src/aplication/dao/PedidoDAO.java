@@ -60,14 +60,18 @@ public class PedidoDAO {
             return aluguel;
     } 
     
-    public List<Aluguel> pesquisarRelatorio(Aluguel aluguel){
+      public List<Aluguel> pesquisarRelatorio(Long cliid){
         
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         manager.getTransaction().begin();
+        
             Query query = manager.createQuery(" select a from Aluguel a "
-                    + " INNER JOIN fetch a.status  "
-                    + " INNER JOIN fetch a.produto  "
-                    + " INNER JOIN fetch a.cliente  ");
+                                                                        + " INNER JOIN fetch a.status s"
+                                                                        + " INNER JOIN fetch a.cliente  c  "
+                                                                        + "  where c.id=?1");
+
+            
+       query.setParameter(1, cliid);
             
         List<Aluguel> itemAluguels = query.getResultList();
         manager.getTransaction();

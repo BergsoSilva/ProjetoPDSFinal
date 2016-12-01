@@ -9,6 +9,7 @@ import aplication.util.ControlaConnexao;
 import java.io.File;
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.Map;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
@@ -21,7 +22,7 @@ public class AluguelController {
     
  private Connection con =null;
   
-public void gerarPorCodigo(){   
+public void gerarPorCodigo(Integer id){   
         try{
             con=ControlaConnexao.getConexao();
             
@@ -29,11 +30,14 @@ public void gerarPorCodigo(){
 
             File file = new File("src/aplication/relatorio/aluguelProcliente.jasper");
             
-                System.out.println(file.getAbsolutePath());
-                JasperPrint print = JasperFillManager.fillReport(file.getAbsolutePath(), null, con);
+            Map parametros = new HashMap();
+           parametros.put("cID",id); 
+            
+             System.out.println(file.getAbsolutePath());
+             JasperPrint print = JasperFillManager.fillReport(file.getAbsolutePath(), parametros, con);
 
-                JasperViewer view = new JasperViewer(print,true);
-                view.setVisible(true);
+             JasperViewer view = new JasperViewer(print,true);
+             view.setVisible(true);
 
 
 
@@ -41,20 +45,17 @@ public void gerarPorCodigo(){
                 System.out.println("Erro"+ex.getMessage());
         }
 }
-public void geraTodos(Integer codigo){   
+public void gerarGrafico1(){   
         try{
-            con=ControlaConnexao.getConexao();
+                    con=ControlaConnexao.getConexao();
             
-            String arquivo = "src\\aplication\\relatorio\\aluguelProcliente.jasper";
+                    File file = new File("src/aplication/relatorio/Grafico1.jasper");
+           
 
-            HashMap filtro = new HashMap();
+                    JasperPrint print = JasperFillManager.fillReport(file.getPath(), null, con);
 
-                filtro.put("alId",codigo);
-
-                JasperPrint print = JasperFillManager.fillReport(arquivo, filtro, con);
-
-                JasperViewer view = new JasperViewer(print,true);
-                view.setVisible(true);
+                    JasperViewer view = new JasperViewer(print,true);
+                    view.setVisible(true);
 
 
 

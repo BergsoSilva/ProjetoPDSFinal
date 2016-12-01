@@ -97,6 +97,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         //Inicializar o taamnho da tela do pc
         Dimension scrensize = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(scrensize.width, scrensize.height);
+        labelenter.setVisible(false);
         
     }
     
@@ -292,6 +293,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabelQtde = new javax.swing.JLabel();
         campoQuatidade = new javax.swing.JTextField();
         jLabelTempo1 = new javax.swing.JLabel();
+        labelenter = new javax.swing.JLabel();
         barraDeMenu = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -445,7 +447,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 campoPesquisaKeyPressed(evt);
             }
         });
-        jPanel2.add(campoPesquisa, new org.netbeans.lib.awtextra.AbsoluteConstraints(222, 22, 590, 30));
+        jPanel2.add(campoPesquisa, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 0, 590, 30));
 
         jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -453,7 +455,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, -1, 30));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 0, -1, 30));
 
         campoHoras.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -473,6 +475,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
 
         jLabelTempo1.setText("Tempo/ Hr");
+
+        labelenter.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        labelenter.setForeground(new java.awt.Color(0, 204, 204));
+        labelenter.setText("Digite o valor e clik ENTER");
 
         menuFile.setText("Arquivo");
 
@@ -597,20 +603,26 @@ public class TelaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelTempo1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoQuatidade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelTempo1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(campoHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(campoQuatidade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(labelenter)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -619,17 +631,22 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabelTempo1)
-                        .addGap(6, 6, 6)
-                        .addComponent(campoHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabelQtde)
-                        .addGap(6, 6, 6)
-                        .addComponent(campoQuatidade, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(labelenter)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelTempo1)
+                                .addGap(6, 6, 6)
+                                .addComponent(campoHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(jLabelQtde)
+                                .addGap(6, 6, 6)
+                                .addComponent(campoQuatidade, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -724,8 +741,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 jLabelTempo1.setVisible(true);
                 campoHoras.setVisible(true);
                 campoHoras.requestFocus();
-                botaFecharPedido.setEnabled(true);
-                botaoCancelarPedido.setEnabled(true);
+                labelenter.setVisible(true);
             }else{
                 JOptionPane.showMessageDialog(null, "Produto ja existe");
                 return ;
@@ -744,7 +760,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
             user.setVisible(true);
             carrinhoAtivo=false;
             botaFecharPedido.setEnabled(false);
-            procarrinhoMemo.clear();
             perrencherTabelaCarrinho();
        }else{
            JOptionPane.showMessageDialog(null, "Lista de carrinho está vázia.");
@@ -853,6 +868,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     campoHoras.setVisible(false);
                     jLabelTempo1.setVisible(false);
                     campoQuatidade.setVisible(false);
+                  
                 }else{
                                 
                     qtde=Integer.parseInt(q);
@@ -866,6 +882,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     campoHoras.setVisible(false);
                     jLabelTempo1.setVisible(false);
                     campoQuatidade.setVisible(false);
+                    botaFecharPedido.setEnabled(true);
+                    botaoCancelarPedido.setEnabled(true);
+                      labelenter.setVisible(false);
                     carrinhoAtivo=true; 
                    // qtde=carrinho.getQntde();
                    // tempoPedido tt= new tempoPedido();
@@ -933,6 +952,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel labelenter;
     private javax.swing.JMenu menuAluguel;
     private javax.swing.JMenu menuAutenticação;
     private javax.swing.JMenu menuCadastro;
