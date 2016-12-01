@@ -4,25 +4,20 @@ package aplication.view.pedido;
 import aplication.Exceptions.BDException;
 import aplication.dao.AluguelDAO;
 import aplication.dao.FormaPagamentoDAO;
-import aplication.dao.MultaDAO;
 import aplication.dao.PedidoDAO;
 import aplication.dao.ProdutoDAO;
 import aplication.modelo.Aluguel;
 import aplication.modelo.FormPagamento;
-import aplication.modelo.Multa;
 import aplication.modelo.Produto;
 import aplication.modelo.Status;
+import aplication.regraDeNegocio.DevolucaoControl;
 import aplication.regraDeNegocio.SingletonBiblioteca;
 import aplication.regraDeNegocio.ThretdTempoPedido;
-import aplication.relatorio.Comprovante;
-import aplication.view.multa.TelaFormularioMulta;
 import aplication.view.multa.TelaPesquisarMulta;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
@@ -36,6 +31,8 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     private Aluguel aluguel;
     
     private ThretdTempoPedido thered;
+    private final static String VER_MULTAS = "Ver Multas";
+    private final static String DEVOLUCAO = "Devolução";
     
     public TelaVerDetalhesPedido(Aluguel alugel, ThretdTempoPedido thered) {
         initComponents();
@@ -65,17 +62,16 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         }
     }
     
-    //Ativa botoes de devolu��o e multa de acordo com o status do aluguel
+    //Ativa ou desativa os botões da tela de acordo com o status do aluguel
     public void ativaBotoes(){
-        if ( aluguel.getStatus().getId().equals(Aluguel.PEDIDO)){
-            botaoDevolucao.setEnabled(false);
-        } else {
-            botaoAlugar.setEnabled(false);
+        Long statusId = aluguel.getStatus().getId();
+        boolean ePedido = statusId.equals(Aluguel.PEDIDO);
+        boolean eFinalizado = statusId.equals(Aluguel.FINALIZADO_COM_PENDENCIA) || statusId.equals(Aluguel.FINALIZADO);
             
-            if ( ! aluguel.getStatus().getId().equals(Aluguel.ALUGADO)){
-            botaoDevolucao.setText("Ver Multas");
-        }
-     }
+        botaoAlugar.setEnabled(ePedido);
+        botaoDevolucao.setEnabled(!ePedido);
+        botaoDevolucao.setText( eFinalizado ? VER_MULTAS : DEVOLUCAO);
+        botaoImprimeComprovante.setEnabled(eFinalizado);
     }
     
     private void carregaImagem(String caminho, String nomeImagem){
@@ -105,111 +101,22 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         carregaImagem(caminho, nomeImagem);
     }
     
-    //abre a janela de multas quando o aluguel j� foi parcialmente ou totalmente finalizado
+    //abre a janela de multas quando o aluguel já foi parcialmente ou totalmente finalizado
     private void verMultas() throws BDException{
-        TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel,this);
-        telaPesquisaMulta.setVisible(true);
+        new TelaPesquisarMulta(aluguel).setVisible(true);
     }
     
-    //Verifica se o cliente est� realizando a devolu��o atrasado
-    //Concede um tempo extra de 20 min
-    private int estaAtrasado(){
-        int diaInicio = aluguel.getDtAluguel().get(Calendar.DAY_OF_MONTH);
-        int horaInicio = aluguel.getDtAluguel().get(Calendar.HOUR_OF_DAY);
-        int minutoInicio = aluguel.getDtAluguel().get(Calendar.MINUTE);
-        int diaDevolucao = aluguel.getDtDevolucao().get(Calendar.DAY_OF_MONTH);
-        int horaDevolucao = aluguel.getDtDevolucao().get((Calendar.HOUR_OF_DAY));
-        int minutoDevolucao = aluguel.getDtDevolucao().get((Calendar.MINUTE));
-        int tempoLocacao = aluguel.getTempo();
-        int horaLimite = horaInicio + tempoLocacao;
-        int minutoLimite = minutoInicio + 20;
-        
-        if ( diaInicio != diaDevolucao ){
-            return 24;
-        }
-        
-        if(minutoLimite > 59){
-            horaLimite += 1;
-            minutoLimite = minutoLimite - 60;
-        }
-        
-        if (horaDevolucao < horaLimite){
-            return 0;
-        }else if( horaDevolucao == horaLimite && minutoDevolucao <= minutoLimite){
-            return 0;
-        } else if (horaDevolucao == horaLimite){
-            return 1;
-        } else {
-            return horaDevolucao - horaLimite;
-        }
-    }
-    
-    // verifica se j� foi cadastrada alguma multa para o aluguel
-    private boolean temMulta() throws BDException{
-        MultaDAO multaDAO = new MultaDAO();
-        List<Multa> multas = multaDAO.pesquisar(aluguel);
-        
-        if (multas.size() > 0){
-            return true;
-        }
-        return false;
-    }
-    
-    //Finaliza o aluguel ou vai para a tela de multas
+    //Chama a classe com os métodos de controle da devolução
     private void devolucao() throws BDException, JRException, SQLException{
-        Calendar dtDevolucao = Calendar.getInstance();
-        aluguel.setDtDevolucao(dtDevolucao);
-        
-        
-        int tempoDeAtraso = estaAtrasado();
-        
-        if(temMulta()){
-            TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel, this);
-            telaPesquisaMulta.setVisible(true);
-        }else if (tempoDeAtraso > 0){
-            updateAluguel();
-            TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel, this);
-            telaPesquisaMulta.setVisible(true);
-
-            new TelaFormularioMulta(aluguel, telaPesquisaMulta, tempoDeAtraso);
-        }else{
-            int escolha = JOptionPane.showConfirmDialog(null, "Houve extravio de produtos ou h� avarias em algum produto?");
-        
-            if (escolha == 1){
-                Status statusAluguel = new Status();
-                statusAluguel.setId(Aluguel.FINALIZADO);
-                aluguel.setStatus(statusAluguel);
-                updateAluguel();
-                //updateProduto();
-                ativaBotoes();
-                Comprovante comprovante = new Comprovante();
-                comprovante.comprovanteDevolucaoFinalizado(aluguel);
-            } else if (escolha == 0){
-                updateAluguel();
-                TelaPesquisarMulta telaPesquisaMulta = new TelaPesquisarMulta(aluguel, this);
-                telaPesquisaMulta.setVisible(true);
-            }
-        }
+        new DevolucaoControl(aluguel).devolucao();
     }
     
-    private void updateProduto(){
-        ProdutoDAO produtoDAO = new ProdutoDAO();
-        Produto produto = aluguel.getProduto();
-        Produto produtoBanco;
-        int saldo = aluguel.getQuantidade();
-        
-        produtoBanco = produtoDAO.produtoFind(produto.getId());
-        double saldoBanco = produtoBanco.getSaldo();
-        produtoBanco.setSaldo(saldoBanco + saldo);
-        produtoDAO.alterar(produtoBanco);
+    private void imprimirComprovante() throws BDException, JRException, SQLException{
+        new DevolucaoControl(aluguel).gerarComprovanteDevolucao();
     }
     
-    private void updateAluguel(){
-        AluguelDAO aluguelDAO = new AluguelDAO();
-        aluguelDAO.alterar(aluguel);
-    }
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
@@ -218,6 +125,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         botaoAlugar = new javax.swing.JButton();
         botaoCancelar3 = new javax.swing.JButton();
         botaoDevolucao = new javax.swing.JButton();
+        botaoImprimeComprovante = new javax.swing.JButton();
         labelAluguel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         labelAQtde = new javax.swing.JLabel();
@@ -242,6 +150,13 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         comboFormaPagamento = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel1.setText("Nome:");
@@ -267,10 +182,18 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             }
         });
 
+        botaoDevolucao.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         botaoDevolucao.setText("Devolução");
         botaoDevolucao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botaoDevolucaoActionPerformed(evt);
+            }
+        });
+
+        botaoImprimeComprovante.setText("Imprimir Comprovante de Devolucao");
+        botaoImprimeComprovante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoImprimeComprovanteActionPerformed(evt);
             }
         });
 
@@ -280,10 +203,12 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(botaoAlugar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(botaoDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(botaoAlugar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(botaoDevolucao)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(botaoImprimeComprovante, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(73, 73, 73)
                 .addComponent(botaoCancelar3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -292,11 +217,12 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(botaoAlugar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(botaoCancelar3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(botaoCancelar3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(botaoImprimeComprovante, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botaoDevolucao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -402,7 +328,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(18, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -485,11 +411,11 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
 
         pack();
         setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void botaoAlugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAlugarActionPerformed
+    private void botaoAlugarActionPerformed(java.awt.event.ActionEvent evt) {                                            
         alugar();
-    }//GEN-LAST:event_botaoAlugarActionPerformed
+    }                                           
 
     private void alugar(){
         Produto produto = aluguel.getProduto();
@@ -520,26 +446,38 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
         //   JOptionPane.showMessageDialog(null," Saldo meno que 0");
       //  }
     }
-    private void botaoCancelar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelar3ActionPerformed
+    private void botaoCancelar3ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         dispose();
-    }//GEN-LAST:event_botaoCancelar3ActionPerformed
+    }                                              
 
-    private void botaoDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoDevolucaoActionPerformed
+    private void botaoDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {                                               
         try {
-            if (botaoDevolucao.getText().equals("Devolu��o")){
+            if (botaoDevolucao.getText().equals(DEVOLUCAO)){
                 devolucao();
             }else{
                 verMultas();
             }
         } catch (BDException | JRException | SQLException ex) {}
         
-    }//GEN-LAST:event_botaoDevolucaoActionPerformed
+    }                                              
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {                                       
+        setar();
+        ativaBotoes();
+    }                                      
+    
+    private void botaoImprimeComprovanteActionPerformed(java.awt.event.ActionEvent evt) {                                                        
+        try {
+            imprimirComprovante();
+        } catch (BDException | JRException | SQLException ex) {}
+    }                                                       
 
     
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton botaoAlugar;
     private javax.swing.JButton botaoCancelar3;
     private javax.swing.JButton botaoDevolucao;
+    private javax.swing.JButton botaoImprimeComprovante;
     private javax.swing.JComboBox<Object> comboFormaPagamento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -565,5 +503,5 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
     private javax.swing.JLabel labelSaldo;
     private javax.swing.JLabel labelTempo;
     private javax.swing.JPanel panelImagem;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 }

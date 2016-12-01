@@ -9,6 +9,9 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowGainedFocus" listener="java.awt.event.WindowFocusListener" parameters="java.awt.event.WindowEvent" handler="formWindowGainedFocus"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -31,7 +34,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <Component id="labelValorTotal" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="campoValorTotal" min="-2" pref="122" max="-2" attributes="0"/>
                           </Group>
@@ -78,16 +81,20 @@
                   </Group>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Component id="labelDivida" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="campoDivida" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="campoValorTotal" alignment="3" max="32767" attributes="0"/>
                   <Component id="botaoFinalizar" alignment="3" max="32767" attributes="0"/>
                   <Component id="botaoEfetuarPagamento" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="labelValorTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelDivida" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="campoDivida" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="campoTroco" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="labelTroco" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -122,7 +129,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="labelValorTotal">
       <Properties>
         <Property name="text" type="java.lang.String" value="Total"/>
       </Properties>

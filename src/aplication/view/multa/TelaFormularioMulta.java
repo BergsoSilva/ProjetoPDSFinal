@@ -5,9 +5,6 @@ import aplication.dao.MultaDAO;
 import aplication.modelo.Aluguel;
 import aplication.modelo.Multa;
 import aplication.modelo.StatusMulta;
-import aplication.view.multa.TelaPesquisarMulta;
-import java.awt.HeadlessException;
-
 import javax.swing.JOptionPane;
 
 /**
@@ -30,6 +27,7 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
         initComponents();
     }
     
+    //Construtor para gerar multa por atraso
     public TelaFormularioMulta(Aluguel aluguel, TelaPesquisarMulta telaPesquisarMulta, int tempoDeAtraso) throws BDException {
         initComponents();
         
@@ -37,6 +35,7 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
         this.telaPesquisarMulta = telaPesquisarMulta;
         this.acao = "adicionar";
         
+        this.telaPesquisarMulta.setVisible(true);
         geraMultaAtraso(tempoDeAtraso);
     }
     
@@ -100,7 +99,6 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
         }
         
         if (acao.equals("adicionar")){
-            System.out.println("add");
             multa = new Multa();
             multa.setAluguel(aluguel);
             StatusMulta statusMulta = new StatusMulta();
@@ -110,6 +108,7 @@ public class TelaFormularioMulta extends javax.swing.JFrame {
         
         multa.setValor(valorMulta);
         multa.setDescricao(descricao);
+        multa.setValorPago(0.0);
 
         return true;
     }

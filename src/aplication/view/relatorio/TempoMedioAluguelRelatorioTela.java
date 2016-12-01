@@ -6,15 +6,13 @@
 package aplication.view.relatorio;
 
 import aplication.Exceptions.BDException;
-import aplication.relatorio.TempoMedioAluguelProdutoRelatorio;
+import aplication.relatorio.TempoMedioAluguelRelatorio;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 //import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 
@@ -22,28 +20,38 @@ import net.sf.jasperreports.engine.JRException;
  *
  * @author flavio
  */
-public class TempoMedioAluguelProdutoTela extends javax.swing.JFrame {
+public class TempoMedioAluguelRelatorioTela extends javax.swing.JFrame {
     
     private Calendar dataInicial;
     private Calendar dataFinal;
-    private Calendar dataMinima;
+    private int radioEscolhido;
+    private static final int RADIO_CLIENTE = 1;
+    private static final int RADIO_PRODUTO = 2;
+    private static final int RADIO_CATEGORIA = 3;
     
     /**
      * Creates new form tempoMedioAluguelProduto
      */
-    public TempoMedioAluguelProdutoTela() {
+    public TempoMedioAluguelRelatorioTela() {
         initComponents();
         this.dataInicial = Calendar.getInstance();
         this.dataFinal = Calendar.getInstance();
-        this.dataMinima = Calendar.getInstance();
-        dataMinima.set(2000, 01, 01);
+        this.radioEscolhido = RADIO_CLIENTE;
     }
     
     private void gerarRelatorio() throws BDException, JRException, SQLException, ParseException{
         if (dataInicialEValida() && dataFinalEValida()){
             if ( ! dataInicial.after(dataFinal)){
-                TempoMedioAluguelProdutoRelatorio relatorio = new TempoMedioAluguelProdutoRelatorio();
-                relatorio.gerarRelatorio(dataInicial, dataFinal);
+                TempoMedioAluguelRelatorio relatorio = new TempoMedioAluguelRelatorio(dataInicial, dataFinal);
+                
+                switch (radioEscolhido) {
+                    case RADIO_CLIENTE: relatorio.tempoMedioPorCliente();
+                        break;
+                    case RADIO_PRODUTO: relatorio.tempoMedioPorProduto();
+                        break;
+                    case RADIO_CATEGORIA: relatorio.tempoMedioPorCategoria();
+                        break;
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Data inicial não pode ser maior que data final!", "Erro", JOptionPane.ERROR_MESSAGE);
             }
@@ -54,19 +62,9 @@ public class TempoMedioAluguelProdutoTela extends javax.swing.JFrame {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date data;
         
-        if (campoDataInicial.getText().equals("  /  /    ")){
-            dataInicial.set(2000, 01, 01);
-            return true;
-        }
-        
         try {
             data = sdf.parse(campoDataInicial.getText());
             this.dataInicial.setTime(data);
-            
-            if (dataInicial.before(dataMinima)){
-                JOptionPane.showMessageDialog(null, "Data inicial inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
             return true;
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(null, "Data inicial inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -81,12 +79,6 @@ public class TempoMedioAluguelProdutoTela extends javax.swing.JFrame {
         try {
             data = sdf.parse(campoDataFinal.getText());
             this.dataFinal.setTime(data);
-            
-            if (dataFinal.before(dataMinima)){
-                JOptionPane.showMessageDialog(null, "Data final inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            
             return true;
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(null, "Data final inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -104,15 +96,20 @@ public class TempoMedioAluguelProdutoTela extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grupoRadio = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         campoDataInicial = new javax.swing.JFormattedTextField();
         campoDataFinal = new javax.swing.JFormattedTextField();
         botaoGerarRelatorio = new javax.swing.JButton();
         botaoCancelar = new javax.swing.JButton();
+        radioCliente = new javax.swing.JRadioButton();
+        jLabel3 = new javax.swing.JLabel();
+        radioProduto = new javax.swing.JRadioButton();
+        radioCategoria = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Relatório: Tempo Médio de Alguel por Produto");
+        setTitle("Relatório: Tempo Médio de Alguel");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Data Inicial");
@@ -152,48 +149,96 @@ public class TempoMedioAluguelProdutoTela extends javax.swing.JFrame {
             }
         });
 
+        grupoRadio.add(radioCliente);
+        radioCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        radioCliente.setSelected(true);
+        radioCliente.setText("Cliente");
+        radioCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioClienteActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("Tempo médio de aluguel por:");
+
+        grupoRadio.add(radioProduto);
+        radioProduto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        radioProduto.setText("Produto");
+        radioProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioProdutoActionPerformed(evt);
+            }
+        });
+
+        grupoRadio.add(radioCategoria);
+        radioCategoria.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        radioCategoria.setText("Categoria");
+        radioCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioCategoriaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
                         .addComponent(botaoGerarRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(campoDataInicial)
-                            .addComponent(campoDataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(radioCliente)
+                                    .addGap(40, 40, 40)
+                                    .addComponent(radioProduto))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(campoDataInicial))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(jLabel2)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(campoDataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGap(41, 41, 41)
+                            .addComponent(radioCategoria))))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radioCliente)
+                    .addComponent(radioProduto)
+                    .addComponent(radioCategoria))
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(campoDataInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(campoDataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(botaoGerarRelatorio, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                    .addComponent(botaoCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botaoGerarRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21))
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
@@ -205,6 +250,18 @@ public class TempoMedioAluguelProdutoTela extends javax.swing.JFrame {
             gerarRelatorio();
         } catch (BDException | JRException | SQLException | ParseException ex) {}
     }//GEN-LAST:event_botaoGerarRelatorioActionPerformed
+
+    private void radioClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioClienteActionPerformed
+        radioEscolhido = RADIO_CLIENTE;
+    }//GEN-LAST:event_radioClienteActionPerformed
+
+    private void radioProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioProdutoActionPerformed
+        radioEscolhido = RADIO_PRODUTO;
+    }//GEN-LAST:event_radioProdutoActionPerformed
+
+    private void radioCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioCategoriaActionPerformed
+        radioEscolhido = RADIO_CATEGORIA;
+    }//GEN-LAST:event_radioCategoriaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -223,21 +280,27 @@ public class TempoMedioAluguelProdutoTela extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TempoMedioAluguelProdutoTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TempoMedioAluguelRelatorioTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TempoMedioAluguelProdutoTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TempoMedioAluguelRelatorioTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TempoMedioAluguelProdutoTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TempoMedioAluguelRelatorioTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TempoMedioAluguelProdutoTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TempoMedioAluguelRelatorioTela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TempoMedioAluguelProdutoTela().setVisible(true);
+                new TempoMedioAluguelRelatorioTela().setVisible(true);
             }
         });
     }
@@ -247,7 +310,12 @@ public class TempoMedioAluguelProdutoTela extends javax.swing.JFrame {
     private javax.swing.JButton botaoGerarRelatorio;
     private javax.swing.JFormattedTextField campoDataFinal;
     private javax.swing.JFormattedTextField campoDataInicial;
+    private javax.swing.ButtonGroup grupoRadio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JRadioButton radioCategoria;
+    private javax.swing.JRadioButton radioCliente;
+    private javax.swing.JRadioButton radioProduto;
     // End of variables declaration//GEN-END:variables
 }

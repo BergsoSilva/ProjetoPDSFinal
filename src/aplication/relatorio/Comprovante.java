@@ -23,14 +23,13 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author flavio
  */
 public class Comprovante {
-    public void comprovanteDevolucaoFinalizado( Aluguel aluguel ) throws BDException, JRException, SQLException{
+    public void gerarComprovanteDevolucao(Aluguel aluguel) throws SQLException, JRException{
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost/projetopds","root","123");
         Map parametros = new HashMap();
         
         parametros.put("idaluguel", aluguel.getId());
-        
-        JasperPrint jp = JasperFillManager.fillReport( "C:\\Users\\flavio\\Documents\\Didático\\TDS\\4º\\PDS\\projeto\\ProjetoPDSFinal\\relatorios\\comprovanteDevolucaoFinalizado.jasper", parametros, con);
-        JasperExportManager.exportReportToPdfFile (jp, "C:\\Users\\flavio\\Documents\\Didático\\TDS\\4º\\PDS\\projeto\\ProjetoPDSFinal\\relatorios\\comprovanteDevolucaoFinalizado.pdf");
+        JasperPrint jp = JasperFillManager.fillReport( "src\\relatorios\\comprovanteDevolucao.jasper", parametros, con);
+        JasperExportManager.exportReportToPdfFile (jp, "src\\relatorios\\comprovanteDevolucao.pdf");
         JasperViewer jv = new JasperViewer(jp, false);
         jv.setVisible(true);
     }

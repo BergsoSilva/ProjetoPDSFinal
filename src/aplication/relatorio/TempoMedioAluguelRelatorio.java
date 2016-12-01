@@ -9,9 +9,7 @@ import aplication.Exceptions.BDException;
 import aplication.util.ControlaConnexao;
 import java.io.File;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,14 +24,44 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author flavio
  */
-public class TempoMedioAluguelProdutoRelatorio {
-    public void gerarRelatorio( Calendar dataInicial, Calendar dataFinal ) throws BDException, JRException, SQLException{
+public class TempoMedioAluguelRelatorio {
+    private Calendar dataInicial;
+    private Calendar dataFinal;
+    private String caminhoRelatorio;
+    private String caminhoPdf;
+    
+    public TempoMedioAluguelRelatorio(Calendar dataInicial, Calendar dataFinal){
+        this.dataInicial = dataInicial;
+        this.dataFinal = dataFinal;
+    }
+    
+    public void tempoMedioPorCliente() throws BDException, JRException, SQLException{
+        caminhoRelatorio = "src\\relatorios\\tempoMedioAluguelCliente.jasper";
+        caminhoPdf = "src\\relatorios\\tempoMedioAluguelCliente.pdf";
+        gerarRelatorio();
+    }
+    
+    public void tempoMedioPorProduto() throws BDException, JRException, SQLException{
+        caminhoRelatorio = "src\\relatorios\\tempoMedioAluguelProduto.jasper";
+        caminhoPdf = "src\\relatorios\\tempoMedioAluguelProduto.pdf";
+        gerarRelatorio();
+    }
+    
+    public void tempoMedioPorCategoria() throws BDException, JRException, SQLException{
+        caminhoRelatorio = "src\\relatorios\\tempoMedioAluguelCategoria.jasper";
+        caminhoPdf = "src\\relatorios\\tempoMedioAluguelCategoria.pdf";
+        gerarRelatorio();
+    }
+    
+    private void gerarRelatorio() throws BDException, JRException, SQLException{
         Connection con = ControlaConnexao.getConexao();
-        
         Map parametros = new HashMap();
         
+        //parametro para exibir a data final do relatório
         Date dataExibicao = dataFinal.getTime();
         
+        //A data final é incrementada em um dia para que
+        //a consulta ao banco de dados retorne o valor esperado
         int dia = dataFinal.get(Calendar.DAY_OF_MONTH) + 1;
         dataFinal.set(Calendar.DAY_OF_MONTH, dia);
         
@@ -47,20 +75,9 @@ public class TempoMedioAluguelProdutoRelatorio {
         parametros.put("datafinal", dataFinalDB);
         parametros.put("dataexibicao", dataExibicao);
         
-        File file = new File("src/aplication/relatorio/mediaHorasAluguel.jasper");
-        
-        JasperPrint jp = JasperFillManager.fillReport(file.getAbsolutePath(), parametros, con);
-        //JasperExportManager.exportReportToPdfFile (jp,file.getAbsolutePath().replaceAll("/mediaHorasAluguel.jasper", "/mediaHorasAluguel.pdf"));
-        System.out.println(file.getAbsolutePath());
+        JasperPrint jp = JasperFillManager.fillReport( caminhoRelatorio, parametros, con);
+        JasperExportManager.exportReportToPdfFile (jp, caminhoPdf);
         JasperViewer jv = new JasperViewer(jp, false);
         jv.setVisible(true);
-    }
-    
-    private Calendar atualizaDataFinal(Calendar dataInicial) throws ParseException{
-        int dia = dataInicial.get(Calendar.DAY_OF_MONTH);
-        dia ++;
-        dataInicial.set(Calendar.DAY_OF_MONTH, dia);
-        
-        return dataInicial;
     }
 }

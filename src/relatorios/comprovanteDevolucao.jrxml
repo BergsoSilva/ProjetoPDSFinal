@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprovanteDevolucaoFinalizado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9b96ba61-9b10-4ba5-aaf3-20138aaec078">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprovanteDevComPendencia" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9b96ba61-9b10-4ba5-aaf3-20138aaec078">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="206"/>
-	<property name="ireport.y" value="165"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="393"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -14,19 +14,24 @@
 		</conditionalStyle>
 	</style>
 	<parameter name="idaluguel" class="java.lang.Long"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\flavio\\Documents\\Didático\\TDS\\4º\\PDS\\Projeto\\ProjetoPDSFinal\\relatorios\\"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[select 	c.cpf, c.nome, f.funome, a.id as idaluguel, a.dtaluguel,
-		a.dtdevolucao, i.tempo, i.quantidade, p.nome as pronome, s.descricao, count(m.mulid) as qtdemultas
+		<![CDATA[select 	c.cpf, c.nome, f.funome, a.id as idaluguel,
+	a.aludtaaluguel, a.aludtadedevolucao, a.alutempo,
+	a.aluqtdeitem, p.nome as pronome, s.descricao,
+	count(m.mulid) as qtdemultas
 
-from Cliente as c, Funcionario as f, Aluguel as a, itemaluguel as i, Produto as p, Status as s, Multa as m
+from 	Cliente as c, Funcionario as f, Aluguel as a,
+	Produto as p, Status as s, Multa as m
 
 where 	a.cliente_id = c.id
-		and a.funcionario_funid = f.funid
-        and i.status_id = s.id
-        and i.aluguel_id = a.id
-        and i.produto_id = p.id
-        and m.mulaluid = a.id
-        and i.id = $P{idaluguel}]]>
+	and a.funcionario_funid = f.funid
+        	and a.status_id = s.id
+        	and a.produto_id = p.id
+        	and m.aluguel_id = a.id
+        	and a.id = $P{idaluguel}]]>
 	</queryString>
 	<field name="cpf" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -38,16 +43,16 @@ where 	a.cliente_id = c.id
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="idaluguel" class="java.lang.Long"/>
-	<field name="dtaluguel" class="java.sql.Timestamp">
+	<field name="aludtaaluguel" class="java.sql.Timestamp">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="dtdevolucao" class="java.sql.Timestamp">
+	<field name="aludtadedevolucao" class="java.sql.Timestamp">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="tempo" class="java.lang.Integer">
+	<field name="alutempo" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="quantidade" class="java.lang.Integer">
+	<field name="aluqtdeitem" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="pronome" class="java.lang.String"/>
@@ -72,10 +77,17 @@ where 	a.cliente_id = c.id
 			</frame>
 			<frame>
 				<reportElement mode="Opaque" x="0" y="99" width="553" height="32" forecolor="#000000" backcolor="#CCCCCC" uuid="1ca08527-afe1-4c47-8705-8bc5f418f84a"/>
-				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement x="397" y="12" width="144" height="20" forecolor="#000000" uuid="01aadbd9-3a59-4831-93f2-34ab282ff476"/>
-					<textElement textAlignment="Right">
-						<font size="12"/>
+				<staticText>
+					<reportElement x="258" y="7" width="72" height="20" uuid="f5314109-1eb2-483a-984c-6f221231e769"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Gerado em:]]></text>
+				</staticText>
+				<textField pattern="EEEEE, dd MMMMM yyyy HH:mm">
+					<reportElement x="331" y="7" width="222" height="20" forecolor="#000000" uuid="12f54d25-d211-40c5-add8-0aea7c1f0053"/>
+					<textElement>
+						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 				</textField>
@@ -86,7 +98,7 @@ where 	a.cliente_id = c.id
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<detail>
-		<band height="176" splitType="Stretch">
+		<band height="310" splitType="Stretch">
 			<textField>
 				<reportElement x="83" y="84" width="27" height="20" uuid="0149df5f-4ed9-4387-a387-0a92ecca7bf0"/>
 				<textElement>
@@ -134,7 +146,7 @@ where 	a.cliente_id = c.id
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{dtaluguel}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{aludtaaluguel}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="143" y="84" width="110" height="20" uuid="df32b467-2162-407f-9182-6ec73638579b"/>
@@ -162,7 +174,7 @@ where 	a.cliente_id = c.id
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{aluqtdeitem}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="373" y="51" width="76" height="20" uuid="adf8d9e4-fa3d-469e-b094-6227e8e8f155"/>
@@ -179,7 +191,7 @@ where 	a.cliente_id = c.id
 				<text><![CDATA[Situação:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="434" y="117" width="100" height="20" uuid="b874b1fc-5544-46d1-9362-cbad2474ee9f"/>
+				<reportElement x="434" y="117" width="100" height="34" uuid="b874b1fc-5544-46d1-9362-cbad2474ee9f"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -197,14 +209,14 @@ where 	a.cliente_id = c.id
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{tempo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{alutempo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="118" y="117" width="95" height="20" uuid="9f33adc8-796c-4071-ae6b-d4312f7aa311"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{dtdevolucao}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{aludtadedevolucao}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="13" y="117" width="100" height="20" uuid="de1452c2-ed37-422e-a67f-d33f93134f98"/>
@@ -241,29 +253,27 @@ where 	a.cliente_id = c.id
 				</textElement>
 				<textFieldExpression><![CDATA[$F{qtdemultas}]]></textFieldExpression>
 			</textField>
+			<subreport>
+				<reportElement x="0" y="193" width="555" height="100" uuid="3db172a3-3b5d-4cf3-947e-38df48b5fe7c"/>
+				<subreportParameter name="idAluguel">
+					<subreportParameterExpression><![CDATA[$F{idaluguel}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "comprovanteDevolucao_multas.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="53" splitType="Stretch">
-			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="f5c19af0-91e0-4e09-9d42-9db32c9eb86a"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineColor="#999999"/>
-				</graphicElement>
-			</line>
-		</band>
-	</columnFooter>
 	<pageFooter>
-		<band height="71" splitType="Stretch">
+		<band height="28" splitType="Stretch">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="47" width="555" height="24" forecolor="#D0B48E" backcolor="#CCCCCC" uuid="02624d72-38e0-43a5-93a1-206208e7088c"/>
-				<textField pattern="EEEEE dd MMMMM yyyy">
-					<reportElement style="Column header" x="2" y="1" width="197" height="20" forecolor="#000000" uuid="2b4f2739-9f20-47a3-ac3a-f8b243d65592"/>
-					<textElement verticalAlignment="Middle">
-						<font size="10" isBold="false"/>
+				<reportElement mode="Opaque" x="0" y="2" width="555" height="24" forecolor="#D0B48E" backcolor="#CCCCCC" uuid="02624d72-38e0-43a5-93a1-206208e7088c"/>
+				<staticText>
+					<reportElement x="149" y="3" width="256" height="20" uuid="9cc2d863-4504-468c-8d5a-8c0a0508edd1"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-				</textField>
+					<text><![CDATA[Obrigado pela preferência! Volte Sempre!]]></text>
+				</staticText>
 			</frame>
 		</band>
 	</pageFooter>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprovanteDevComPendencia_multas" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="08a6f511-5470-4a06-9796-bbe1fcb7d886">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="idAluguel" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select 	muldescricao, mulvalor, mulvalorpago, stmdescricao
+
+from 	multa m, statusmulta s, Aluguel a
+
+where 	m.statusMulta_stmid = s.stmid
+	and m.aluguel_id = a.id
+   	and a.id = $P{idAluguel}]]>
+	</queryString>
+	<field name="muldescricao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mulvalor" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mulvalorpago" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="stmdescricao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="106" splitType="Stretch">
+			<staticText>
+				<reportElement x="13" y="83" width="100" height="20" uuid="d15c1384-9f17-4b75-83da-fde12ab37a57"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="267" y="83" width="49" height="20" uuid="e78b0037-05e6-49e5-9520-bb9bbefcadd6"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="365" y="83" width="69" height="20" uuid="c320a996-4438-4ba4-8dc2-867beaf4466c"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="463" y="83" width="45" height="20" uuid="bd152f60-78bc-41b1-84e0-f232624acf93"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="19" width="555" height="54" forecolor="#000000" backcolor="#00CCCC" uuid="0a08a68e-506d-4da1-8cb2-3f1fb410b92d"/>
+				<box>
+					<pen lineColor="#3333FF"/>
+					<topPen lineColor="#3333FF"/>
+					<leftPen lineColor="#3333FF"/>
+					<bottomPen lineColor="#3333FF"/>
+					<rightPen lineColor="#3333FF"/>
+				</box>
+				<staticText>
+					<reportElement x="228" y="17" width="100" height="20" uuid="dee8faea-b652-41b7-ba74-1f1d794c1478"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Multas]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="52" splitType="Stretch">
+			<textField>
+				<reportElement x="13" y="5" width="241" height="42" uuid="8e3c1759-7590-4371-ac79-cc2deea076fc"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{muldescricao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="267" y="5" width="85" height="20" uuid="7170dc5d-b1c2-4ff3-b9f1-7cb6543e81f5"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mulvalor}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="365" y="5" width="85" height="31" uuid="2038b9e7-a531-4a12-8040-d281bdd5c805"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mulvalorpago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="5" width="72" height="42" uuid="dcf746c9-a365-4f99-bdd3-dc944b2a0122"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stmdescricao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

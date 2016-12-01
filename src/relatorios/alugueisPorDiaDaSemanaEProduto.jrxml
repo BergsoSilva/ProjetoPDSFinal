@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vendasPorPeriodo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9b96ba61-9b10-4ba5-aaf3-20138aaec078">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="datainicial" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="datafinal" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dataexibicao" class="java.util.Date"/>
+	<parameter name="idproduto" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[select 	sum(a.aluvalor) as 'valorDoDia', sum(a.alutempo) as 'horasDoDia',
+	dayname(a.aludtaaluguel) as 'diaDaSemana', p.nome, p.id,
+	dayofweek(a.aludtaaluguel) as 'numDiaDaSemana'
+from 	aluguel a, cliente c, produto p
+where 	aludtaAluguel between $P{datainicial} and $P{datafinal}
+	and a.cliente_id = c.id
+	and a.produto_id = p.id
+	and p.id = $P{idproduto}
+group by 	diadasemana
+order by 	numDiaDaSemana]]>
+	</queryString>
+	<field name="valorDoDia" class="java.lang.Double"/>
+	<field name="horasDoDia" class="java.math.BigDecimal"/>
+	<field name="diaDaSemana" class="java.lang.String"/>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numDiaDaSemana" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="132" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="553" height="95" forecolor="#000000" backcolor="#00CCCC" uuid="da911f9b-692a-4f8d-93fb-4e20d13fef87"/>
+				<staticText>
+					<reportElement style="Title" x="0" y="0" width="553" height="28" forecolor="#000000" uuid="74b78b48-9b0f-40a1-91d3-e55e3ca0e154"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="18" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Relatório: Aluguéis por Dia da Semana e Produto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="SubTitle" x="135" y="61" width="61" height="20" forecolor="#000000" uuid="9dac59c2-580d-4abb-ac1a-cfa209fc16e5"/>
+					<textElement>
+						<font fontName="Times New Roman" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Período: ]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="200" y="61" width="100" height="20" forecolor="#000000" uuid="59d4a7b0-629b-4af2-8c23-c142b2a5fc3f"/>
+					<textElement>
+						<font fontName="Times New Roman" size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{datainicial}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="308" y="61" width="26" height="20" forecolor="#000000" uuid="dd8e52f1-3bab-463e-94aa-336c155a52e1"/>
+					<textElement>
+						<font fontName="Times New Roman" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[até]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="357" y="60" width="121" height="20" uuid="de9f2da0-fca2-4ac6-b729-4ddcb2ad40f1"/>
+					<textElement>
+						<font fontName="Times New Roman" size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{dataexibicao}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="174" y="38" width="56" height="17" uuid="e0ebf7ef-8ca2-479f-b8e3-16359394d684"/>
+					<textElement>
+						<font fontName="Times New Roman" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Produto:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="234" y="38" width="100" height="17" uuid="ada8584a-248c-459e-ad9e-9f9c93d84a52"/>
+					<textElement>
+						<font fontName="Times New Roman" size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="95" width="553" height="27" forecolor="#000000" backcolor="#CCCCCC" uuid="1ca08527-afe1-4c47-8705-8bc5f418f84a"/>
+				<textField pattern="EEEEE, dd MMMMM yyyy HH:mm">
+					<reportElement x="209" y="5" width="269" height="20" forecolor="#000000" uuid="01aadbd9-3a59-4831-93f2-34ab282ff476"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="128" y="5" width="71" height="20" uuid="401f8614-fe41-4164-a3fb-7edd23616e64"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Gerado em:]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="434" y="6" width="103" height="18" forecolor="#000000" uuid="1ef043a3-f890-46da-b5b7-bd9e3eec6ba6"/>
+				<textElement>
+					<font fontName="SansSerif" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Valor Apurado Dia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="4" width="109" height="20" uuid="1a6eedbb-0ac4-4ccd-a16c-04c06e5323b2"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tempo Alugado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="3" width="106" height="20" uuid="d6d640d6-db1c-469f-b1c7-7fa6c339203e"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dia da Semana]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="30" uuid="0e00410a-8ec2-4c5f-9bdd-73b64300365d"/>
+				<textField pattern="¤ #,##0.00">
+					<reportElement x="447" y="5" width="89" height="20" uuid="b41e99fd-b8e6-4051-b779-81d2654193b4"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{valorDoDia}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.0;-###0.0">
+					<reportElement x="159" y="4" width="96" height="20" uuid="bb476256-a192-49bb-8997-5ebe8ec13083"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{horasDoDia}]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE">
+					<reportElement x="6" y="4" width="110" height="20" uuid="30f8c24b-c006-4345-b346-9cdc3c3e64b4"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{diaDaSemana}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="263" y="4" width="14" height="20" uuid="aa8d0b7c-00db-4e60-af1a-eb711fd55b22"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[h]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="344">
+			<bar3DChart>
+				<chart isShowLegend="false">
+					<reportElement x="0" y="20" width="553" height="301" uuid="13b9430a-2ef1-47ba-8b43-65a88ed9a27b"/>
+					<chartTitle>
+						<font size="12" isBold="true"/>
+						<titleExpression><![CDATA["Valor apurado por dia da semana"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Valor apurado por dia da semana"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{diaDaSemana}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{valorDoDia}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<bar3DPlot isShowLabels="false">
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat>
+							<tickLabelFont>
+								<font size="9"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</bar3DPlot>
+			</bar3DChart>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="1" width="555" height="24" forecolor="#D0B48E" backcolor="#CCCCCC" uuid="02624d72-38e0-43a5-93a1-206208e7088c"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="513" y="0" width="40" height="20" forecolor="#000000" uuid="ab3d7843-c47c-45b8-a498-217c385e33b7"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="449" y="0" width="64" height="20" forecolor="#000000" uuid="f55901ef-1ee1-48c7-8b85-d9ff7507335a"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

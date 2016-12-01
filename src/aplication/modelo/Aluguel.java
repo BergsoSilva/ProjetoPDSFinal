@@ -26,12 +26,14 @@ public class Aluguel implements Serializable{
     @Id
     @GeneratedValue
     private Long id;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "aludtaaluguel")
     private Calendar dtAluguel;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "aludtadedevolucao" , nullable = true)
     private Calendar dtDevolucao;
+    @Column(name="aluvalor")
+    private Double valor;
     @ManyToOne
     private Status status;
     @ManyToOne

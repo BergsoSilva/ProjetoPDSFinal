@@ -59,7 +59,7 @@ public class MultaDAO {
         EntityManager manager= ConnectioinFactory.getEntityManagerFactory();
         
         manager.getTransaction().begin();
-        Query query = manager.createQuery("select m from Multa m, Aluguel alu where alu.id = :mAluId and m.aluguel.id = alu.id");
+        Query query = manager.createQuery("select m from Multa m, Aluguel alu, StatusMulta s where alu.id = :mAluId and m.aluguel.id = alu.id and m.statusMulta.id = s.id");
         query.setParameter("mAluId", aluguel.getId());
         manager.getTransaction();
         multas = query.getResultList();

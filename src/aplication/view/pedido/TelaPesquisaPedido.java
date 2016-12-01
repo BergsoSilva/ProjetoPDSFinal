@@ -1,19 +1,24 @@
 
 package aplication.view.pedido;
 
+import aplication.Exceptions.BDException;
 import aplication.dao.AluguelDAO;
 import aplication.dao.PedidoDAO;
 import aplication.modelo.Aluguel;
 import aplication.modelo.Cliente;
 import aplication.modelo.Status;
+import aplication.regraDeNegocio.DevolucaoControl;
 import aplication.regraDeNegocio.ThretdTempoPedido;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
 
 
 public class TelaPesquisaPedido extends javax.swing.JFrame {
@@ -35,6 +40,8 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         carregarTabela();
         carregarMenuFlutuante();     
         preecherComboMarcacao();
+        
+        botaoDevolverMarcados.setEnabled(false);
     }
     
     private void preecherComboMarcacao(){
@@ -64,25 +71,13 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     }
     
     private void carregarMenuFlutuante(){
-        JMenuItem menuItem[] = {new JMenuItem("Ver detalhes"), new JMenuItem("Devolucao")};
+        JMenuItem menuItem[] = {new JMenuItem("Ver detalhes")};
         
         menuItem[0].addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                verDetalhes();
-            }
-        });
-        
-        menuItem[1].addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    alterar();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
             }
         });
         
@@ -99,10 +94,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     private void alterar(){
         if (radioPedido.isSelected()){
             JOptionPane.showMessageDialog(this, "Selecione a lista De 'Alugados'");
-        }else{
-            TelaDevolucao telaDevolucao = new TelaDevolucao(aluguel);
-            telaDevolucao.setVisible(true);
-        }        
+        }       
     }
     
     private void preencherCliente(){
@@ -153,7 +145,49 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         }
     }
     
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void devolverMarcados() throws BDException, JRException, SQLException{
+        List<Aluguel> alugueisMarcados = alugueisMarcados();
+        
+        if (!alugueisMarcados.isEmpty()){
+            if (alugueisMarcados.size() == 1){
+                new DevolucaoControl(aluguel).devolucao();
+            }else{
+                int opcao = JOptionPane.showConfirmDialog(null, "Houve avaria ou extravio de algum produto?", "Atenção", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            
+                if (opcao == JOptionPane.YES_OPTION){
+                    JOptionPane.showMessageDialog(null, "Selecione apenas alugueis que não possuem avarias a serem cadastradas!", "Atenção", JOptionPane.WARNING_MESSAGE);
+                } else if (opcao == JOptionPane.NO_OPTION){
+                    List<Long> alugueisNaoProcessados = new ArrayList<>();
+
+                    for (Aluguel aluguel: alugueisMarcados){
+                        //Atribui a data e a hora atuais à data de devolução
+                        Calendar dtDevolucao = Calendar.getInstance();
+                        aluguel.setDtDevolucao(dtDevolucao);
+                        DevolucaoControl devolucaoControl = new DevolucaoControl(aluguel);
+
+                        if (devolucaoControl.estaAtrasado() > 0 || devolucaoControl.temMulta()){
+                            alugueisNaoProcessados.add(aluguel.getId());
+                        } else {
+                            devolucaoControl.finalizarDevolucaoSemMulta();
+                            devolucaoControl.gerarComprovanteDevolucao();
+                        }
+                    }
+
+                    if (!alugueisNaoProcessados.isEmpty()){
+                        String idsAtrasados = "     -> ";
+
+                        for (Long id: alugueisNaoProcessados){
+                            idsAtrasados += id + "\n";
+                        }
+
+                        JOptionPane.showMessageDialog(null, "Os alugueis com os seguintes ID's não foram finalizados pois estão atrasados ou já possuem multas cadastradas: \n" + idsAtrasados, "Atenção", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }   
+        }
+    }
+    
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
@@ -172,6 +206,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         radioFinalizado = new javax.swing.JRadioButton();
         radioFinalComPendencia = new javax.swing.JRadioButton();
         campoCancelar = new javax.swing.JButton();
+        botaoDevolverMarcados = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisar Pedido");
@@ -199,7 +234,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Resultados Encontrados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, null, new java.awt.Color(51, 51, 51)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Resultados Encontrados", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 51, 51))); // NOI18N
         jPanel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         tabelaPedido.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -329,6 +364,14 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
             }
         });
 
+        botaoDevolverMarcados.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        botaoDevolverMarcados.setText("Devolver Marcados");
+        botaoDevolverMarcados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoDevolverMarcadosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -363,6 +406,8 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(botaoDevolverMarcados, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(botaoAlugarMarcados)))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -391,7 +436,9 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(botaoAlugarMarcados, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botaoDevolverMarcados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(25, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -402,13 +449,13 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
 
         pack();
         setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {                                       
        aplicaRadioStatus();
        carregarTabela(); 
         switchMarcacaoDesmacacaoCheck();
-    }//GEN-LAST:event_formWindowGainedFocus
+    }                                      
 
     private void switchMarcacaoDesmacacaoCheck(){
         switch(comboMarcacao.getSelectedIndex()){
@@ -421,7 +468,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
        }
     }
     
-    private void botaoAlugarMarcadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoAlugarMarcadosActionPerformed
+    private void botaoAlugarMarcadosActionPerformed(java.awt.event.ActionEvent evt) {                                                    
                        
         List<Aluguel> alugueisMarcados = alugueisMarcados();
         if (!alugueisMarcados.isEmpty()){
@@ -429,7 +476,7 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
             telaFormPagmento.setVisible(true);
         }            
            
-    }//GEN-LAST:event_botaoAlugarMarcadosActionPerformed
+    }                                                   
 
     private List<Aluguel> alugueisMarcados(){         
         List<Aluguel> alugueisMarcados = new ArrayList<Aluguel>();
@@ -454,49 +501,59 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         return alugueisMarcados;
     }
     
-    private void tabelaPedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaPedidoMouseClicked
+    private void tabelaPedidoMouseClicked(java.awt.event.MouseEvent evt) {                                          
         
-    }//GEN-LAST:event_tabelaPedidoMouseClicked
+    }                                         
 
-    private void tabelaPedidoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaPedidoMouseReleased
+    private void tabelaPedidoMouseReleased(java.awt.event.MouseEvent evt) {                                           
         selecionarCliente(evt);
         realizarAcao(evt);
-    }//GEN-LAST:event_tabelaPedidoMouseReleased
+    }                                          
 
-    private void botaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPesquisarActionPerformed
+    private void botaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {                                               
         aplicaRadioStatus();
         carregarTabela();
-    }//GEN-LAST:event_botaoPesquisarActionPerformed
+    }                                              
 
-    private void radioPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioPedidoActionPerformed
+    private void radioPedidoActionPerformed(java.awt.event.ActionEvent evt) {                                            
         this.aluguel.getStatus().setId(Aluguel.PEDIDO);
+        botaoAlugarMarcados.setEnabled(true);
+        botaoDevolverMarcados.setEnabled(false);
         carregarTabela();
-    }//GEN-LAST:event_radioPedidoActionPerformed
+    }                                           
 
-    private void radioAlugadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioAlugadoActionPerformed
+    private void radioAlugadoActionPerformed(java.awt.event.ActionEvent evt) {                                             
         this.aluguel.getStatus().setId(Aluguel.ALUGADO);
+        botaoAlugarMarcados.setEnabled(false);
+        botaoDevolverMarcados.setEnabled(true);
         carregarTabela();
-    }//GEN-LAST:event_radioAlugadoActionPerformed
+    }                                            
 
-    private void campoCpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoCpfActionPerformed
+    private void campoCpfActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_campoCpfActionPerformed
+    }                                        
 
-    private void campoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoCancelarActionPerformed
+    private void campoCancelarActionPerformed(java.awt.event.ActionEvent evt) {                                              
         dispose();
-    }//GEN-LAST:event_campoCancelarActionPerformed
+    }                                             
 
-    private void comboMarcacaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboMarcacaoMouseClicked
+    private void comboMarcacaoMouseClicked(java.awt.event.MouseEvent evt) {                                           
         
-    }//GEN-LAST:event_comboMarcacaoMouseClicked
+    }                                          
 
-    private void comboMarcacaoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboMarcacaoMouseReleased
+    private void comboMarcacaoMouseReleased(java.awt.event.MouseEvent evt) {                                            
 
-    }//GEN-LAST:event_comboMarcacaoMouseReleased
+    }                                           
 
-    private void comboMarcacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboMarcacaoActionPerformed
+    private void comboMarcacaoActionPerformed(java.awt.event.ActionEvent evt) {                                              
         switchMarcacaoDesmacacaoCheck();
-    }//GEN-LAST:event_comboMarcacaoActionPerformed
+    }                                             
+
+    private void botaoDevolverMarcadosActionPerformed(java.awt.event.ActionEvent evt) {                                                      
+       try {
+           devolverMarcados();
+       } catch (BDException | JRException | SQLException ex) {}
+    }                                                     
 
     private void marcaDesmarcarChecks(Boolean value){
         for (int i = 0; i < tabelaPedido.getRowCount(); i++) {
@@ -507,11 +564,15 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     
     private void radioFinalizadoActionPerformed(java.awt.event.ActionEvent evt) {                                                
         this.aluguel.getStatus().setId(Aluguel.FINALIZADO);
+        botaoAlugarMarcados.setEnabled(false);
+        botaoDevolverMarcados.setEnabled(false);
         carregarTabela();
     }                                               
 
     private void radioFinalComPendenciaActionPerformed(java.awt.event.ActionEvent evt) {                                                       
         this.aluguel.getStatus().setId(Aluguel.FINALIZADO_COM_PENDENCIA);
+        botaoAlugarMarcados.setEnabled(false);
+        botaoDevolverMarcados.setEnabled(false);
         carregarTabela();
     }                                                      
 
@@ -520,8 +581,9 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
         telaPesquisaCliente.setVisible(true);
     }
     
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton botaoAlugarMarcados;
+    private javax.swing.JButton botaoDevolverMarcados;
     private javax.swing.JButton botaoPesquisar;
     private javax.swing.JButton campoCancelar;
     private javax.swing.JFormattedTextField campoCpf;
@@ -537,5 +599,5 @@ public class TelaPesquisaPedido extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioFinalizado;
     private javax.swing.JRadioButton radioPedido;
     private javax.swing.JTable tabelaPedido;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration                   
 }
