@@ -440,7 +440,7 @@ public class TelaVerDetalhesPedido extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Produto Alugado!!");
             
             // Thred tempo produto parada
-            SingletonBiblioteca.stopt();
+           // SingletonBiblioteca.stopt();
             
       //  }else {
         //   JOptionPane.showMessageDialog(null," Saldo meno que 0");

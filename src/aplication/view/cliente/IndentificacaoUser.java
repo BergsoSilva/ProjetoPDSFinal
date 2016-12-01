@@ -219,11 +219,11 @@ public class IndentificacaoUser extends javax.swing.JFrame {
 
                          daoaluguel.inserir(aluguel);
                          
-                          this.thered =SingletonBiblioteca.erasePedido(aluguel.getQuantidade(), aluguel.getProduto(), aluguel);
+                         // this.thered =SingletonBiblioteca.erasePedido(aluguel.getQuantidade(), aluguel.getProduto(), aluguel);
                         //  JOptionPane.showMessageDialog(null,"Tempor vida Aluguel " + aluguel.getId()+" Thred nome ="+ this.thered.getName());
                           TelaPrincipal telaPricipal= new TelaPrincipal();
-                          this.thered.start();
-                          telaPricipal.thered=this.thered;
+                         // this.thered.start();
+                         // telaPricipal.thered=this.thered;
                           
                           
                           
